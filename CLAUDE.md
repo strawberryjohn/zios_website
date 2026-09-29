@@ -14,7 +14,7 @@ There is no local code build: this repo holds the build docs, the page tracker, 
 | Primary locale | English (`en`), no secondary locales |
 | Custom domain | none yet (publishes to the webflow.io subdomain) |
 | Figma account | ryabovdigital@gmail.com, team "Main Team" (pro) |
-| Figma file | _TBD: add the file URL here once shared_ |
+| Figma file | [ZiOS (Kopie)](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-), file key `1An9pIi2CL2DHoEV8EUmee` |
 
 ## Designer connection
 

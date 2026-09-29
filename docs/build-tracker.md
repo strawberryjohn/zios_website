@@ -6,7 +6,7 @@ Paste the Figma frame link (with `node-id`) for each page once its design is fin
 
 | Page | Figma frame | Webflow page ID | Status | Notes |
 |---|---|---|---|---|
-| Home | | `694123a0cdbcf3917d15a080` | | |
+| Home | [10028:23778](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10028-23778) | `694123a0cdbcf3917d15a080` | Ready to build | Redesigned: Expertise slider ([10119:14288](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10119-14288)), Unsere Leistungsbereiche (10028:29331), Über Zios (10028:29626) |
 | What we do | | `69aed262702891b6c33f36a8` | | |
 | About us | | `69ca45b3349d87dbe29f8f74` | | |
 | Approach and mission | | `69ce8152e5b958f6d63d838b` | | |
