@@ -55,6 +55,10 @@ Figma is the visual target, not the source of truth for sizes. Sanity-check ever
 - Only colours from the swatch/theme variables. A new variable or text style needs sign-off; prefer extending an existing collection over one-off classes.
 - One-off decorative sizes (e.g. the 240px "24/7") belong on a section-specific class, not in the global scale.
 
+## External code bundle
+
+Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it.
+
 ## Rules
 
 - **Never publish** the site (`publish_site`) or CMS items without explicit confirmation from the user.

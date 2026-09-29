@@ -6,7 +6,7 @@ Paste the Figma frame link (with `node-id`) for each page once its design is fin
 
 | Page | Figma frame | Webflow page ID | Status | Notes |
 |---|---|---|---|---|
-| Home | [10028:23778](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10028-23778) | `694123a0cdbcf3917d15a080` | Ready to build | Redesigned: Expertise slider ([10119:14288](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10119-14288)), Unsere Leistungsbereiche (10028:29331), Über Zios (10028:29626) |
+| Home | [10028:23778](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10028-23778) | `694123a0cdbcf3917d15a080` | In progress | Type scale applied site-wide (4px grid, Typography vars + Tablet/Mobile modes, global u-text-style-* bound to vars). Redesigned: Expertise slider ([10119:14288](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10119-14288)), Unsere Leistungsbereiche (10028:29331), Über Zios (10028:29626) |
 | What we do | | `69aed262702891b6c33f36a8` | | |
 | About us | | `69ca45b3349d87dbe29f8f74` | | |
 | Approach and mission | | `69ce8152e5b958f6d63d838b` | | |
@@ -24,3 +24,22 @@ Paste the Figma frame link (with `node-id`) for each page once its design is fin
 | Contacts | | `69cfb6ea9c5550c894a2dd8c` | | |
 | Privacy&Policy | | `69f0c61afbbfefb259c3ca5d` | | |
 | 404 | | `694123a0cdbcf3917d15a083` | | |
+
+## Type scale (approved, 4px grid)
+
+px at 1440 (desktop) / tablet / 375 (mobile), set as rem in the Typography collection with Tablet (medium) and Mobile (small) modes.
+
+| Style | Desktop | Tablet | Mobile |
+|---|---|---|---|
+| Display | 96 | 96 | 96 |
+| H1 | 80 | 64 | 48 |
+| H2 | 68 | 48 | 40 |
+| H3 | 40 | 40 | 32 |
+| H4 | 32 | 32 | 24 |
+| H5 | 24 | 24 | 20 |
+| H6 | 20 | 20 | 16 |
+| H7 (medium) / H8 (regular) / text-main | 16 | 16 | 16 |
+| H9 / text-small (labels) | 12 | 12 | 12 |
+| text-large (lead) | 24 | 24 | 20 |
+
+Open: ~80 section-level combo classes on other pages still override font-size with off-grid values (e.g. 0.88rem, 1.13rem, 5.69vw); fix page by page.
