@@ -46,18 +46,15 @@ Open: ~80 section-level combo classes on other pages still override font-size wi
 
 ## Section widths (Home)
 
-| Section | Type |
-|---|---|
-| Hero (`hero_wrap`) | full |
-| Partners + Expertise (`gradient_wrap`, `partners_sec`, `expertise_sec`) | full |
-| Unsere Leistungsbereiche (`services_sec`) | regular |
-| Produkte & Plattformen (`solutions_sec`) | regular |
-| Über Zios header (`aboutUs_header_wr`, in container) | regular |
-| Über Zios stats panel (`aboutUs_main_wr`) | full |
-| Greetings / Notifications (component `greetings_sec`) | regular |
-| Reviews (`reviews_sec`) | regular |
-| FAQ (component `FAQ_sec`) | regular |
-| News (component `news_sec`) | regular |
-| Footer (component `footer_wrap`) | full |
+All backgrounds full-bleed; content capped at 1920px (`u-container`, 35px gutters).
 
-Component sections (Greetings, FAQ, News, Footer) carry the class in their definition, so every page using them already follows the rule.
+| Section | Type | Content |
+|---|---|---|
+| Hero | full | bg full; nav, heading, CTA, bottom group, chat widget aligned to container |
+| Partners | full | marquee edge to edge |
+| Expertise | full | active card = container width (≤ viewport height), neighbours visible |
+| Unsere Leistungsbereiche | regular | mosaic in container |
+| Produkte & Plattformen | regular | 4-col grid fills container |
+| Über Zios | regular header + full-bleed stats panel | both contents in container |
+| Greetings, Reviews, FAQ, News | regular | in container (Reviews slider track bleeds) |
+| Footer | full | content in container |

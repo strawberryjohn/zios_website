@@ -32,10 +32,10 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 - Buttons: `Button Main`, `Button Primary`, `Button Secondary`, `Primary Button / Icon`, `Button / Text Link`.
 - Make a card clickable with the `Clickable` utility component.
 - Build new page sections as components in the `• Section` group (duplicate `• Section Custom (duplicate this)`).
-- **Every section is one of two types.** Add the class to the section's outermost element:
-  - `u-section-full` — spans 100% of the viewport (hero, logo strip, sliders, full-bleed colour panels, footer).
-  - `u-section-regular` — `max-width: var(--max-width--section)` (120rem = 1920px), centred. Default for everything else.
-  Content inside either still sits in `u-container` (max 1370px). A section that mixes both (e.g. Über Zios: regular header, full-bleed stats panel) puts the class on the inner wrappers instead.
+- **Section width rule.** Every section's background spans 100% of the viewport. Content sits in `u-container`: max `--max-width--main` (now = `max-width/section`, 120rem = 1920px), centred, with the `site/margin` gutter (35px at desktop) when the screen is narrower.
+  - `u-section-regular` (default): all content inside `u-container`.
+  - `u-section-full`: content may break out of the container, e.g. the partners marquee (edge to edge) and sliders (active card = container width, neighbours visible left/right).
+  - Absolutely/fixed-positioned content that belongs to the container (hero bottom group, chat widget) is offset with `max(2.1875rem, calc(50% - 57.8125rem))` so it lines up with the container edge. Note: the style API mangles `var()` inside `calc()`, so use literal rem values there.
 
 See `docs/webflow-inventory.md` for the full list of components, variables, and CMS collections.
 

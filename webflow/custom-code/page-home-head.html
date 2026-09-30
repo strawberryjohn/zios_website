@@ -1,5 +1,34 @@
-/* Expertise slider (Home) — lives in the Home page head custom code, after app.css,
-   so it overrides the external bundle's styles for this section. */
+<!-- CLAUDFLARE STYLES SCRIPT -->
+<!-- <link rel="stylesheet" href="https://anyone-cottages-towns-dependence.trycloudflare.com/app.css"> -->
+
+<!-- GITHUB STYLES SCRIPT -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ndrewfrolov/zios@main/dist/app.css"> -->
+
+<!-- LOCAL HOST SCRIPT -->
+<!-- <link rel="stylesheet" href="https://a4892c53000a55.lhr.life/app.css"> -->
+
+<!-- NETLIFy STYLES SCRIPT -->
+<link rel="stylesheet" href="https://zios-webflow.netlify.app/app.css">
+
+<style>
+#scramble-text{
+  opacity: 0;
+}
+</style>
+
+<!-- HOME REDESIGN (versioned in strawberryjohn/zios_website: webflow/custom-code/) -->
+<style>
+@keyframes services-marquee { from { background-position-x: 1rem; } to { background-position-x: 3.3125rem; } }
+.services_card_strip { animation: services-marquee 1.6s linear infinite; }
+@media (hover: hover) and (min-width: 992px) {
+  .services_card:hover .services_card_inner { transform: translateY(-1.75rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .services_card_strip { animation: none; }
+  .services_card_inner { transition: none; }
+}
+</style>
+<style>
 .expertise_sec {
   /* card = content container width (max 1920px minus gutters), never taller than the viewport */
   --exp-cw: min(var(--max-width--main), 100vw - var(--site--margin) * 2);
@@ -18,15 +47,12 @@
 .expertise_sec .expertise_card_subheader_text { margin-top: 1.25rem; max-width: 27.5rem; text-transform: uppercase; font-weight: 400; color: var(--swatch--blue-30); }
 .expertise_sec .expertise_card_bottom { align-self: flex-end; max-width: 38rem; gap: 1.875rem; }
 .expertise_sec .expertise_card_text { font-size: var(--_typography---font-size--h7); font-weight: 400; line-height: 1.3; color: var(--swatch--white-100); }
-/* NIS2 slide is the light variant */
 .expertise_sec .expertise_card_wr.is-3 { background-color: var(--swatch--light-200); }
 .expertise_sec .expertise_card_wr.is-3 .expertise_card_title { color: var(--blue-160-2-0); }
 .expertise_sec .expertise_card_wr.is-3 .expertise_card_subheader_text,
 .expertise_sec .expertise_card_wr.is-3 .expertise_card_text { color: var(--swatch--blue-130); }
-/* Prev / next at the slide edges */
 .expertise_sec .expertise_nav_wr { position: absolute; inset: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; width: auto; margin: 0; padding: 0 calc((100vw - var(--exp-sw)) / 2 - 1.6875rem); pointer-events: none; }
 .expertise_sec .expertise_nav_btn { pointer-events: auto; cursor: pointer; }
-/* Tab bar with autoplay progress */
 .expertise_sec .expertise_tab_button_list { display: flex; gap: 1rem; width: var(--exp-sw); margin-left: auto; margin-right: auto; padding: 0; overflow: visible; }
 .expertise_sec .tab_button_item { position: relative; flex: 1 1 0%; display: flex; align-items: center; justify-content: center; min-height: 2.3125rem; padding: 0.5rem 1.5rem; overflow: hidden; background-color: var(--swatch--blue-60); }
 .expertise_sec .tab_button_text { position: relative; z-index: 1; font-size: var(--_typography---font-size--h6); font-weight: 500; line-height: 1.3; color: var(--swatch--blue-130); text-transform: capitalize; }
@@ -44,3 +70,4 @@
 @media (prefers-reduced-motion: reduce) {
   .expertise_sec .tab_button_item.is-active .tab_button_line { animation: none; width: 100%; }
 }
+</style>
