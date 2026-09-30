@@ -1,0 +1,11 @@
+/* Leistungsbereiche hover + marquee. Lives in the Home page head custom code
+   (keyframes and parent:hover selectors can't be Webflow classes). */
+@keyframes services-marquee { from { background-position-x: 1rem; } to { background-position-x: 3.3125rem; } }
+.services_card_strip { animation: services-marquee 1.6s linear infinite; }
+@media (hover: hover) and (min-width: 992px) {
+  .services_card:hover .services_card_inner { transform: translateY(-1.75rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .services_card_strip { animation: none; }
+  .services_card_inner { transition: none; }
+}
