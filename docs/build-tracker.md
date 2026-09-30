@@ -43,3 +43,21 @@ px at 1440 (desktop) / tablet / 375 (mobile), set as rem in the Typography colle
 | text-large (lead) | 24 | 24 | 20 |
 
 Open: ~80 section-level combo classes on other pages still override font-size with off-grid values (e.g. 0.88rem, 1.13rem, 5.69vw); fix page by page.
+
+## Section widths (Home)
+
+| Section | Type |
+|---|---|
+| Hero (`hero_wrap`) | full |
+| Partners + Expertise (`gradient_wrap`, `partners_sec`, `expertise_sec`) | full |
+| Unsere Leistungsbereiche (`services_sec`) | regular |
+| Produkte & Plattformen (`solutions_sec`) | regular |
+| Über Zios header (`aboutUs_header_wr`, in container) | regular |
+| Über Zios stats panel (`aboutUs_main_wr`) | full |
+| Greetings / Notifications (component `greetings_sec`) | regular |
+| Reviews (`reviews_sec`) | regular |
+| FAQ (component `FAQ_sec`) | regular |
+| News (component `news_sec`) | regular |
+| Footer (component `footer_wrap`) | full |
+
+Component sections (Greetings, FAQ, News, Footer) carry the class in their definition, so every page using them already follows the rule.

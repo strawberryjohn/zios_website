@@ -32,6 +32,10 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 - Buttons: `Button Main`, `Button Primary`, `Button Secondary`, `Primary Button / Icon`, `Button / Text Link`.
 - Make a card clickable with the `Clickable` utility component.
 - Build new page sections as components in the `• Section` group (duplicate `• Section Custom (duplicate this)`).
+- **Every section is one of two types.** Add the class to the section's outermost element:
+  - `u-section-full` — spans 100% of the viewport (hero, logo strip, sliders, full-bleed colour panels, footer).
+  - `u-section-regular` — `max-width: var(--max-width--section)` (120rem = 1920px), centred. Default for everything else.
+  Content inside either still sits in `u-container` (max 1370px). A section that mixes both (e.g. Über Zios: regular header, full-bleed stats panel) puts the class on the inner wrappers instead.
 
 See `docs/webflow-inventory.md` for the full list of components, variables, and CMS collections.
 
