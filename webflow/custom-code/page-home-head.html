@@ -18,6 +18,11 @@
 
 <!-- HOME REDESIGN (versioned in strawberryjohn/zios_website: webflow/custom-code/) -->
 <style>
+/* Partners marquee: same dark blue as the hero end state, edge fades in that blue too (beats app.css). */
+.gradient_wrap .partners_sec { background-color: #012462; }
+.gradient_wrap .partners_overlay { background: linear-gradient(90deg, #012462 0%, rgba(1, 36, 98, 0) 12%, rgba(1, 36, 98, 0) 88%, #012462 100%); }
+</style>
+<style>
 @keyframes services-marquee { from { background-position-x: 1rem; } to { background-position-x: 3.3125rem; } }
 .services_card_strip { animation: services-marquee 1.6s linear infinite; }
 @media (hover: hover) and (min-width: 992px) {

@@ -1,0 +1,5 @@
+/* Partners marquee (Home): same dark blue as the hero end state, so there is no
+   colour step below the hero. The edge fades use that blue too. Scoped under
+   .gradient_wrap so it beats the external app.css. Lives in the Home page head. */
+.gradient_wrap .partners_sec { background-color: #012462; }
+.gradient_wrap .partners_overlay { background: linear-gradient(90deg, #012462 0%, rgba(1, 36, 98, 0) 12%, rgba(1, 36, 98, 0) 88%, #012462 100%); }
