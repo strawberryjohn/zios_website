@@ -1,7 +1,8 @@
-// Animated digit mountain (Home hero, layer 3).
+// Animated binary mountain (Home hero, layer 3).
 // Replaces the static ascii-art image (.hero_layer.is-3) with a canvas that
-// redraws the same mountain in digits. Density comes from brightness (digits
-// all carry about the same ink), so the shading of the original holds.
+// redraws the same mountain in 0s and 1s: each grid cell holds two stacked
+// digits, so the columns read as vertical binary streams. Density comes from
+// brightness, and the faintest cells are thinned out.
 // Motion is slow and calm, like snow catching light:
 //  - every SWAP_MS a few digits quietly change to another digit;
 //  - a few cells twinkle: brighten quickly, then fade out slowly.
@@ -19,25 +20,25 @@
   var IW = 2514, IH = 1469, CW = 11.79, CH = 19.66, OY = 5;
   // Brightness per density level (index = level).
   var ALPHA = [0, 0.3, 0.37, 0.44, 0.51, 0.6, 0.7, 0.8, 0.9];
-  // Digits grouped by ink weight; denser cells use heavier digits.
-  var LIGHT = '71', MID = '2354', HEAVY = '6908';
+  var ONES = 0.7;          // share of 1s (the rest are 0s)
+  var SUB = 2;             // digits stacked per grid cell
+  var SH = CH / SUB;       // height of one digit slot
   var SWAP_MS = 160;      // how often a batch of digits changes
   var SWAP = 0.005;       // share of cells that change per batch
   var SPARK = 0.0007;     // share of cells that start twinkling per batch
   var SPARK_MS = 1600;    // twinkle duration (quick rise, slow fade)
 
-  function digit(level) {
-    var set = level <= 3 ? LIGHT : (level <= 6 ? MID : HEAVY);
-    return set[(Math.random() * set.length) | 0];
-  }
+  function digit() { return Math.random() < ONES ? '1' : '0'; }
 
   var cells = [];
   GRID.split('|').forEach(function (row, r) {
     var parts = row.split(':'), pad = +parts[0], line = parts[1];
     for (var c = 0; c < line.length; c++) {
       var lvl = line.charCodeAt(c) - 48;
-      if (lvl > 0 && lvl < 9) {
-        cells.push({ x: (pad + c + 0.5) * CW, y: OY + (FIRST_ROW + r + 0.5) * CH, l: lvl, ch: digit(lvl), glow: 0, t0: 0 });
+      if (lvl < 1 || lvl > 8) continue;
+      for (var k = 0; k < SUB; k++) {
+        if (lvl <= 2 && Math.random() < 0.4) continue; // thin out the faintest cells
+        cells.push({ x: (pad + c + 0.5) * CW, y: OY + (FIRST_ROW + r) * CH + (k + 0.5) * SH, l: lvl, ch: digit(), glow: 0, t0: 0 });
       }
     }
   });
@@ -60,7 +61,7 @@
     canvas.height = Math.round(h * dpr);
     var s = Math.max(w / IW, h / IH);
     ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * (w - IW * s) / 2, dpr * (h - IH * s));
-    ctx.font = '13px ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace';
+    ctx.font = '9px ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#ffffff';
@@ -69,7 +70,7 @@
 
   function paint(cell) {
     var a = ALPHA[cell.l];
-    ctx.clearRect(cell.x - CW / 2, cell.y - CH / 2, CW, CH);
+    ctx.clearRect(cell.x - CW / 2, cell.y - SH / 2, CW, SH);
     ctx.globalAlpha = a + (1 - a) * cell.glow;
     ctx.fillText(cell.ch, cell.x, cell.y);
   }
@@ -89,7 +90,7 @@
     for (i = Math.max(1, Math.round(n * SWAP)); i > 0; i--) {
       cell = cells[(Math.random() * n) | 0];
       if (cell.t0) continue;
-      cell.ch = digit(cell.l);
+      cell.ch = digit();
       paint(cell);
     }
     for (i = Math.max(1, Math.round(n * SPARK)); i > 0; i--) {
