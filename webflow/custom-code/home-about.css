@@ -1,0 +1,3 @@
+/* Über Zios (Home): 24/7 gradient fill per Figma 10028:29626 (87deg, white-100 -> blue-100).
+   Lives in the Home page head. Class styles (sizes, Monitoring, aboutUs_ascii layer) are in Webflow. */
+.aboutus_main_wr .aboutus_number { display: inline-block; background-image: linear-gradient(87deg, var(--swatch--white-100) 9.7%, var(--swatch--blue-100) 99%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
