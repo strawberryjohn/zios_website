@@ -1,24 +1,26 @@
-// Über Zios ASCII mountain (Home): a straight copy of the hero's animated
-// binary mountain (home-hero-ascii.js): same traced mountain, same symbols by
-// depth ('1' ridges, ':' mid-slope, '0' foreground, '.'/':' faint edges), same
-// per-symbol opacity, swaps and snow-like twinkle. Only the framing differs:
-// the canvas sits inside .aboutUs_ascii, is at most 1920px (120rem) wide,
-// centred, and bottom-aligned to the blue panel; the empty sky above the
-// mountain and the empty strip below it are cropped off. Reduced motion gets a still frame.
+// Über Zios ASCII mountain (Home). Same look and motion as the hero's animated
+// binary mountain (home-hero-ascii.js): symbols chosen by depth below the ridge
+// ('1' ridges, ':' mid-slope, '0' foreground, '.'/':' faint edges), per-symbol
+// opacity, slow swaps and snow-like twinkle, same symbol size and spacing.
+// The shape is generated for this panel instead of traced from the hero art:
+//  - low foothills on the left, so nothing sits behind "24/7 Monitoring";
+//  - the range rises from about a third of the width and fills the right side;
+//  - both ends fade out instead of being cut off.
+// Shape noise is seeded, so the mountain is the same on every load.
+// Canvas inside .aboutUs_ascii: at most 1920px (120rem) wide, centred,
+// bottom-aligned, never taller than 60% of the panel. On narrow screens the
+// symbols keep a minimum size and the right-hand peaks stay in view. Reduced motion gets a still frame.
 (function () {
   // Webflow publishes class names lowercased.
   var host = document.querySelector('.aboutus_ascii, .aboutUs_ascii');
   if (!host || !window.HTMLCanvasElement) return;
 
-  var FIRST_ROW = 20;
-  var GRID = '166:131|164:1574221|163:55763232223|160:12768861232223321|159:6576876512321123222211|157:1658685552331333322222222|155:2576865822222223333322222222223|153:2687866565252632223333233322222222213225521|151:56787865768556522222333332223222222222252225523|146:588888858866765555862322222222222322222222222552555552523|142:25556888888765686556578522222222222222222222222222225522255222222|140:268558688888855666855876222222222268 122222222222222222255525222222222|136:2658555558888888556868655555522222225651    221222222222222222255522222225525|134:156655565558865656558665762  132222252653         12222222222222222222222252522|92:121                                     168566855668556665568565865 111111232221              122222222222522222222255525|89:15876551      2          35765         12255555555556566656557665811111122332222                    122222222222222222225255|74:11          25788885588855888885     25788888866655 5555865555655555666568888866231111222521                         1122222222222255555552|70:3222555       3588888658888888888888867888888888888888786555565555666655235888885213333333553                                 21122222222555555|68:2855855566632557888855855588888888888888888887887888887865555556566566652      223221323111 1                                          1122222555|66:2555866565566655555555855655888888888888888888888888878865556556556665555 1                                                                      13|62:2288665556556566665566656555888888888888888888888888887888866665566656665655 3|47:252          18887665565866655666556665655588888888888888888888878888785655666556665556221 2|36:2       55888886551   265885556658866665566655666666665655888888888888888888765556665566556556521 21 2|33:55888623558888888888888885556656565865566655666556665555556555568888888888855556665566655555522     1 1|30:56888888888888888888888555555555655885665666656666556665555555555225885888856666566665566555563       32|27:5588888888888888888888555555566555888556666556665566655655555555666      565565566655655566565522       2|23:2588888888888888888888585555655556558885655666656666556665555556555562 1        122255655556555521         2|10:2555       25888888888888888885585586555555555655555566566665666655666565555555551 1           1112322225252|0:55521 5558888888886688888888888888888855566555655555555566665666656666556665566555555556621         1 11111333222252 1|0:888888888888888888888888888888888888668856555565555566655666556665666655666565555222222211 13      111112223322222|0:88888888888888888888888888888888885555555555556555566665666655666566665666655652222531  2 32    1111111233222251     1|0:88888888888888888888888888888886555555555555555656556665566655666522255522232222222    1 21  11 11111122222251    1|0:888888888888888888888888886655565555655556556566665566655666556652223333322222211 1111 113111111111332232221   11|0:788888888888888888888885555555565555655555666566665566656666565223222333322222  11113122221 11111133332221   1|0:788888888888888888855655555555565555566655666566665666655666512223232222222    1113221222  1111221232231|0:788888888888888865555555555555556665666655666566665666555653332223333322  11111122313222 1112321122311  1|0:788888878555555555555555655666566665566656666555552255522323222233231      111111122221  111111211|0:555555655555555556665666655666556565666652222222225552111111232221        111  112111    13  11|0:5655556555556665555555555555555555555522222222222231111111113221               11          1|0:666666655565555555555555555556555222232222222221    1111111311                           1|0:5555555555555555525252555555223222232323222211     1   1111|0:555222222222222222222222222323322222332321              1|0:2222222222222222222222222321111111111|0:22323333332232332211111111111|0:2232223333333111|0:111111111';
-  var IW = 2514, IH = 1469, CW = 11.79, CH = 19.66, OY = 5;
-  var PX = 16;              // horizontal pitch of the symbol lattice (image px)
-  var FONT = 11;            // symbol size (image px)
-  // Base opacity and share of symbols kept, per traced density level (1-8).
+  // Virtual drawing space, same units as the hero art (scaled to fit).
+  var IW = 2514, CH = 19.66, NR = 42, IH = NR * CH;
+  var PX = 16, FONT = 11;
+  var MAX_W_REM = 120, MIN_SCALE = 0.4, MAX_H = 0.6; // max share of the panel height
   var ALPHA = [0, 0.24, 0.3, 0.38, 0.44, 0.5, 0.56, 0.62, 0.7];
   var KEEP = [0, 0.45, 0.7, 0.9, 1, 1, 1, 1, 1];
-  // Symbol mix by depth below the ridge (rows): cumulative weights.
   var FAINT = { set: '.:', w: [0.55, 1] };
   var DEPTH = [
     { max: 2, set: '1:', w: [0.8, 1] },
@@ -26,10 +28,39 @@
     { max: 12, set: '0:1', w: [0.45, 0.75, 1] },
     { max: 99, set: '01:', w: [0.82, 0.92, 1] }
   ];
-  var SWAP_MS = 180;        // how often a batch of symbols changes
-  var SWAP = 0.004;         // share of symbols that change per batch
-  var SPARK = 0.0008;       // share of symbols that start twinkling per batch
-  var SPARK_MS = 1800;      // twinkle duration
+  var SWAP_MS = 180, SWAP = 0.004, SPARK = 0.0008, SPARK_MS = 1800;
+
+  // Seeded random + smooth value noise for the shape.
+  var seed = 7;
+  function rnd() {
+    seed = (seed + 0x6d2b79f5) | 0;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  var LATTICE = [];
+  for (var i = 0; i < 512; i++) LATTICE.push(rnd());
+  function noise(v) {
+    var i0 = Math.floor(v), f = v - i0, a = LATTICE[i0 & 511], b = LATTICE[(i0 + 1) & 511];
+    return a + (b - a) * f * f * (3 - 2 * f);
+  }
+  function fbm(v) { return noise(v) * 0.6 + noise(v * 2.3 + 17) * 0.28 + noise(v * 5.1 + 41) * 0.12; }
+  function smooth(a, b, v) { var t = Math.min(1, Math.max(0, (v - a) / (b - a))); return t * t * (3 - 2 * t); }
+  function peak(u, c, h, w) { var t = Math.max(0, 1 - Math.abs(u - c) / w); return h * Math.pow(t, 1.5); }
+
+  // Ridge height in rows at horizontal position u (0..1).
+  function height(u) {
+    var rise = smooth(0.3, 0.64, u);
+    var h = 2.5 + 2 * fbm(u * 9)
+      + 21 * rise
+      + rise * (peak(u, 0.47, 4, 0.05) + peak(u, 0.6, 9, 0.07) + peak(u, 0.7, 6, 0.05)
+        + peak(u, 0.82, 13, 0.09) + peak(u, 0.93, 8, 0.07))
+      + (fbm(u * 30 + 5) - 0.5) * (2 + 4 * rise)
+      + Math.abs(noise(u * 90 + 3) - 0.5) * 2 * rise;
+    return Math.min(NR - 1, Math.max(1, h));
+  }
+  // Ends fade out instead of stopping at a hard edge.
+  function edgeFade(u) { return smooth(0, 0.08, u) * smooth(1, 0.9, u); }
 
   function pick(z) {
     var r = Math.random();
@@ -42,55 +73,44 @@
     return DEPTH[DEPTH.length - 1];
   }
 
-  // Density level at an image-space point, from the traced grid.
-  var rows = GRID.split('|').map(function (row) {
-    var p = row.split(':');
-    return { pad: +p[0], line: p[1] };
-  });
-  function levelAt(x, y) {
-    var r = Math.floor((y - OY) / CH) - FIRST_ROW;
-    if (r < 0 || r >= rows.length) return 0;
-    var c = Math.floor(x / CW) - rows[r].pad;
-    var ch = rows[r].line.charCodeAt(c) - 48;
-    return ch > 0 && ch < 9 ? ch : 0;
-  }
-
   var cells = [];
   for (var x = PX / 2; x < IW; x += PX) {
-    var ridge = -1; // first solid row in this column = the ridge line
-    for (var r = 0; r < rows.length; r++) {
-      var y = OY + (FIRST_ROW + r + 0.5) * CH;
-      var l = levelAt(x, y);
-      if (!l) continue;
-      if (ridge < 0 && l >= 3) ridge = r;
-      if (Math.random() > KEEP[l]) continue;
-      var z = zoneFor(l, ridge < 0 ? 0 : r - ridge);
-      cells.push({
-        x: x, y: y, z: z, ch: pick(z),
-        a: Math.min(0.8, ALPHA[l] * (0.75 + Math.random() * 0.4)),
-        glow: 0, t0: 0
-      });
+    var u = x / IW, h = height(u), top = NR - h, fade = edgeFade(u);
+    // Faces turned to the left catch the light, the others sit in shadow.
+    var slope = (height(u + 0.004) - height(u - 0.004)) / 0.008;
+    var light = Math.max(-1.5, Math.min(2, slope * 0.06));
+    // Faint snow dust just above the ridge.
+    if (rnd() < 0.35) {
+      cells.push(cell(x, top - 0.5, 1 + (rnd() < 0.4 ? 1 : 0), 0, fade));
+    }
+    for (var r = Math.ceil(top); r < NR; r++) {
+      var d = r - top;
+      var lvl = d < 1.2 ? 7.5 : 6.2 - d * 0.08 + light * Math.max(0, 1 - d / 14);
+      lvl += (noise(x * 0.02 + r * 0.7) - 0.5) * 3;
+      lvl = Math.round(Math.min(8, Math.max(1, lvl)));
+      if (rnd() > KEEP[lvl]) continue;
+      cells.push(cell(x, r + 0.5, lvl, d, fade));
     }
   }
-
-  var MAX_W_REM = 120;
-  // Crop to the mountain: one row above the first peak to the last traced row.
-  var TOP = OY + (FIRST_ROW - 1) * CH;
-  var BOTTOM = OY + (FIRST_ROW + rows.length) * CH;
+  function cell(x, row, lvl, depth, fade) {
+    var z = zoneFor(lvl, depth);
+    var a = Math.min(0.8, ALPHA[lvl] * (0.75 + rnd() * 0.4)) * fade;
+    return { x: x, y: row * CH, z: z, ch: pick(z), a: a, glow: 0, t0: 0, fade: fade };
+  }
+  cells = cells.filter(function (c) { return c.a > 0.01; });
 
   var canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   canvas.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none;';
   host.appendChild(canvas);
-
   var ctx = canvas.getContext('2d');
 
-  // Full mountain width = min(panel width, 1920px), centred, bottom-aligned.
   function layout() {
     var hw = host.clientWidth, hh = host.clientHeight;
     if (!hw || !hh) return false;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    var w = Math.min(hw, MAX_W_REM * rem), s = w / IW, h = (BOTTOM - TOP) * s;
+    var w = Math.min(hw, MAX_W_REM * rem);
+    var s = Math.min(Math.max(w / IW, MIN_SCALE), MAX_H * hh / IH), h = IH * s;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
@@ -98,7 +118,9 @@
     canvas.style.top = (hh - h) + 'px';
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr * s, 0, 0, dpr * s, 0, -dpr * s * TOP);
+    // Right-aligned: when the art is wider than the canvas, the left foothills
+    // are what gets cropped.
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * (w - IW * s), 0);
     ctx.font = FONT + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -106,10 +128,10 @@
     return true;
   }
 
-  function paint(cell) {
-    ctx.clearRect(cell.x - PX / 2, cell.y - CH / 2, PX, CH);
-    ctx.globalAlpha = cell.a + (1 - cell.a) * cell.glow;
-    ctx.fillText(cell.ch, cell.x, cell.y);
+  function paint(c) {
+    ctx.clearRect(c.x - PX / 2, c.y - CH / 2, PX, CH);
+    ctx.globalAlpha = c.a + (c.fade - c.a) * c.glow;
+    ctx.fillText(c.ch, c.x, c.y);
   }
 
   function drawAll() {
@@ -123,18 +145,18 @@
 
   var twinkling = [];
   function batch(now) {
-    var n = cells.length, i, cell;
+    var n = cells.length, i, c;
     for (i = Math.max(1, Math.round(n * SWAP)); i > 0; i--) {
-      cell = cells[(Math.random() * n) | 0];
-      if (cell.t0) continue;
-      cell.ch = pick(cell.z);
-      paint(cell);
+      c = cells[(Math.random() * n) | 0];
+      if (c.t0) continue;
+      c.ch = pick(c.z);
+      paint(c);
     }
     for (i = Math.max(1, Math.round(n * SPARK)); i > 0; i--) {
-      cell = cells[(Math.random() * n) | 0];
-      if (cell.t0) continue;
-      cell.t0 = now;
-      twinkling.push(cell);
+      c = cells[(Math.random() * n) | 0];
+      if (c.t0) continue;
+      c.t0 = now;
+      twinkling.push(c);
     }
   }
 
