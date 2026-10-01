@@ -25,7 +25,7 @@ Paste the Figma frame link (with `node-id`) for each page once its design is fin
 | Privacy&Policy | | `69f0c61afbbfefb259c3ca5d` | | |
 | 404 | | `694123a0cdbcf3917d15a083` | | |
 
-## Type scale (approved, 4px grid)
+## Type scale (approved on a 4px grid; moving to an 8px grid)
 
 px at 1440 (desktop) / tablet / 375 (mobile), set as rem in the Typography collection with Tablet (medium) and Mobile (small) modes.
 
@@ -41,6 +41,8 @@ px at 1440 (desktop) / tablet / 375 (mobile), set as rem in the Typography colle
 | H7 (medium) / H8 (regular) / text-main | 16 | 16 | 16 |
 | H9 / text-small (labels) | 12 | 12 | 12 |
 | text-large (lead) | 24 | 24 | 20 |
+
+Open: the scale moves to an 8px grid (user direction 2026-10-01). Steps still off it, need a new value signed off: H2 68 (desktop), H5 mobile 20, H6 20 (all breakpoints), text-large mobile 20, H9 / text-small 12. Primary buttons (`button_primary_element`) were 18px (1.13rem), now bound to text-main 16px site-wide.
 
 Open: ~80 section-level combo classes on other pages still override font-size with off-grid values (e.g. 0.88rem, 1.13rem, 5.69vw); fix page by page.
 
