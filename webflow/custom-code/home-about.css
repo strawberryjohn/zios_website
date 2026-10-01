@@ -1,12 +1,14 @@
 /* Über Zios (Home), Figma 10028:29626. Lives in the Home page head.
    Note: Webflow publishes class names lowercased (aboutUs_x -> aboutus_x). */
+/* Webflow classes: .aboutUs_main_wr min-height 43.75rem (700px at 1440) as flex column; .aboutUs_ascii bg image bottom-centred, width min(100%, 120rem = 1920px). */
 /* 24/7: gradient fill (87deg, white-100 -> blue-100). */
 .aboutus_main_wr .aboutus_number { display: inline-block; background-image: linear-gradient(87deg, var(--swatch--white-100) 9.7%, var(--swatch--blue-100) 99%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
 /* Panel layout: stats on top, 24/7 + Monitoring bottom-left, link bottom-right. */
 @media screen and (min-width: 992px) {
-  .aboutus_main_wr .aboutus_layout { min-height: 33.25rem; align-content: space-between; }
-  .aboutus_main_wr .aboutus_number_wr { grid-column: 1 / 4; align-self: end; }
-  .aboutus_main_wr .aboutus_link_wr { grid-column: 4 / 5; justify-self: end; align-self: end; padding-right: 0; }
+  .aboutus_main_wr .aboutus_layout { height: 100%; min-height: 33.25rem; align-content: space-between; }
+  /* Last grid column, flush right, whatever the column count. */
+  .aboutus_main_wr .aboutus_number_wr { grid-column: 1 / -2; align-self: end; }
+  .aboutus_main_wr .aboutus_link_wr { grid-column: -2 / -1; justify-self: end; align-self: end; display: flex; justify-content: flex-end; padding-right: 0; margin-left: auto; }
 }
 /* Monitoring loader: a ring in the text colour that keeps turning (continuous monitoring). */
 .aboutus_loader { position: relative; border: 0.1875rem solid rgba(123, 186, 255, 0.25); border-top-color: var(--swatch--blue-60); animation: aboutus-loader 1.6s linear infinite; }
