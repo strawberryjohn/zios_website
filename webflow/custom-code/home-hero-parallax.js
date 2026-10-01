@@ -2,8 +2,10 @@
 // The hero pins (GSAP's version of position: sticky; it also works under
 // ScrollSmoother) for two viewport-heights of scroll. While pinned:
 //  - the mountain layers move UP and out of frame with parallax: the front
-//    peak (is-1) fastest, the sky gradient (is-5) slowest, which also fades so
-//    only the dark blue of hero_gsap_trigger_wr is left behind;
+//    peak (is-1) fastest, the sky gradient (is-5) slowest, which also fades.
+//    A solid dark blue block (is-ground) hangs under the main mountain (is-2)
+//    and rises with it, so the scene ends on the dark blue of
+//    hero_gsap_trigger_wr without the sky showing below the mountains;
 //  - the heading + CTA ride up with the mountains;
 //  - hero_bottom stays on screen and travels to the centre of the viewport
 //    while hero_text grows 16px -> 24px (the link keeps its size).
@@ -75,6 +77,9 @@
     // mountain layers clear the top edge by 0.75.
     tl.to(layer(1), { yPercent: -160, duration: 0.75 }, 0)
       .to(layer(2), { yPercent: -140, duration: 0.75 }, 0)
+      // Dark blue "ground" under layer 2 rises glued to it (same 1.4 x height),
+      // so the gap below the mountains is dark blue instead of the sky.
+      .to(sec.querySelector('.hero_layer.is-ground'), { y: function () { return -sec.clientHeight * 1.4; }, duration: 0.75 }, 0)
       .to(layer(3), { yPercent: -125, duration: 0.75 }, 0)
       .to(layer(4), { yPercent: -110, duration: 0.75 }, 0)
       .to(layer(5), { yPercent: -50, duration: 0.75 }, 0)
