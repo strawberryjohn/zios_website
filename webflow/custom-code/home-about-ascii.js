@@ -2,14 +2,18 @@
 // binary mountain (home-hero-ascii.js): symbols chosen by depth below the ridge
 // ('1' ridges, ':' mid-slope, '0' foreground, '.'/':' faint edges), per-symbol
 // opacity, slow swaps and snow-like twinkle, same symbol size and spacing.
-// The shape is generated for this panel instead of traced from the hero art:
-//  - low foothills on the left, so nothing sits behind "24/7 Monitoring";
-//  - the range rises from about a third of the width and fills the right side;
-//  - both ends fade out instead of being cut off.
+// The shape is generated for this panel: overlapping peaks in three depth
+// layers, each with a bright outline, a lit left face, a shaded right face, a
+// bright spine down from the summit and gullies running down the slopes.
+//  - low foothills on the left, so nothing sits behind "24/7 Monitoring"; the
+//    range starts right after it and fills the right side;
+//  - both ends fade out, and so does the bottom-right corner behind the
+//    "Über Zios" link.
 // Shape noise is seeded, so the mountain is the same on every load.
 // Canvas inside .aboutUs_ascii: at most 1920px (120rem) wide, centred,
-// bottom-aligned, never taller than 60% of the panel. On narrow screens the
-// symbols keep a minimum size and the right-hand peaks stay in view. Reduced motion gets a still frame.
+// bottom-aligned, never taller than 60% of the panel (then only the row
+// spacing tightens). On narrow screens the symbols keep a minimum size and
+// the right-hand peaks stay in view. Reduced motion gets a still frame.
 (function () {
   // Webflow publishes class names lowercased.
   var host = document.querySelector('.aboutus_ascii, .aboutUs_ascii');
@@ -46,21 +50,38 @@
   }
   function fbm(v) { return noise(v) * 0.6 + noise(v * 2.3 + 17) * 0.28 + noise(v * 5.1 + 41) * 0.12; }
   function smooth(a, b, v) { var t = Math.min(1, Math.max(0, (v - a) / (b - a))); return t * t * (3 - 2 * t); }
-  function peak(u, c, h, w) { var t = Math.max(0, 1 - Math.abs(u - c) / w); return h * Math.pow(t, 1.5); }
 
-  // Ridge height in rows at horizontal position u (0..1).
-  function height(u) {
-    var rise = smooth(0.3, 0.64, u);
-    var h = 2.5 + 2 * fbm(u * 9)
-      + 21 * rise
-      + rise * (peak(u, 0.47, 4, 0.05) + peak(u, 0.6, 9, 0.07) + peak(u, 0.7, 6, 0.05)
-        + peak(u, 0.82, 13, 0.09) + peak(u, 0.93, 8, 0.07))
-      + (fbm(u * 30 + 5) - 0.5) * (2 + 4 * rise)
-      + Math.abs(noise(u * 90 + 3) - 0.5) * 2 * rise;
-    return Math.min(NR - 1, Math.max(1, h));
+  // The range: overlapping peaks in three depth layers (0 = back). Each one
+  // is a jagged cone: centre c, height h (rows), half-widths wl / wr (share
+  // of the width). The front-most peak covering a spot decides how it's drawn.
+  var PEAKS = [
+    { c: 0.55, h: 28, wl: 0.2, wr: 0.15, z: 0 },
+    { c: 0.79, h: 38, wl: 0.19, wr: 0.17, z: 0 },
+    { c: 0.98, h: 31, wl: 0.13, wr: 0.12, z: 0 },
+    { c: 0.42, h: 20, wl: 0.075, wr: 0.11, z: 1 },
+    { c: 0.67, h: 24, wl: 0.12, wr: 0.11, z: 1 },
+    { c: 0.9, h: 22, wl: 0.11, wr: 0.12, z: 1 },
+    { c: 0.355, h: 11, wl: 0.035, wr: 0.06, z: 2 },
+    { c: 0.58, h: 11, wl: 0.09, wr: 0.09, z: 2 }
+  ];
+  PEAKS.forEach(function (m, i) { m.k = i * 13.7; });
+
+  // Silhouette height of peak m at u (0 outside it).
+  function top(m, u) {
+    var w = u < m.c ? m.wl : m.wr, t = 1 - Math.abs(u - m.c) / w;
+    if (t <= 0) return 0;
+    var jag = (fbm(u * 60 + m.k) - 0.5) * 3 + (noise(u * 160 + m.k) - 0.5) * 1.2;
+    return Math.max(0, m.h * Math.pow(t, 1.25) + jag * Math.min(1, t * 3));
   }
-  // Ends fade out instead of stopping at a hard edge.
-  function edgeFade(u) { return smooth(0, 0.08, u) * smooth(1, 0.9, u); }
+  // Low foreground strip along the bottom, so the range has a base.
+  function base(u) { return 1.5 + 2 * fbm(u * 12 + 3); }
+
+  // Ends fade out instead of stopping at a hard edge; the bottom-right corner
+  // fades too, so the "Über Zios" link sits on a quiet background.
+  function fadeAt(u, y) {
+    var dx = (1 - u) / 0.22, dy = y / (NR * 0.42);
+    return smooth(0, 0.06, u) * smooth(1, 0.95, u) * (1 - 0.92 * Math.exp(-(dx * dx + dy * dy)));
+  }
 
   function pick(z) {
     var r = Math.random();
@@ -75,21 +96,42 @@
 
   var cells = [];
   for (var x = PX / 2; x < IW; x += PX) {
-    var u = x / IW, h = height(u), top = NR - h, fade = edgeFade(u);
-    // Faces turned to the left catch the light, the others sit in shadow.
-    var slope = (height(u + 0.004) - height(u - 0.004)) / 0.008;
-    var light = Math.max(-1.5, Math.min(2, slope * 0.06));
-    // Faint snow dust just above the ridge.
-    if (rnd() < 0.35) {
-      cells.push(cell(x, top - 0.5, 1 + (rnd() < 0.4 ? 1 : 0), 0, fade));
+    var u = x / IW;
+    var tops = PEAKS.map(function (m) { return top(m, u); });
+    var sky = Math.max(base(u), Math.max.apply(null, tops));
+    // Faint snow dust just above the outline.
+    if (rnd() < 0.3) {
+      var yd = sky + 0.6;
+      cells.push(cell(x, NR - yd, 1 + (rnd() < 0.4 ? 1 : 0), 0, fadeAt(u, yd)));
     }
-    for (var r = Math.ceil(top); r < NR; r++) {
-      var d = r - top;
-      var lvl = d < 1.2 ? 7.5 : 6.2 - d * 0.08 + light * Math.max(0, 1 - d / 14);
-      lvl += (noise(x * 0.02 + r * 0.7) - 0.5) * 3;
+    for (var r = 0; r < NR; r++) {
+      var y = NR - r - 0.5;
+      if (y >= sky) continue;
+      // Front-most peak covering this spot.
+      var m = null, mt = 0;
+      for (var i = 0; i < PEAKS.length; i++) {
+        if (y < tops[i] && (!m || PEAKS[i].z > m.z)) { m = PEAKS[i]; mt = tops[i]; }
+      }
+      var lvl, d;
+      if (!m) {
+        d = base(u) - y;
+        lvl = d < 1 ? 5 : 4;
+      } else {
+        d = mt - y;
+        var w = u < m.c ? m.wl : m.wr;
+        var side = (u - m.c) / w;
+        // Lit left faces, shaded right faces, a bright spine down from the
+        // summit, and gullies running down the slopes.
+        lvl = u < m.c ? 5.6 : 3.6;
+        if (Math.abs(u - m.c) * IW < PX * 1.2 && y > m.h * 0.35) lvl += 2;
+        lvl += (noise((Math.abs(side) - y / m.h) * 14 + m.k) - 0.5) * 3.2;
+        lvl -= Math.max(0, d - 6) * 0.06;
+        if (d < 1.1) lvl = 7.5;
+        else if (d < 2.2) lvl = Math.max(lvl, 5.5);
+      }
       lvl = Math.round(Math.min(8, Math.max(1, lvl)));
       if (rnd() > KEEP[lvl]) continue;
-      cells.push(cell(x, r + 0.5, lvl, d, fade));
+      cells.push(cell(x, r + 0.5, lvl, d, fadeAt(u, y)));
     }
   }
   function cell(x, row, lvl, depth, fade) {
@@ -104,13 +146,19 @@
   canvas.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none;';
   host.appendChild(canvas);
   var ctx = canvas.getContext('2d');
+  var sx = 1, sy = 1, ox = 0;
 
   function layout() {
     var hw = host.clientWidth, hh = host.clientHeight;
     if (!hw || !hh) return false;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     var w = Math.min(hw, MAX_W_REM * rem);
-    var s = Math.min(Math.max(w / IW, MIN_SCALE), MAX_H * hh / IH), h = IH * s;
+    // Width always fills; if that would make the range too tall for the
+    // panel, only the vertical spacing is tightened (symbols stay upright).
+    sx = Math.max(w / IW, MIN_SCALE);
+    sy = Math.min(sx, MAX_H * hh / IH);
+    ox = w - IW * sx;
+    var h = IH * sy;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
@@ -118,10 +166,10 @@
     canvas.style.top = (hh - h) + 'px';
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
-    // Right-aligned: when the art is wider than the canvas, the left foothills
-    // are what gets cropped.
-    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * (w - IW * s), 0);
-    ctx.font = FONT + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace';
+    // Right-aligned (ox): when the art is wider than the canvas, the left
+    // foothills are what gets cropped.
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = (FONT * sy).toFixed(2) + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#ffffff';
@@ -129,9 +177,10 @@
   }
 
   function paint(c) {
-    ctx.clearRect(c.x - PX / 2, c.y - CH / 2, PX, CH);
+    var x = ox + c.x * sx, y = c.y * sy;
+    ctx.clearRect(x - PX * sx / 2, y - CH * sy / 2, PX * sx, CH * sy);
     ctx.globalAlpha = c.a + (c.fade - c.a) * c.glow;
-    ctx.fillText(c.ch, c.x, c.y);
+    ctx.fillText(c.ch, x, y);
   }
 
   function drawAll() {
