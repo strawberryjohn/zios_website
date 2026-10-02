@@ -1,0 +1,31 @@
+/* Reviews (Home), Figma 10028:23842. Lives in the Home page head custom code.
+   Card shape, gradient and hover can't be Webflow classes (clip-path polygon,
+   color-mix, :hover on a parent). Layout, spacing and type are classes. */
+
+/* Cut top-right corner (57px at 1440). The outer layer is the 1px white-100
+   stroke; the fill sits 1px inside it with a slightly shorter cut, so the
+   stroke also runs along the diagonal. */
+.reviews_card_bg { clip-path: polygon(0 0, calc(100% - 3.5625rem) 0, 100% 3.5625rem, 100% 100%, 0 100%); }
+.reviews_card_fill {
+  clip-path: polygon(0 0, calc(100% - 3.4625rem) 0, 100% 3.4625rem, 100% 100%, 0 100%);
+  /* Figma: #BDDDFF -> #DBEDFF at 87%. #DBEDFF has no swatch; it is blue-30 30% + blue-10. */
+  background-image: linear-gradient(90deg, var(--swatch--blue-30) 0%, color-mix(in srgb, var(--swatch--blue-30) 30%, var(--swatch--blue-10)) 87%);
+}
+
+/* Hover: a deeper blue gradient fades in over the base gradient. */
+.reviews_card_hover {
+  background-image: linear-gradient(115deg, color-mix(in srgb, var(--swatch--blue-60) 55%, transparent) 0%, color-mix(in srgb, var(--swatch--blue-60) 0%, transparent) 70%);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) {
+  .reviews_card:hover .reviews_card_hover { opacity: 1; }
+}
+.reviews_card:focus-within .reviews_card_hover { opacity: 1; }
+
+/* Opening and closing quote marks around the CMS text. */
+.reviews_card_text::before { content: "\201C"; }
+.reviews_card_text::after { content: "\201D"; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reviews_card_hover { transition: none; }
+}
