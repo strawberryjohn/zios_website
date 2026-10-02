@@ -1,0 +1,8 @@
+/* News slider (Home head). The arrows themselves are Webflow elements now:
+   inline SVG `.news_arrow_svg` (blue-100 via currentColor, `.is-prev` mirrors it)
+   inside the `.swiper-button.prev/.next` buttons of the News / Section component.
+   The old `Swiper button` instances there are hidden (Visibility prop off, not deleted):
+   their "Blue" variant sets .button_arrow_icon to display:none and turns
+   .button_arrow_element into a 0.5rem blue square, which is the dot that showed. */
+.news_swiper_nav .swiper-button { cursor: pointer; }
+.news_swiper_nav .swiper-button:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
