@@ -53,7 +53,7 @@ See `docs/webflow-inventory.md` for the full list of components, variables, and 
 Figma is the visual target, not the source of truth for sizes. Sanity-check every value as you translate it.
 
 - **Base text is 16px (1rem at the 1440px design width).** Body copy, descriptions, links and anything that should read as body text uses the base size, even where Figma drifted (e.g. 14px or 15px body copy gets bumped to 16px).
-- **Every text size is a multiple of 4px** (4, 8, 12, 16, 20, 24, 28, 32 …), both the desktop value and the mobile minimum of fluid sizes. A Figma size off that grid gets rounded to the nearest multiple. On an exact tie (e.g. 22, 30), round up, unless that would merge two different steps of the scale; then round down.
+- **Every text size is a multiple of 8px** (8, 16, 24, 32, 40, 48 …), both the desktop value and the mobile minimum of fluid sizes (user direction, 2026-10-01; replaces the earlier 4px grid). A Figma size off that grid gets rounded to the nearest multiple. On an exact tie (e.g. 20, 28), round up, unless that would merge two different steps of the scale; then round down. Steps of the approved scale that are still off the 8px grid are listed in the tracker until they are re-approved.
 - Every other size derives from the scale (px at 1440, used as rem; see the tracker for the approved scale). An off-scale value gets snapped to the step that matches its role, and the fix is noted in the tracker.
 - Elements with the same role get the same style everywhere: all card titles one step, all tag chips one step, and so on. Don't copy a one-off from a single Figma frame.
 - Only colours from the swatch/theme variables. A new variable or text style needs sign-off; prefer extending an existing collection over one-off classes.
