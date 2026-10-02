@@ -1,19 +1,8 @@
-/* News slider (Home): the shared Swiper button component renders its icon as a
-   small blue square (a dot); in the News nav it becomes a line arrow in blue-100.
-   Scoped to .news_swiper_nav so the other 36 Swiper button instances are untouched. */
-.news_swiper_nav .swiper-button { width: 2.5rem; height: 2.5rem; aspect-ratio: auto; cursor: pointer; }
-.news_swiper_nav .button_arrow_wrap, .news_swiper_nav .button_arrow_element { border: 0; border-radius: 0; background: none; }
-.news_swiper_nav .button_arrow_element { width: 2.5rem; }
-.news_swiper_nav .button_arrow_icon {
-  width: 2rem; height: 1rem; aspect-ratio: auto; background-color: var(--swatch--blue-100);
-  -webkit-mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='square'%3E%3Cpath d='M2 8h27M23 2l6 6-6 6'/%3E%3C/svg%3E");
-  mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='square'%3E%3Cpath d='M2 8h27M23 2l6 6-6 6'/%3E%3C/svg%3E");
-  transition: transform 200ms ease;
-}
-.news_swiper_nav .swiper-button.next .button_arrow_icon { transform: none; }
-.news_swiper_nav .swiper-button.prev .button_arrow_icon { transform: scaleX(-1); }
-@media (hover: hover) {
-  .news_swiper_nav .swiper-button.next:hover .button_arrow_icon { transform: translateX(0.25rem); }
-  .news_swiper_nav .swiper-button.prev:hover .button_arrow_icon { transform: scaleX(-1) translateX(0.25rem); }
-}
+/* News slider (Home head). The arrows themselves are Webflow elements now:
+   inline SVG `.news_arrow_svg` (blue-100 via currentColor, `.is-prev` mirrors it)
+   inside the `.swiper-button.prev/.next` buttons of the News / Section component.
+   The old `Swiper button` instances there are hidden (Visibility prop off, not deleted):
+   their "Blue" variant sets .button_arrow_icon to display:none and turns
+   .button_arrow_element into a 0.5rem blue square, which is the dot that showed. */
+.news_swiper_nav .swiper-button { cursor: pointer; }
 .news_swiper_nav .swiper-button:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
