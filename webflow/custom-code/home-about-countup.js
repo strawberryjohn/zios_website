@@ -1,4 +1,4 @@
-// Über Zios (Home): the stat numbers (.aboutUs_item_num: "30+", "800+", "700+",
+// Über Zios (Home): the stat numbers (.aboutUs_item_num, published lowercased as .aboutus_item_num: "30+", "800+", "700+",
 // "2.300+") count up from 0 to their value when they scroll into view, once.
 // The target is read from the text, so editing the number in Webflow is
 // enough; German thousands dots and the "+" are kept. Tabular digits keep the
@@ -8,7 +8,7 @@
   var RE = /^(\D*)(\d{1,3}(?:\.\d{3})+|\d+)(\D*)$/;
   var DUR = 2000;
   var items = [];
-  document.querySelectorAll('.aboutUs_item_num').forEach(function (el) {
+  document.querySelectorAll('.aboutus_item_num, .aboutUs_item_num').forEach(function (el) {
     var m = el.textContent.trim().match(RE);
     if (!m) return;
     items.push({ el: el, pre: m[1], suf: m[3], to: parseInt(m[2].replace(/\./g, ''), 10), dotted: m[2].indexOf('.') > -1 });
@@ -34,7 +34,7 @@
       io.unobserve(en.target);
       items.forEach(function (it) { if (it.el === en.target) run(it); });
     });
-  }, { threshold: 0.6 });
+  }, { threshold: 0.3 });
   items.forEach(function (it) {
     it.el.style.fontVariantNumeric = 'tabular-nums';
     it.el.textContent = fmt(it, 0);
