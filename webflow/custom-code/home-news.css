@@ -1,0 +1,2 @@
+.news_swiper_nav .swiper-button { cursor: pointer; }
+.news_swiper_nav .swiper-button:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }

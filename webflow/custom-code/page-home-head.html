@@ -22,6 +22,23 @@
 .gradient_wrap .partners_sec { background-color: #012462; }
 .gradient_wrap .partners_overlay { background: linear-gradient(90deg, #012462 0%, rgba(1, 36, 98, 0) 12%, rgba(1, 36, 98, 0) 88%, #012462 100%); }
 </style>
+<!-- Über Zios (home-about.css) -->
+<style>
+.aboutus_main_wr .aboutus_number { display: inline-block; background-image: linear-gradient(87deg, var(--swatch--white-100) 9.7%, var(--swatch--blue-100) 99%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+@media screen and (min-width: 992px) {
+  .aboutus_main_wr .aboutus_layout { height: 100%; min-height: 33.25rem; align-content: space-between; }
+  .aboutus_main_wr .aboutus_number_wr { grid-column: 1 / -2; align-self: end; }
+  .aboutus_main_wr .aboutus_link_wr { grid-column: -2 / -1; justify-self: end; align-self: end; display: flex; justify-content: flex-end; padding-right: 0; margin-left: auto; }
+}
+.aboutus_loader { position: relative; border: 0.1875rem solid rgba(123, 186, 255, 0.25); border-top-color: var(--swatch--blue-60); animation: aboutus-loader 1.6s linear infinite; }
+@keyframes aboutus-loader { to { transform: rotate(360deg); } }
+@media screen and (max-width: 767px) {
+  .aboutus_loader { width: 1.5rem; height: 1.5rem; border-width: 0.125rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aboutus_loader { animation-duration: 6s; }
+}
+</style>
 <style>
 @keyframes services-marquee { from { background-position-x: 1rem; } to { background-position-x: 3.3125rem; } }
 .services_card_strip { animation: services-marquee 1.6s linear infinite; }
@@ -33,9 +50,56 @@
   .services_card_inner { transition: none; }
 }
 </style>
+<!-- Expertise slider v3 (home-expertise-v3.css) -->
+<style>
+.expert_sec {
+  --exp-cw: min(var(--max-width--main), 100vw - var(--site--margin) * 2);
+  --exp-gap: 1.5rem;
+  --exp-sw: min(calc(var(--exp-cw) - var(--exp-gap) * 2), calc(100svh * 1322 / 784));
+  overflow: clip;
+}
+.expert_sec .expert_swiper { width: 100%; overflow: hidden; }
+.expert_sec .expert_slide { width: var(--exp-sw); height: auto; aspect-ratio: 1322 / 784; }
+.expert_sec .expert_tabs { width: var(--exp-sw); transform: translateX(-50%); }
+.expert_sec .expert_tab_text { font-size: var(--_typography---font-size--h6); }
+.expert_sec .expert_nav { transform: translateY(-50%); }
+.expert_sec .expert_nav.is-prev { left: calc(50% - var(--exp-sw) / 2 - 1.5rem); }
+.expert_sec .expert_nav.is-next { right: calc(50% - var(--exp-sw) / 2 - 1.5rem); }
+.expert_sec .expert_nav_icon {
+  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34' fill='none' stroke='%23071c33' stroke-width='1.5' stroke-linecap='square'%3E%3Cpath d='M6 17h21M22 12l5 5-5 5'/%3E%3C/svg%3E");
+}
+.expert_sec .expert_nav.is-prev .expert_nav_icon { transform: rotate(180deg); }
+.expert_sec .expert_nav:focus-visible,
+.expert_sec .expert_tab:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
+.expert_sec .expert_slide.is-ki .expert_eyebrow,
+.expert_sec .expert_slide.is-ki .expert_text,
+.expert_sec .expert_slide.is-ki .expert_link { color: var(--swatch--white-100); }
+.expert_sec .expert_slide.is-nis2 { background-color: var(--swatch--light-200); }
+.expert_sec .expert_slide.is-nis2 .expert_title { color: var(--blue-160-2-0); }
+.expert_sec .expert_slide.is-nis2 .expert_eyebrow,
+.expert_sec .expert_slide.is-nis2 .expert_text,
+.expert_sec .expert_slide.is-nis2 .expert_link { color: var(--swatch--blue-130); }
+@media screen and (max-width: 991px) {
+  .expert_sec .expert_head { top: 2rem; left: 2rem; }
+  .expert_sec .expert_body { right: 2rem; bottom: calc(2.3125rem + 2rem); max-width: 28rem; }
+}
+@media screen and (max-width: 767px) {
+  .expert_sec { padding-top: 4rem; padding-bottom: 4rem; --exp-gap: 0.75rem; }
+  .expert_sec .expert_slide { aspect-ratio: auto; min-height: 34rem; }
+  .expert_sec .expert_head { top: 1.5rem; left: 1.5rem; right: 1.5rem; }
+  .expert_sec .expert_body { left: 1.5rem; right: 1.5rem; bottom: 5rem; }
+  .expert_sec .expert_tabs { gap: 0.25rem; }
+  .expert_sec .expert_tab { height: auto; min-height: 2.3125rem; padding: 0.375rem 0.5rem; }
+  .expert_sec .expert_tab_text { font-size: var(--_typography---font-size--h9); white-space: normal; text-align: center; }
+  .expert_sec .expert_nav { width: 2.5rem; height: 2.5rem; }
+  .expert_sec .expert_nav_icon { width: 1.5rem; height: 1.5rem; }
+  .expert_sec .expert_nav.is-prev { left: calc(50% - var(--exp-sw) / 2 - 1.25rem); }
+  .expert_sec .expert_nav.is-next { right: calc(50% - var(--exp-sw) / 2 - 1.25rem); }
+}
+</style>
+<!-- Old expertise slider (section hidden; kept until v3 is approved) -->
 <style>
 .expertise_sec {
-  /* card = content container width (max 1920px minus gutters), never taller than the viewport */
   --exp-cw: min(var(--max-width--main), 100vw - var(--site--margin) * 2);
   --exp-sw: min(var(--exp-cw), calc(100svh * 1322 / 784));
   overflow: clip;
@@ -75,4 +139,24 @@
 @media (prefers-reduced-motion: reduce) {
   .expertise_sec .tab_button_item.is-active .tab_button_line { animation: none; width: 100%; }
 }
+</style>
+<!-- Reviews: static 3 cards, cut corner, gradient + hover (home-reviews.css) -->
+<style>
+.reviews_card_bg { clip-path: polygon(0 0, calc(100% - 3.5625rem) 0, 100% 3.5625rem, 100% 100%, 0 100%); }
+.reviews_card_fill { clip-path: polygon(0 0, calc(100% - 3.4625rem) 0, 100% 3.4625rem, 100% 100%, 0 100%); background-image: linear-gradient(90deg, var(--swatch--blue-30) 0%, color-mix(in srgb, var(--swatch--blue-30) 30%, var(--swatch--blue-10)) 87%); }
+.reviews_card_hover { background-image: linear-gradient(115deg, color-mix(in srgb, var(--swatch--blue-60) 55%, transparent) 0%, color-mix(in srgb, var(--swatch--blue-60) 0%, transparent) 70%); transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+@media (hover: hover) {
+  .reviews_card:hover .reviews_card_hover { opacity: 1; }
+}
+.reviews_card:focus-within .reviews_card_hover { opacity: 1; }
+.reviews_card_text::before { content: "\201C"; }
+.reviews_card_text::after { content: "\201D"; }
+@media (prefers-reduced-motion: reduce) {
+  .reviews_card_hover { transition: none; }
+}
+</style>
+<!-- News slider: arrows are Webflow elements (.news_arrow_svg in the News component); only cursor + focus ring here (home-news.css) -->
+<style>
+.news_swiper_nav .swiper-button { cursor: pointer; }
+.news_swiper_nav .swiper-button:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
 </style>
