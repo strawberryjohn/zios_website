@@ -22,9 +22,17 @@
   .m-nav_btn:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
   .m-nav_bar { position: relative; flex: 1 1 0%; height: 2px; overflow: hidden; background-color: var(--swatch--blue-30); }
   .m-nav_fill { position: absolute; top: 0; bottom: 0; left: 0; width: 0; background-color: var(--swatch--blue-100); }
-  .news_swiper_nav { display: flex !important; align-items: center; }
-  .news_swiper_nav .swiper-button { display: flex !important; width: 2.75rem; height: 2.75rem; }
-  .news_timer { max-width: 91.82481751824818%; margin: 1rem auto 0; }
+  /* R3. Reviews: every card as tall as the tallest one. */
+  .reviews_list.is-slider .reviews_grid { align-items: stretch; }
+  .reviews_list.is-slider .reviews_item { display: flex; }
+  .reviews_list.is-slider .reviews_card { height: 100%; }
+  /* R3. News: same arrows + timer bar as reviews (built by home-mobile.js); no dots,
+     own nav hidden; link button below the slider with room above it. */
+  .news_sec .news_swiper_nav { display: none !important; }
+  .news_sec .g-swiper_layout { display: flex; flex-direction: column; }
+  .news_sec .new_head { order: 0; }
+  .news_sec .news_slider_component { order: 1; }
+  .news_sec .news_btn_wr { order: 2; margin-top: 2.5rem; }
 }
 @media screen and (max-width: 767px) {
   /* 1. Hero: heading below the nav, 40px above the button. */
@@ -33,7 +41,7 @@
   .hero_sec .hero_head { margin-bottom: 2.5rem; }
   .hero_sec .button-wr.is-hero { margin-top: 0; }
   /* 2. Hero text + link: moved below the hero (home-mobile.js), plain, on the dark blue. */
-  .hero_bottom_mob { padding-top: 3rem; padding-bottom: 3rem; color: var(--swatch--white-100); }
+  .hero_bottom_mob { padding-top: 2rem; padding-bottom: 3rem; color: var(--swatch--white-100); }
   .hero_bottom_mob .hero_bottom { position: static; transform: none; align-items: flex-start; }
   /* 3. Ground block overlaps the main mountain a bit more. */
   .hero_layer.is-ground { top: 85%; }
@@ -54,13 +62,32 @@
   .swiper.products.is-stacked { overflow: visible; }
   .swiper.products.is-stacked .swiper-wrapper { display: flex; flex-direction: column; gap: 1.5rem; height: auto !important; transform: none !important; }
   .swiper.products.is-stacked .swiper-slide { width: 100% !important; min-height: 0; height: auto; margin: 0 !important; }
-  .solutions_sec .products_swiper_nav { display: none; }
+  .solutions_sec .products_swiper_nav, .solutions_sec .products_swiper_pagination { display: none !important; }
   .solutions_sec .products_item_inner { grid-template-columns: minmax(0, 1fr); }
   .solutions_sec .products_item_visual_wr { height: auto; aspect-ratio: 16 / 10; max-height: 15rem; }
   /* 8. Über Zios: smaller stats, less space above the blue panel. */
   .aboutus_sec .aboutus_item_wr .aboutus_item_num { font-size: var(--_typography---font-size--h3); }
   .aboutus_sec .aboutus_item_wr .aboutus_item_title { font-size: var(--_typography---font-size--h6); }
-  .aboutus_sec .aboutus_header_wr .aboutus_head { margin-bottom: 2rem; }
+  .aboutus_sec .aboutus_header_wr .aboutus_head { margin-bottom: 1rem; }
+  /* R3. Stats in one column with light blue dividers; 24/7 tight on Monitoring; link on the left. */
+  .aboutus_main_wr .aboutus_layout.u-grid-custom { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  .aboutus_main_wr .aboutus_item_wr.u-flex-vertical-nowrap { margin: 0; padding: 1.5rem 0; row-gap: 0.5rem; border-right: 0; border-bottom: 1px solid var(--swatch--blue-60); }
+  .aboutus_main_wr .aboutus_item_wr:first-child { padding-top: 0; }
+  .aboutus_main_wr .aboutus_number_wr { margin-top: 2rem; margin-bottom: 1.5rem; }
+  .aboutus_main_wr .aboutus_number { margin-bottom: -0.15em; }
+  .aboutus_main_wr .aboutus_number_title_wr { margin-top: 0; }
+  .aboutus_main_wr .aboutus_link_wr { display: flex; justify-content: flex-start; justify-self: start; margin-left: 0; padding-right: 0; text-align: left; }
+  .aboutus_main_wr .aboutus_link_wr > * { margin-left: 0; margin-right: auto; }
   /* 9. Austria map a little lower; the cards are pushed below its label by home-mobile.js. */
   .greetings_sec .greetings_map_inner { top: 16rem; }
+  /* R3. Reviews: tighter vertical rhythm. */
+  .reviews_sec { padding-bottom: 3.5rem; }
+  .reviews_sec .reviews_contain { row-gap: 1rem; }
+  .reviews_sec .reviews_card { padding-top: 1.5rem; row-gap: 1.5rem; }
+  .reviews_sec .m-nav { margin-top: 1rem; }
+  /* R3. FAQ: tighter vertical rhythm. */
+  .faq_sec { padding-top: 3rem; padding-bottom: 3rem; }
+  .faq_sec .faq_layout.u-grid-custom { row-gap: 0.75rem; }
+  .faq_sec .faq_list { margin-bottom: 2rem; }
+  .faq_sec .accordion_component { padding-top: 1.25rem; padding-bottom: 1.25rem; }
 }

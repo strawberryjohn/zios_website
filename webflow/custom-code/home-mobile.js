@@ -1,6 +1,7 @@
 // Home: tablet/mobile behaviour (Eugene's list, 2026-10-03). Three blocks, each
 // registered as its own inline page script in the Home footer (2000-char limit):
-// HomeMobileHero, HomeMobileSections, HomeMobileSliders. The CSS half
+// HomeMobileHero, HomeMobileSections, HomeMobileSliderKit, HomeMobileReviews,
+// HomeMobileNews. The CSS half
 // (home-mobile.css) is injected by HomeMobileCss1/2 in the page header.
 
 // HomeMobileHero
@@ -9,8 +10,11 @@
 //     them and skips its move-to-centre / 16->24px tween.
 //  3. Don't re-measure ScrollTrigger when the mobile address bar shows/hides;
 //     that re-measure is what let the sky gradient flash through mid-scroll.
+// R3. ≤767: the hero pin is shortened from 200% to 75% of the screen, so the
+//     text below arrives right after the first scroll instead of two screens later.
 (function () {
-  if (window.matchMedia('(max-width: 767px)').matches) {
+  var mob = window.matchMedia('(max-width: 767px)').matches;
+  if (mob) {
     var bottom = document.querySelector('.hero_sec .hero_bottom');
     var wrap = document.querySelector('.hero_gsap_trigger_wr');
     if (bottom && wrap) {
@@ -20,10 +24,16 @@
       wrap.appendChild(box);
     }
   }
-  var n = 0;
+  var n = 0, cfg = 0;
   (function st() {
-    if (window.ScrollTrigger) ScrollTrigger.config({ ignoreMobileResize: true });
-    else if (n++ < 40) setTimeout(st, 100);
+    var S = window.ScrollTrigger;
+    if (S && !cfg) { S.config({ ignoreMobileResize: true }); cfg = 1; }
+    if (S && !mob) return;
+    var h = S && S.getAll().filter(function (t) {
+      return t.trigger && t.trigger.classList && t.trigger.classList.contains('hero_sec') && t.pin;
+    })[0];
+    if (h) { h.vars.end = '+=75%'; S.refresh(); }
+    else if (n++ < 200) setTimeout(st, 100);
   })();
 })();
 
@@ -118,8 +128,8 @@
 })();
 
 // HomeMobileNews
-// 11. ≤991: news gets an autoplay timer bar (arrows made visible by the CSS;
-//     wired here only if the bundle didn't wire them). Uses HomeMobileSliderKit.
+// 11/R3. ≤991: news gets the same nav as reviews (prev arrow, timer bar, next
+//     arrow); the bundle's own arrows and dots are hidden by the CSS.
 (function () {
   if (!window.matchMedia('(max-width: 991px)').matches) return;
   window.addEventListener('load', function () {
@@ -130,15 +140,13 @@
       var el = document.querySelector('.news_slider_component .swiper');
       var ns = el && el.swiper;
       if (!ns) { if (el && tries) setTimeout(function () { news(tries - 1); }, 300); return; }
-      var navEl = document.querySelector('.news_swiper_nav') || el;
-      if (!(ns.params.navigation && ns.params.navigation.nextEl)) {
-        var p = navEl.querySelector('.swiper-button.prev'), q = navEl.querySelector('.swiper-button.next');
-        if (p) p.addEventListener('click', function () { ns.slidePrev(); });
-        if (q) q.addEventListener('click', function () { ns.slideNext(); });
-      }
-      var b = z.bar('news_timer');
-      navEl.parentNode.insertBefore(b, navEl.nextSibling);
-      z.timer(ns, b.querySelector('.m-nav_fill'));
+      var nav = z.bar('m-nav');
+      nav.insertAdjacentHTML('afterbegin', z.arrow('prev', 'Zurück'));
+      nav.insertAdjacentHTML('beforeend', z.arrow('next', 'Weiter'));
+      el.parentNode.appendChild(nav);
+      nav.querySelector('.is-prev').addEventListener('click', function () { ns.slidePrev(); });
+      nav.querySelector('.is-next').addEventListener('click', function () { if (ns.isEnd) ns.slideTo(0); else ns.slideNext(); });
+      z.timer(ns, nav.querySelector('.m-nav_fill'));
     })(10);
   });
 })();
