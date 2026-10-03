@@ -1,0 +1,109 @@
+
+<!-- Finsweet Attributes -->
+<script async type="module"
+src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js"
+fs-scrolldisable
+></script>
+<!-- Deep chat  -->
+<script type="module" src="https://unpkg.com/deep-chat@2.4.2/dist/deepChat.bundle.js"></script>
+<!-- SWIPER STYLES  -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+
+
+<style>
+.char {
+  display: inline-block;
+  text-transform: inherit !important;;
+}
+
+#particle-container {
+  position: relative;
+  z-index: 10;
+}
+#particle-container canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.swiper-button[disabled]{
+  opacity: 0.3;
+  pointer-events: none;
+}
+.swiper.news .swiper-slide {
+  margin-right: 2.25rem; 
+}
+.swiper.news .swiper-slide:last-child {
+  margin-right: 0;
+}
+</style>
+
+<style>
+  #page-loader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  #page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite;
+  }
+
+  .loader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 5px solid #FFF;
+    animation: prixClipFix 2s linear infinite;
+  }
+
+  @keyframes rotate {
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes prixClipFix {
+    0%   { clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0); }
+    25%  { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0); }
+    50%  { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%); }
+    75%  { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%); }
+    100% { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0); }
+  }
+</style>
+
+<!-- Accordion styles -->
+<style>
+.wf-design-mode .accordion_content_wrap {
+	display: block;
+}
+@media(width>991px){
+  .accordion_item:hover button[aria-expanded="false"] .accordion_toggle_icon{
+    transform: rotate(90deg);
+  }
+}
+button[aria-expanded="true"] .accordion_toggle_icon{
+  transform: rotate(135deg);
+}
+button[aria-expanded="true"] .accordion_toggle_text,
+button[aria-expanded="true"] .accordion_card_number_el{
+  color: var(--swatch--blue-100);
+}
+</style>
+
+<script>
+//LOADER SCRIPT
+</script>
