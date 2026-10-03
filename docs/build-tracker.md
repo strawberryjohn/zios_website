@@ -6,7 +6,7 @@ Paste the Figma frame link (with `node-id`) for each page once its design is fin
 
 | Page | Figma frame | Webflow page ID | Status | Notes |
 |---|---|---|---|---|
-| Home | [10028:23778](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10028-23778) | `694123a0cdbcf3917d15a080` | In progress Tablet/mobile audit 2026-10-03 (docs/home-mobile-audit.md); fixed: Leistungsbereiche cards now reset grid column/row to auto at ≤991 (they kept desktop 16-col positions), unpublished. |
+| Home | [10028:23778](https://www.figma.com/design/1An9pIi2CL2DHoEV8EUmee/ZiOS--Kopie-?node-id=10028-23778) | `694123a0cdbcf3917d15a080` Mobile round 2 (11 items from Eugene, 2026-10-03, unpublished): registered scripts HomeMobileCss1/2 (header) + HomeMobileHero/Sections/SliderKit/Reviews/News (footer), source webflow/custom-code/home-mobile.css/.js. |
 | What we do | | `69aed262702891b6c33f36a8` | | |
 | About us | | `69ca45b3349d87dbe29f8f74` | | |
 | Approach and mission | | `69ce8152e5b958f6d63d838b` | | |
