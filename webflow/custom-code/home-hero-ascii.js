@@ -2,11 +2,10 @@
 // Replaces the static ascii-art image (.hero_layer.is-3) with a canvas that
 // redraws the mountain as an airy grid of symbols chosen by depth below the
 // ridge line, after the approved hero reference:
-//   along the ridges / upper slopes -> '*' (with a few '=')
-//   middle of the slopes            -> '=' mixed with '*'
-//   low foreground                  -> heavy '#'
-//   faint, thin areas               -> '-' and '='
-// (Symbols by weight, light to heavy: - = * #; they were . : 1 0 before.)
+//   along the ridges / upper slopes -> '1' (with a few ':')
+//   middle of the slopes            -> dotted ':' mixed with '1'
+//   low foreground                  -> heavy '0'
+//   faint, thin areas               -> '.' and ':'
 // Every symbol gets its own opacity (from the traced density, with a little
 // random variation), which gives the depth.
 // Motion is slow and calm: now and then a symbol swaps for another one from
@@ -30,12 +29,12 @@
   var ALPHA = [0, 0.24, 0.3, 0.38, 0.44, 0.5, 0.56, 0.62, 0.7];
   var KEEP = [0, 0.45, 0.7, 0.9, 1, 1, 1, 1, 1];
   // Symbol mix by depth below the ridge (rows): cumulative weights.
-  var FAINT = { set: '-=', w: [0.55, 1] };
+  var FAINT = { set: '.:', w: [0.55, 1] };
   var DEPTH = [
-    { max: 2, set: '*=', w: [0.8, 1] },
-    { max: 7, set: '=*', w: [0.55, 1] },
-    { max: 12, set: '#=*', w: [0.45, 0.75, 1] },
-    { max: 99, set: '#*=', w: [0.82, 0.92, 1] }
+    { max: 2, set: '1:', w: [0.8, 1] },
+    { max: 7, set: ':1', w: [0.55, 1] },
+    { max: 12, set: '0:1', w: [0.45, 0.75, 1] },
+    { max: 99, set: '01:', w: [0.82, 0.92, 1] }
   ];
   var SWAP_MS = 180;        // how often a batch of symbols changes
   var SWAP = 0.004;         // share of symbols that change per batch

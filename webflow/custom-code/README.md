@@ -29,7 +29,7 @@ When you change a block, edit the section file, paste it into Webflow, then refr
 | `home-news.css` | Home head |
 | `home-expertise-v3.js` | Home footer |
 | `home-ascii-mountain.js` | Home footer (Über Zios + footer blue panel) |
-| `home-hero-ascii.js` | Home footer, before the parallax script |
+| `home-hero-ascii.js` | Home footer, before the parallax script (live symbol swap lands via the hero PR) |
 | `home-hero-parallax.js` | Home footer |
 | `home-reviews-reveal.js` | Registered script `HomeReviewsReveal` v1.0.0, applied to the Home footer |
 | `home-expertise-slider.js` | Not live (old slider, removed from the footer) |
