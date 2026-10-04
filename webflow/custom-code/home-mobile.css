@@ -72,7 +72,7 @@
   .aboutus_sec .aboutus_item_wr .aboutus_item_num { font-size: var(--_typography---font-size--h3); }
   .aboutus_sec .aboutus_item_wr .aboutus_item_title { font-size: var(--_typography---font-size--h6); }
   .aboutus_sec .aboutus_header_wr .aboutus_head { margin-bottom: 1rem; }
-  /* R3. Stats in one column with light blue dividers; 24/7 tight on Monitoring; link centred 36px below it. */
+  /* R3. Stats in one column with light blue dividers; 24/7 tight on Monitoring; link centred 48px below it. */
   /* Something outside Webflow's styles kept two staggered columns on the live site,
      hence the !important. Stat blocks: content top left, same 24px from text to divider. */
   .aboutus_main_wr .aboutus_layout.u-grid-custom { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none; row-gap: 0; }
@@ -82,8 +82,9 @@
   .aboutus_main_wr .aboutus_number_wr { margin-top: 2rem; margin-bottom: 0; }
   .aboutus_main_wr .aboutus_number { margin-bottom: -0.15em; }
   .aboutus_main_wr .aboutus_number_title_wr { margin-top: 0; }
-  .aboutus_main_wr .aboutus_link_wr { display: flex; justify-content: center; justify-self: stretch; margin: 2.25rem 0 0; padding-right: 0; text-align: center; }
-  .aboutus_main_wr .aboutus_link_wr > * { margin-left: auto; margin-right: auto; }
+  /* The live site positions the link outside the flow (not from Webflow's styles), so pin it back with !important. */
+  .aboutus_main_wr .aboutus_link_wr { position: static !important; display: flex !important; justify-content: center !important; width: 100% !important; margin: 3rem 0 0 !important; padding: 0 !important; transform: none !important; }
+  .aboutus_main_wr .aboutus_link_wr .text_link { position: relative !important; inset: auto !important; width: auto !important; margin: 0 auto !important; transform: none !important; }
   /* 9. Austria map a little lower; the cards are pushed below its label by home-mobile.js. */
   .greetings_sec .greetings_map_inner { top: 16rem; }
   /* R3. Reviews: tighter vertical rhythm. */
