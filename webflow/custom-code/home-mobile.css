@@ -40,9 +40,10 @@
   .hero_contain { display: flex; flex-direction: column; justify-content: flex-start; padding-top: 8rem; }
   .hero_sec .hero_head { margin-bottom: 2.5rem; }
   .hero_sec .button-wr.is-hero { margin-top: 0; }
-  /* 2. Hero text + link: moved below the hero (home-mobile.js), plain, on the dark blue. */
-  .hero_bottom_mob { padding-top: 2rem; padding-bottom: 3rem; color: var(--swatch--white-100); }
-  .hero_bottom_mob .hero_bottom { position: static; transform: none; align-items: flex-start; }
+  /* 2. Hero text + link: their own dark blue screen below the hero (home-mobile.js),
+     centred; this block + the partners marquee (--zp-h, set by the JS) = one screen. */
+  .hero_bottom_mob { display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; min-height: calc(100svh - var(--zp-h, 8rem)); padding-top: 2rem; padding-bottom: 2rem; color: var(--swatch--white-100); }
+  .hero_bottom_mob .hero_bottom.u-align-items-end { position: static; transform: none; align-items: center; text-align: center; }
   /* 3. Ground block overlaps the main mountain a bit more. */
   .hero_layer.is-ground { top: 85%; }
   /* 4. Partners marquee smaller. */

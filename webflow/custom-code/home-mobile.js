@@ -5,23 +5,34 @@
 // (home-mobile.css) is injected by HomeMobileCss1/2 in the page header.
 
 // HomeMobileHero
-//  2. ≤767: the hero text + link move below the hero (dark blue, no scale-up).
-//     Runs before load, so the hero parallax (which starts on load) never sees
-//     them and skips its move-to-centre / 16->24px tween.
-//  3. Don't re-measure ScrollTrigger when the mobile address bar shows/hides;
-//     that re-measure is what let the sky gradient flash through mid-scroll.
-// R3. ≤767: the hero pin is shortened from 200% to 75% of the screen, so the
-//     text below arrives right after the first scroll instead of two screens later.
+// ≤767 the hero is two screens (Eugene, 2026-10-04):
+//  1. The hero itself scrolls away normally: no pin, heading + button scroll
+//     like regular content, only the mountain layers lag behind (parallax).
+//  2. The hero text + link move into their own dark blue block, centred, sized
+//     so that block plus the partners marquee fill exactly one screen.
+// Runs before load, so the hero parallax (which starts on load) never sees the
+// text and skips its move-to-centre / 16->24px tween. Once that pinned
+// timeline exists it is reverted and replaced by the plain parallax below.
+// All widths: ScrollTrigger doesn't re-measure when the mobile address bar
+// shows/hides (that let the sky gradient flash through mid-scroll).
 (function () {
   var mob = window.matchMedia('(max-width: 767px)').matches;
-  if (mob) {
-    var bottom = document.querySelector('.hero_sec .hero_bottom');
+  var sec = document.querySelector('.hero_sec');
+  if (mob && sec) {
+    var bottom = sec.querySelector('.hero_bottom');
     var wrap = document.querySelector('.hero_gsap_trigger_wr');
     if (bottom && wrap) {
       var box = document.createElement('div');
       box.className = 'u-container hero_bottom_mob';
       box.appendChild(bottom);
       wrap.appendChild(box);
+      var fit = function () {
+        var p = document.querySelector('.partners_sec');
+        box.style.setProperty('--zp-h', (p ? p.offsetHeight : 0) + 'px');
+      };
+      fit();
+      window.addEventListener('load', fit);
+      window.addEventListener('resize', fit);
     }
   }
   var n = 0, cfg = 0;
@@ -29,11 +40,23 @@
     var S = window.ScrollTrigger;
     if (S && !cfg) { S.config({ ignoreMobileResize: true }); cfg = 1; }
     if (S && !mob) return;
-    var h = S && S.getAll().filter(function (t) {
-      return t.trigger && t.trigger.classList && t.trigger.classList.contains('hero_sec') && t.pin;
-    })[0];
-    if (h) { h.vars.end = '+=75%'; S.refresh(); }
-    else if (n++ < 200) setTimeout(st, 100);
+    var h = S && S.getAll().filter(function (t) { return t.trigger === sec && t.pin; })[0];
+    if (!h) { if (n++ < 200) setTimeout(st, 100); return; }
+    var tl = h.animation;
+    h.kill(true); // trigger first: killing the timeline first would leave the pin in place
+    if (tl) { tl.progress(0); tl.kill(); }
+    var L = function (k) { return sec.querySelector('.hero_layer.is-' + k); };
+    var all = ['1', '2', '3', '4', '5', 'ground'].map(L).filter(Boolean);
+    var top = [sec.querySelector('.hero_head'), sec.querySelector('.button-wr.is-hero')].filter(Boolean);
+    gsap.set(all.concat(top), { clearProps: 'transform,opacity,visibility' });
+    // Further back = more lag. Layer 1 (front) moves with the page.
+    var lag = { 5: 0.5, 4: 0.35, 3: 0.25, 2: 0.15, ground: 0.15 };
+    var p = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+      trigger: sec, start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+    Object.keys(lag).forEach(function (k) {
+      if (L(k)) p.to(L(k), { y: function () { return sec.clientHeight * lag[k]; } }, 0);
+    });
+    S.refresh();
   })();
 })();
 
