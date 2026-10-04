@@ -73,8 +73,11 @@
   .aboutus_sec .aboutus_item_wr .aboutus_item_title { font-size: var(--_typography---font-size--h6); }
   .aboutus_sec .aboutus_header_wr .aboutus_head { margin-bottom: 1rem; }
   /* R3. Stats in one column with light blue dividers; 24/7 tight on Monitoring; link on the left. */
-  .aboutus_main_wr .aboutus_layout.u-grid-custom { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
-  .aboutus_main_wr .aboutus_item_wr.u-flex-vertical-nowrap { margin: 0; padding: 1.5rem 0; row-gap: 0.5rem; border-right: 0; border-bottom: 1px solid var(--swatch--blue-60); }
+  /* Something outside Webflow's styles kept two staggered columns on the live site,
+     hence the !important. The four stat blocks get equal rows, content top left. */
+  .aboutus_main_wr .aboutus_layout.u-grid-custom { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: repeat(4, 1fr); row-gap: 0; }
+  .aboutus_main_wr .aboutus_layout > * { grid-column: 1 / -1 !important; grid-row: auto !important; width: auto !important; transform: none !important; }
+  .aboutus_main_wr .aboutus_item_wr.u-flex-vertical-nowrap { margin: 0 !important; padding: 1.5rem 0; row-gap: 0.5rem; justify-content: flex-start; align-items: flex-start; text-align: left; border-right: 0; border-bottom: 1px solid var(--swatch--blue-60); }
   .aboutus_main_wr .aboutus_item_wr:first-child { padding-top: 0; }
   .aboutus_main_wr .aboutus_number_wr { margin-top: 2rem; margin-bottom: 1.5rem; }
   .aboutus_main_wr .aboutus_number { margin-bottom: -0.15em; }
