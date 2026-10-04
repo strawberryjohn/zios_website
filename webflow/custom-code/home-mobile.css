@@ -41,13 +41,15 @@
   .hero_sec .hero_head { margin-bottom: 2.5rem; }
   .hero_sec .button-wr.is-hero { margin-top: 0; }
   /* 2. Hero text + link: their own dark blue screen below the hero (home-mobile.js),
-     centred in the space above a 200px gap to the marquee; this block + the partners marquee (--zp-h, set by the JS) = one screen. */
-  .hero_bottom_mob { display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; min-height: calc(100svh - var(--zp-h, 8rem)); padding-top: 2rem; padding-bottom: 12.5rem; color: var(--swatch--white-100); }
+     centred in the space above a 450px gap to the marquee; this block + the partners marquee (--zp-h, set by the JS) = one screen. */
+  .hero_bottom_mob { display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; min-height: calc(100svh - var(--zp-h, 8rem)); padding-top: 2rem; padding-bottom: 28.125rem; color: var(--swatch--white-100); }
   .hero_bottom_mob .hero_bottom.u-align-items-end { position: static; transform: none; align-items: center; text-align: center; }
   /* 3. Ground block overlaps the main mountain a bit more. */
   .hero_layer.is-ground { top: 85%; }
   /* 4. Partners marquee smaller. */
-  .partners_sec { padding-top: 2rem; padding-bottom: 3.5rem; }
+  .partners_sec { padding-top: calc(2rem + 2px); padding-bottom: 3.5rem; }
+  /* Overlap the hero by 2px so no light hairline shows at the seam above the marquee. */
+  .gradient_wrap { margin-top: -2px; }
   .partners_sec .partners_item { height: 2.25rem; }
   /* 5. Expertise slider: no timer tabs; text block drops to the bottom edge. */
   .expert_sec .expert_tabs { display: none; }
