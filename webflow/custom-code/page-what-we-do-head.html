@@ -1,0 +1,45 @@
+<style>
+.swiper-slide.reviews{
+  opacity: 0.4;
+  transition: all 0.4s ease;
+}
+.swiper-slide-active.reviews{
+  opacity: 1;
+}
+.swiper-slide-active.reviews + .swiper-slide {
+  opacity: 1;
+}
+
+.swiper.reviews .swiper-slide {
+  margin-right: 1.625rem; 
+}
+.swiper.reviews .swiper-slide:last-child {
+  margin-right: 0;
+}
+</style>
+
+<!-- WHAT WE DO REDESIGN (versioned in strawberryjohn/zios_website: webflow/custom-code/) -->
+<style>
+/* What we do hero (page head). Versioned in strawberryjohn/zios_website: webflow/custom-code/. */
+
+/* CTA: Figma's fixed 220px pill, label left, arrow right. The Button Primary
+   component sizes to its label, so this is scoped to the hero. */
+.wwdhero_content .button_primary_wrap { width: 13.75rem; }
+.wwdhero_content .button_primary_element { width: 100%; justify-content: space-between; }
+
+/* Reveal (wwd-hero-reveal.js): hidden until the GSAP timeline has set its start state. */
+html.wwd-reveal-pending .wwdhero_heading,
+html.wwd-reveal-pending .wwdhero_text,
+html.wwd-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidden; }
+/* Line masks: a little room so descenders aren't clipped at line-height 1.1. */
+.wwdhero_line-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
+</style>
+<script>
+/* Reveal guard: hide the hero text until wwd-hero-reveal.js runs; show it anyway after 3s. */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var d = document.documentElement;
+  d.classList.add('wwd-reveal-pending');
+  setTimeout(function () { d.classList.remove('wwd-reveal-pending'); }, 3000);
+})();
+</script>
