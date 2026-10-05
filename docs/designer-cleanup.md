@@ -33,6 +33,11 @@ So a section can look finished on the live site and broken or unstyled in the De
 Measured on existing header wrappers, the gap from headline to section body is 2, 2.5, 3.125, 4.375 or 8 rem, depending on who built the section. Radius is hard-coded (0.375rem) in places even though `radius/*` variables exist. There are three different arrow implementations (CSS data-URI in Expertise, JS-built SVG in the mobile sliders, Webflow SVG in News) and four easing/duration combinations. `section-space/small` and `section-space/main` are 0.
 `docs/rules.md` fixes this going forward.
 
+## Progress
+
+- 2026-10-05: Expertise moved to a section embed. It renders in the Designer and was confirmed by the user; the page-head copy is removed. This is the pattern for every section.
+- 2026-10-05: one pixel arrow site-wide, plus a 4px hover nudge in a Global Styles embed. The bundle's arrow swap was unhooked.
+
 ## The plan
 
 Work top to bottom. Every step is reversible, and nothing is deleted or published without your OK.

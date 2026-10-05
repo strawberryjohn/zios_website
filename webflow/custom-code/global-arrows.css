@@ -1,0 +1,32 @@
+<style>
+/* CSS · Arrows (site-wide). Lives in an HTML embed inside the Global Styles component,
+   so every page and the Designer load it. Source: strawberryjohn/zios_website
+   webflow/custom-code/global-arrows.css. Rules: docs/rules.md §7 + §8.
+   One pixel arrow everywhere; on hover/focus of its link or button the arrow nudges 4px
+   in the direction it points. Uses `translate` (not `transform`) so it never fights a
+   rotation or a position transform already on the element. */
+
+/* Hidden swap copies (the old bundle slid these in on hover). */
+.button_primary_icon.is-1,
+.text_link_icon_wr.is-1,
+.btn_icon_svg.is-2 { display: none !important; }
+
+/* Every arrow that can nudge. */
+.btn_icon_svg:not(.cart), .btn_icon_large svg, .text_link_icon, .news_arrow_svg,
+.expert_nav_icon, .footer_action_btn_svg {
+  transition: translate 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Forward arrows: nudge right. */
+:is(a, button, [data-button], [role="button"], .swiper-button, .indastries_card_wr):is(:hover, :focus-visible)
+  :is(.btn_icon_svg:not(.cart), .btn_icon_large svg, .text_link_icon, .news_arrow_svg:not(.is-prev), .footer_action_btn_svg),
+.expert_nav.is-next:is(:hover, :focus-visible) .expert_nav_icon { translate: 0.25rem 0; }
+
+/* Back arrows: nudge left. */
+:is(a, button, [data-button], [role="button"], .swiper-button):is(:hover, :focus-visible) .news_arrow_svg.is-prev,
+.expert_nav.is-prev:is(:hover, :focus-visible) .expert_nav_icon { translate: -0.25rem 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn_icon_svg, .btn_icon_large svg, .text_link_icon, .news_arrow_svg, .expert_nav_icon, .footer_action_btn_svg { transition: none; }
+}
+</style>

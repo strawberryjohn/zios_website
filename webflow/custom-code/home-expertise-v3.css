@@ -21,9 +21,8 @@
 .expert_sec .expert_nav { transform: translateY(-50%); }
 .expert_sec .expert_nav.is-prev { left: calc(50% - var(--exp-sw) / 2 - 1.5rem); }
 .expert_sec .expert_nav.is-next { right: calc(50% - var(--exp-sw) / 2 - 1.5rem); }
-.expert_sec .expert_nav_icon {
-  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34' fill='none' stroke='%23071c33' stroke-width='1.5' stroke-linecap='square'%3E%3Cpath d='M6 17h21M22 12l5 5-5 5'/%3E%3C/svg%3E");
-}
+.expert_sec .expert_nav { color: var(--swatch--blue-180); }
+.expert_sec .expert_nav_icon { display: flex; align-items: center; justify-content: center; }
 .expert_sec .expert_nav.is-prev .expert_nav_icon { transform: rotate(180deg); }
 .expert_sec .expert_nav:focus-visible,
 .expert_sec .expert_tab:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }

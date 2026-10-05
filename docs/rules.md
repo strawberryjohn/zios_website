@@ -19,7 +19,7 @@ The single most important rule: **the Designer must show what the published site
 | Hover / focus states that Webflow supports | Webflow class states (Hover, Focus-visible) | |
 | Simple scroll reveals, hover moves | Webflow Interactions, using the motion tokens below | Editable without code |
 | CSS the style panel can't express (`clip-path` with `calc`, `background-clip: text`, `@keyframes`, `color-mix`, `:has`, `::before` content) | **One HTML embed inside the section**, labelled `CSS · <section>`, scoped to that section's classes | Embedded `<style>` renders in the Designer and travels with the section |
-| CSS needed on every page | The embed in the `Global Styles` component | Lumos convention; renders in the Designer |
+| CSS needed on every page | An embed in the `Global Styles` component (e.g. `CSS · Arrows (site-wide)`) | Lumos convention; renders in the Designer |
 | Behaviour (sliders, canvas, GSAP sequences, counters) | JS in page footer code, or site footer code if it's used on several pages; source in `webflow/custom-code/` | Webflow can't do it natively |
 | Never | CSS injected by JS, CSS in page head (except temporary hotfixes, which must be moved within a week), `!important`, hard-coded hex, IDs as style hooks | Invisible in the Designer, hard to find |
 
@@ -140,10 +140,17 @@ Borders: `border-width/main` (≈1px) in `border` theme colour. No other widths.
 
 ## 7. Icons and arrows
 
-- **Proposed:** one arrow everywhere. It's the line arrow from the Expertise slider: 34×34 viewBox, 1.5 stroke, square caps, `currentColor`. Build it as the `Icon Arrow` component with a `direction` prop (right / left / up-right).
-- Arrow buttons (slider prev/next): 44px square hit area (40px on mobile), 1px border in `currentColor`, no radius, icon 24px. Hover: background fills with the text colour and the icon inverts.
-- Text link with arrow (`Button / Text Link`): arrow on the right, moves 4px right on hover.
+**Approved (2026-10-05).** One arrow everywhere: the **pixel arrow** (stepped arrowhead, square line), filled with `currentColor`, viewBox `0 0 20 13`:
+
+```
+M16.9727 7.06738L16.9727 8.56152L15.5664 8.56152L15.5664 9.90918L14.1602 9.90918L14.1602 12.7725L12.7432 12.7725L12.7432 7.09277L0 7.09277L0 5.67578L12.7432 5.67578L12.7432 0L14.1602 0L14.1602 2.82617L15.5664 2.82617L15.5664 4.18945L16.9727 4.18945L16.9727 5.65039L19.7187 5.65039L19.7187 7.06738L16.9727 7.06738Z
+```
+
+- These already carry it: `Button Primary` (via `Primary Button / Icon`), `Button / Text Link`, `Button Secondary`, `Icon Arrow`, `Icon Arrow Full`, `Key link`, the `News / Section` slider arrows, the Footer CTA and links, the Expertise prev/next and card icons, and the chat send button. To get an arrow, use one of these components first. A new inline arrow must use the path above; other directions are made with a CSS `rotate`, never with a different drawing.
+- **Hover (Approved):** on hover or keyboard focus of its link or button, the arrow nudges 4px in the direction it points (`translate`, 400ms, ease-out). There is no swap and no second copy. This lives in the site-wide embed `CSS · Arrows (site-wide)` inside the `Global Styles` component (`webflow/custom-code/global-arrows.css`). A new arrow class gets added to that file's selector list.
+- Arrow buttons (slider prev/next): square, 44px hit area (40px on mobile), icon 24px.
 - No icon fonts, no data-URI icons in CSS, no SVGs built in JS. All SVGs are Webflow elements or components.
+- Not yet converted: the tablet/mobile slider arrows that `home-mobile.js` builds in JS (a registered script on Home). They go away when that code moves to Webflow.
 
 ---
 
@@ -159,7 +166,7 @@ Borders: `border-width/main` (≈1px) in `border` theme colour. No other widths.
 | autoplay | 6s per slide, progress bar shows the timer | every auto-advancing slider |
 
 - **Reveal on scroll (Proposed):** fade + 24px rise, `slow` + `ease-out`, cards stagger 80ms, once only.
-- **Hover:** cards lift 8px (Leistungsbereiche: 28px is the approved exception), arrows nudge 4px, gradients fade in.
+- **Hover:** cards lift 8px (Leistungsbereiche: 28px is the approved exception), arrows nudge 4px (section 7, live site-wide), gradients fade in.
 - **Signature effect:** the animated ASCII mountain (`- = * #` symbols) is reserved for hero, Über Zios and footer. Don't add it to new sections without sign-off.
 - Every animation has a `prefers-reduced-motion` fallback: no movement, final state shown.
 - Every slider uses the same pattern: loop, autoplay 6s, timer bar, arrow buttons from section 7, swipe on touch.

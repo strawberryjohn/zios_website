@@ -58,7 +58,7 @@ Start every session from the latest `main` and merge back into it at the end of 
 2. Read the frame with Figma MCP (`get_design_context`, `get_screenshot`, `get_variable_defs`).
 3. Map Figma tokens to existing Webflow variables. If a value has no match, flag it; don't create a variable without asking.
 4. Reuse existing components and classes first. Only create new classes for section-specific layout, named `<section>_<element>` in Lumos style.
-5. Build in the Designer (`data_whtml_builder` / `data_element_builder` / `data_component_builder`), then check the result with `element_snapshot_tool` against the Figma screenshot at desktop, tablet (991), and mobile (767/479).
+5. Build in the Designer (`data_whtml_builder` / `data_element_builder` / `data_component_builder`). Styling goes on classes; whatever CSS can't be a class goes in the section's own `CSS · <section>` embed, never in page head code. JS-driven sections get a "before JS" state that matches the first frame. Then check the result with `element_snapshot_tool` against the Figma screenshot at desktop, tablet (991), and mobile (767/479), **and check the Designer against the published page**. A section is not done while they differ.
 6. Update the tracker.
 
 ## Type and token rules
