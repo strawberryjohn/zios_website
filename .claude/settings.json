@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Webflow__data_variable_tool"
+    ]
+  }
+}
