@@ -9,8 +9,8 @@ Existing content on the page isn't worth keeping. Rebuild each section from Figm
 
 | # | Section | Figma node | Type | Reuse from Home / site | Status |
 |---|---|---|---|---|---|
-| 0 | Prep: audit the current page, hide old sections, add page code slots | | | | |
-| 1 | Hero: "Rethink what your business can become." + lead + CTA, background image | `10028:32219` | full | Navbar (global), hero positioning offset rule, `Button Primary` | |
+| 0 | Prep: audit the current page, hide old sections, add page code slots | | | | Done |
+| 1 | Hero: "Rethink what your business can become." + lead + CTA, background image | `10028:32219` | full | Navbar (global), hero positioning offset rule, `Button Primary` | Built, visual QA pending |
 | 2 | Partner logos strip | `10028:32091` | full | `partners_sec` marquee + `home-partners.css` (check the bg colour: here it sits on the hero gradient) | |
 | 3 | What We Do: intro, 5 rows (number + title / 3D icon / text + "Get Started"), closing CTA "See how organizations build resilience with ZiOS" + "View Cases" | `10028:32223` | regular | Leistungsbereiche CMS (5 items match: Cybersecurity, KI & Automatisierung, Compliance & Governance, Managed IT & Server, Cloud & Backup), `Button / Text Link`, `Clickable` | |
 | 4 | Core Industries We Serve: 2-col list of 6, tag chips, arrow icon | `10028:23438` | regular | Branchen CMS + tags, same tag-chip style as Home | |
@@ -62,4 +62,36 @@ Figma type variables vs the approved scale:
 
 ## Section notes
 
-_Filled in per section as it's built._
+### 0. Prep
+
+Current page (2026-10-05), inside `page_main`:
+- `dark-bg-wrapper` (bg `--_theme---background-2`) holds the old `hero_sec is-whatWeDo` (now **hidden**), `partners_sec is-whatWeDo`, and `whatWeDo_sec` (old tabs version).
+- Then `indastries_sec`, `products_sec`, `CTA section / Global pages` ("Reinvention. Real results."), `FAQ / Section` (filtered to this page), `News / Section`, Footer.
+- Each old section gets hidden when its replacement is built, so the page stays usable in between. Nothing deleted.
+
+Tooling notes:
+- The data API (elements, styles, variables, components, whtml builder) works **without** the Designer open. Only `asset_tool`, `element_snapshot_tool` and `designer_tool` need the Designer.
+- Figma images: the container can't download from figma.com, but `get_screenshot` with `enableBase64Response` saves the PNG locally. Process it there (Pillow), then upload with `data_assets_tool > create_asset` plus a direct S3 POST (curl), which works.
+- whtml builder: an `<img src>` pointing at the CDN isn't linked to the asset; follow with `set_image_asset`. A class with no CSS passed and no existing style is dropped, so create styles first (`data_style_tool`, with `variable_as_value` for tokens) and reference them by name.
+- The old hero had `data-gsap-trigger="menu-animation"` (navbar animation in the external bundle); the new hero keeps it.
+
+### 1. Hero (`10028:32219`)
+
+Built as `wwdHero_sec` (first child of `dark-bg-wrapper`).
+
+| Figma | Value | Webflow |
+|---|---|---|
+| Section bg | `#002361` | `swatch/blue-170` (#012462, same blue as Home's hero end and partners strip) |
+| Theme | | Theme collection: **Dark mode** on `wwdHero_sec`; text colour `--_theme---text` |
+| Background image | photo at 28% over black, screen tint, fades to the bg colour from 50% to 70% of its height, flipped | flattened Figma render (1440×876, alpha kept) composited onto #012462 → `wwd-hero-bg.webp` (12 KB, asset `6ac42c7fb46bd61fa63dcc77`, copy in `webflow/custom-code/`). `object-fit: cover`, anchored bottom (65% x on mobile to keep the hand). Exported at 1x only: it's a 28% overlay, so the upscale on wide screens is barely visible |
+| Heading | Light 82 / 1.1 / -4%, capitalize, 910 wide | `u-text-style-h1` (80, approved H1; weight 300 + letter-spacing var) + `wwdHero_heading` (capitalize, no margins). 82 → 80 |
+| Lead | Regular 16 / 1.3, 356 wide | `u-text-style-h8` (16/1.3 regular) + `wwdHero_text` max 22.25rem |
+| Gaps | heading→lead 40, text→CTA 64 | `wwdHero_head` row-gap 2.5rem, `wwdHero_content` row-gap 4rem (mobile 1.5 / 2.5rem) |
+| Content top | 196 | `wwdHero_contain u-container` padding-top 12.25rem (tablet 10, mobile 8), bottom 5rem |
+| Section height | 876 | min-height 54.75rem (mobile 100svh) |
+| CTA "Get Started" | light pill, blue-10 bg, 18px medium text, arrow, hover blob | `Button Primary` (Light variant), the same as Home's hero CTA; links to `/contacts`. Its text size comes from the component (Figma 18 is off-grid → H6 20 by the scale) |
+
+Figma's `ss01`/`ss04` font features aren't used anywhere on the site (Home included), so they're left out to keep the same role styled the same everywhere.
+
+Open: visual QA at 1440 / 991 / 767 / 479 needs the Designer (`element_snapshot_tool`).
+
