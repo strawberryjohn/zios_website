@@ -39,6 +39,18 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 
 See `docs/webflow-inventory.md` for the full list of components, variables, and CMS collections.
 
+## Rulebook (read before building anything)
+
+- `docs/rules.md`: spacing, type, colour, shape, icons/arrows, motion, responsive, and **Designer vs custom code**. It wins over Figma. Rules marked *Proposed* need the user's sign-off before they are applied site-wide.
+- `docs/code-registry.md`: every piece of custom code, where it is injected and what the Designer shows without it. Update it in the same commit as the code.
+- `docs/designer-cleanup.md`: the audit and the step-by-step plan to make the Designer match the published site.
+
+Core rule: **the Designer must show what the published site shows.** Layout, size, spacing, colour and all breakpoint overrides go on Webflow classes with variables. CSS the style panel can't express goes in an embed inside its section (labelled `CSS · <section>`). JS goes in footer code and hooks onto `data-js` attributes. Never inject CSS with JS, never add `@media` CSS in custom code, never leave hidden sections on a live page (move them to the Archive page).
+
+## Branches
+
+Start every session from the latest `main` and merge back into it at the end of the session. Live Webflow code that exists only on a side branch is how the repo stopped being the source of truth.
+
 ## Figma → Webflow workflow
 
 1. Get the Figma frame URL (`figma.com/design/<fileKey>/...?node-id=X-Y`) and mark the page "In progress" in `docs/build-tracker.md`.
