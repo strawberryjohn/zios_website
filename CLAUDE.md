@@ -28,7 +28,8 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 
 - Wrap sections in the `Section` + `Layout` / `Grid` components; use `Spacer` rather than ad-hoc margins.
 - Text goes through `Typography Heading` / `Typography Paragraph` / `Typography Eyebrow`, sized by the **Text Style** variable modes (Display, H1–H6, Text Large/Small), not by one-off font sizes.
-- Color comes from the **Theme** collection (`--_theme---*`) with modes Base / Dark / Brand. Set a section's theme mode; never hard-code a hex value.
+- Spacing comes from the role variables in the **Spacing** collection (`space/head-to-body`, `space/card-padding`, …; see `docs/rules.md` §3), with Base / tablet / mobile modes.
+- Color comes from the **Theme** collection (`--_theme---*`) with modes Base / Dark / Brand. Set a section's theme mode; never hard-code a hex value. Gradients are `u-gradient-*` utility classes.
 - Buttons: `Button Main`, `Button Primary`, `Button Secondary`, `Primary Button / Icon`, `Button / Text Link`.
 - Make a card clickable with the `Clickable` utility component.
 - Build new page sections as components in the `• Section` group (duplicate `• Section Custom (duplicate this)`).
@@ -73,7 +74,7 @@ Figma is the visual target, not the source of truth for sizes. Sanity-check ever
 
 ## External code bundle
 
-Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it.
+**Frozen (decision 2026-10-05).** Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it. Don't add anything that depends on the bundle; rebuilt sections move their behaviour into `webflow/custom-code/`.
 
 ## Rules
 

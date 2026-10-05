@@ -1,7 +1,8 @@
 # Zios build rules
 
 The rulebook for every page and section. If a Figma frame disagrees with this file, this file wins, and the deviation goes in the tracker.
-Status per rule: **Approved** (use it) · **Proposed** (my recommendation, needs your sign-off before it is applied site-wide).
+Status per rule: **Approved** (use it) · **Proposed** (needs sign-off before it is applied site-wide).
+Decisions of 2026-10-05: 4px type grid, spacing variable system, square containers / rounded controls, dark blue + gradients as tokens, external bundle frozen.
 
 Design width 1440px, so 1rem = 16px. Breakpoints: Desktop (base) · Tablet ≤991 · Mobile L ≤767 · Mobile ≤479.
 
@@ -28,7 +29,7 @@ JS rules:
 - Every script file starts with a comment saying which section it drives and which `data-js` hooks it needs.
 - Log every script in `docs/code-registry.md` when you add it.
 
-Before touching a style that "doesn't take effect": check `app.css` / `app.js` from the external bundle (see CLAUDE.md).
+**External bundle is frozen** (`zios-webflow.netlify.app/app.js` + `app.css`, repo `ndrewfrolov/zios`). Nobody changes it, and nothing new may depend on it. When a section is rebuilt, its behaviour moves into our own code (`webflow/custom-code/`, logged in the registry), and the section's styles move onto Webflow classes. If a style "doesn't take effect", check whether `app.css` overrides it, then beat it with a more specific Webflow class, never by editing the bundle.
 
 ---
 
@@ -53,30 +54,32 @@ section  [<name>_sec  u-section-regular | u-section-full]   theme mode set here
 
 ## 3. Spacing
 
-Today the gap from a section header to its body varies between 2 and 8 rem across sections. Proposed fixed roles (px at 1440; the value goes in as rem):
+**Approved.** Every gap is a role from the `Spacing` collection. Bind the variable, never type a value. The collection has three modes: Base (desktop), `tablet` (≤991) and `mobile` (≤767). Body switches the mode at each breakpoint, so a bound value adapts on its own.
 
-| Role | Desktop | Tablet | Mobile | Status |
+| Role | Variable | Desktop | Tablet | Mobile |
 |---|---|---|---|---|
-| Section padding top/bottom (`section-space/large`) | 140 | 100 | 64 | Approved desktop/tablet; mobile Proposed |
-| Header block → section body | 64 | 48 | 40 | Proposed |
-| Eyebrow → headline | 16 | 16 | 12 | Proposed |
-| Headline → intro text | 24 | 24 | 16 | Proposed |
-| Text → button / link | 32 | 32 | 24 | Proposed |
-| Paragraph → paragraph | 16 | 16 | 16 | Proposed |
-| Grid gap between cards | 24 | 24 | 16 | Proposed |
-| Card inner padding | 48 | 32 | 24 | Proposed (Figma Expertise 50 → 48) |
-| Title → text inside a card | 20 | 20 | 16 | Proposed |
-| Page top under fixed navbar (`section-space/page-top`) | 80 | 80 | 80 | Approved |
+| Section padding top/bottom | `section-space/large` | 140 | 100 | 64 |
+| Page top under fixed navbar | `section-space/page-top` | 80 | 80 | 80 |
+| Header block → section body | `space/head-to-body` | 64 | 48 | 40 |
+| Eyebrow → headline | `space/eyebrow-to-heading` | 16 | 16 | 12 |
+| Headline → intro text | `space/heading-to-text` | 24 | 24 | 16 |
+| Text → button / link | `space/text-to-action` | 32 | 32 | 24 |
+| Paragraph → paragraph | `space/paragraph` | 16 | 16 | 16 |
+| Grid gap between cards | `space/grid-gap` | 24 | 24 | 16 |
+| Card inner padding | `space/card-padding` | 48 | 32 | 24 |
+| Title → text inside a card | `space/card-title-to-text` | 20 | 20 | 16 |
 
-Every spacing value is a multiple of 4px. Off-grid Figma values get snapped to the nearest role above, with the change noted in the tracker.
-
-**Needed to apply (sign-off):** the `Spacing` collection has only whole-rem steps (`space/1`–`10`), and `section-space/small` and `section-space/main` are 0. Proposal: add named role variables (`space/head-to-body`, `space/heading-to-text`, `space/card-padding`, `space/grid-gap`, …) with Tablet/Mobile modes, so every section binds to the role and one change updates the whole site.
+- Apply the gaps as `gap` on the parent (flex/grid), not as margins on children.
+- `space/1`–`space/10` (1–10 rem) stay for one-off layout sizes. They are not for the roles above.
+- `section-space/small` and `section-space/main` are 0 and unused; don't use them.
+- Every spacing value is a multiple of 4px. Off-grid Figma values snap to the nearest role, and the change is noted in the tracker.
+- Existing Home sections still use their old hard-coded gaps. They move onto these variables section by section during the cleanup (`designer-cleanup.md`, step 2).
 
 ---
 
 ## 4. Typography
 
-**Approved** scale (from the tracker):
+**Approved** scale, on a **4px grid** (confirmed 2026-10-05):
 
 | Style | Desktop | Tablet | Mobile | Use |
 |---|---|---|---|---|
@@ -103,18 +106,35 @@ Every spacing value is a multiple of 4px. Off-grid Figma values get snapped to t
 
 - **Approved:** only `swatch/*` and Theme (`--_theme---*`) variables. Set the theme mode (Base / Dark / Brand) on the section, so children inherit it.
 - Text on dark sections: `white-100` for headings, `blue-30` for secondary text, `blue-60` for accents. On light sections: `blue-160-2.0` for headings, `blue-130` for body, `black-50` for muted text.
-- **Needs a swatch (sign-off):** the hero/partners dark blue `#012462` is hard-coded in 3+ places. Proposal: a swatch `blue-200` and a Theme mode "Night" that uses it.
-- Gradients: only the two existing ones, white→blue-100 (text, e.g. 24/7) and blue-100→white (progress bars). A new gradient needs sign-off.
+- **Approved:** `swatch/blue-170` = `#012462`, the "night" blue of the hero, partners and Expertise. It is bound on `hero_gsap_trigger_wr`, `hero_layer.is-ground` and `partners_sec`.
+
+### Gradients
+Webflow can't store a gradient in a variable, and its style API drops `var()` inside gradients. So **each gradient is one utility class**, and that class is the only place its hex stops may appear. Add the class to the element; never copy the gradient into a section class.
+
+| Class | Gradient | Used for |
+|---|---|---|
+| `u-gradient-sky` | radial glow over night → `#1150a8` | hero sky layer |
+| `u-gradient-night-to-light` | night → blue-100 → blue-60 → white, top to bottom | Expertise stage (dark into light section) |
+| `u-gradient-night-split` | night top half, white bottom half | section that straddles dark and light |
+| `u-gradient-text` | white → blue-100 at 87°, clipped to text | big numbers (24/7) |
+
+A new gradient needs sign-off and gets its own `u-gradient-*` class. Section classes still carry their old copies until the cleanup moves those elements onto these classes.
 
 ---
 
 ## 6. Shape: radius, borders, corners
 
-- **Proposed:** Zios is **square-cornered**. Radius 0 on buttons, cards, tabs, inputs and images. The current Home build already looks like this (square tabs, square nav buttons).
-- **Proposed:** the signature card shape is the **cut corner** (top-right, 57px at desktop, as on the Reviews cards). Use it on featured cards only, not everywhere. It should become a reusable class `u-cut-corner`.
-- Circles only for avatars, the loader ring and status dots (`radius/round`).
-- **Sign-off needed:** `radius/small` (5px) and `radius/main` (16px) are still Lumos defaults and are used by older components. Either set both to 0, or keep them only for legacy pages.
-- Borders: `border-width/main` (≈1px) in `border` theme colour. No other widths.
+**Approved:**
+- **Square (radius 0):** sections, subsections, panels, cards, images, sliders, banners. Bind `radius/main`, which is now 0. Don't type 0, so the whole site can be changed in one place.
+- **Rounded:** small controls only: buttons, tags/chips, inputs, icon wrappers, tab pills. Use `radius/small`.
+- **Circle:** avatars, bullets, loader ring, status dots. Use `radius/round`.
+- **Cut corner** (top-right, 57px at desktop, as on the Reviews cards) is the signature card shape. Use it on featured cards only.
+
+Done 2026-10-05: `radius/main` set to 0, and these classes were moved from hard-coded rounding onto it: `news_slide_image_wr`, `achieve_item`, `whatWeDo_tabs_component`, `case_quote_item`, `reviews_card_bg`, `reviews_card_fill`, `reviews_overlay.u-cover-absolute`, `solutions_card`, `cta_contain`, `why_stat_wr`, `products_item_visual_wr`, `leaderslide_image_wr`, `about_visual_wr`, `cases_layout.u-grid-custom`, `roadmap_contain.u-container`, `review_slide_wr`, `cases_sidebar`, `expertise_card_wr`, `cookie_ban_component`, `swiper-slide.products`, `swiper-slide.howWeHelp`, `g-values_keys_list_item_wr…`.
+
+**Open:** controls currently use at least 8 different radii (5, 6, 8, 12, 20, 26, 36, 46, 66px, pills). They need one value for `radius/small`, see Open decisions. The navbar dropdown panels were left alone; they get their own pass.
+
+Borders: `border-width/main` (≈1px) in `border` theme colour. No other widths.
 
 ---
 
@@ -168,8 +188,14 @@ Every spacing value is a multiple of 4px. Off-grid Figma values get snapped to t
 
 ## Open decisions (need your answer)
 
-1. **Type grid: 4px or 8px?** A side branch (2026-10-01) moved it to 8px. That puts H2 68, H5/H6 20 and text-small 12 off-grid. This file and CLAUDE.md on this branch still say 4px.
-2. **Spacing role variables:** OK to add them to the `Spacing` collection (section 3)?
-3. **Radius:** square everywhere, and set `radius/small` + `radius/main` to 0?
-4. **Dark blue `#012462`:** add as swatch `blue-200` + Theme mode "Night"?
-5. **External bundle** (`app.js`/`app.css`): take over or freeze?
+1. **Control radius:** one value for buttons, tags, inputs and icon wrappers (`radius/small`, now 5px). Recommendation: **4px** (on the grid, quiet next to the square cards). Pills (fully round buttons) yes or no?
+
+## Decided
+
+| Date | Decision |
+|---|---|
+| 2026-10-05 | Type grid stays **4px**. |
+| 2026-10-05 | Spacing is a variable system (section 3), with a new `mobile` mode in `Spacing`. |
+| 2026-10-05 | Containers, cards and images are square; small controls keep rounding (section 6). |
+| 2026-10-05 | `#012462` becomes `swatch/blue-170`; gradients become `u-gradient-*` classes (section 5). |
+| 2026-10-05 | External bundle (`app.js`/`app.css`) is **frozen** (section 1). |

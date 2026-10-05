@@ -14,7 +14,7 @@ Legend for Where: SH/SF = site head/footer code · PH/PF = page head/footer code
 | Swiper 12 CSS + JS | SH / SF | all sliders | slides stacked/overflowing |
 | Page loader, accordion, `.char`, news slide margins CSS | SH | loader, FAQ, split text | — |
 | Dropdown click fix, News swiper, FAQ accordion JS | SF | navbar, News, FAQ | closed accordions |
-| `app.css` / `app.js` | EXT (Home PH/PF) | animations, sliders, several section styles | unknown; check here first when a style "doesn't work" |
+| `app.css` / `app.js` | EXT (Home PH/PF) | animations, sliders, several section styles | **frozen**: no edits, nothing new may depend on it |
 
 ## Home (`694123a0cdbcf3917d15a080`)
 
@@ -23,7 +23,7 @@ Legend for Where: SH/SF = site head/footer code · PH/PF = page head/footer code
 | Hero | 5-layer parallax + pinned scroll sequence | PF | `home-hero-parallax.js` | static layers, text in start position |
 | Hero | ASCII mountain canvas (layer 3) | PF | `home-hero-ascii.js` | static image fallback |
 | Hero (mobile) | two-screen mobile hero | REG `HomeMobileHero` | `registered/min-HomeMobileHero.js`¹ | desktop hero |
-| Partners | dark blue bg + edge fade | PH | `home-partners.css` | Webflow bg colour; fades differ |
+| Partners | dark blue bg + edge fade (hex `#012462`; class itself now uses `swatch/blue-170`) | PH | `home-partners.css` | Webflow bg colour; fades differ |
 | Partners | marquee slows on hover | REG `HomePartnersHoverSlow` | `home-partners-hover.js`¹ | — |
 | Expertise (`expert_sec`) | slide sizing, nav, light slide, mobile | PH | `home-expertise-v3.css` | **unsized slides** |
 | Expertise | loop, autoplay 6s, tab timer | PF | `home-expertise-v3.js` | slide 1, no timer |

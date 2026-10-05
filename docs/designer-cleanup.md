@@ -40,7 +40,7 @@ Work top to bottom. Every step is reversible, and nothing is deleted or publishe
 ### Step 1: one source of truth (repo)
 - [ ] Merge all `claude/*` branches into a new `main`, resolving the custom-code files against what is actually live in Webflow (Webflow wins on conflicts).
 - [ ] From then on, every session branches from `main` and gets merged back at the end of the session. No more long-lived side branches.
-- [ ] Decide 4px vs 8px type grid (see `rules.md` → Open decisions) and keep one version of CLAUDE.md.
+- [x] Type grid decided: 4px (2026-10-05). The 8px change on `claude/intelligent-meitner-ujy0cr` must not be merged in.
 - [ ] Shorten the tracker: one line per page, with section details moved to `docs/code-registry.md`.
 
 ### Step 2: move styling into the Designer
@@ -48,6 +48,7 @@ Rule: **anything that is "how it looks" belongs in Webflow classes**. That cover
 - [ ] Rebuild the tablet/mobile CSS (`home-mobile.css`) as breakpoint styles on the real classes. Remove the 3 `HomeMobileCss*` registered scripts.
 - [ ] Move the plain properties in the Home head CSS onto their classes (e.g. `expert_*` widths and paddings, Über Zios grid placement, partners colour).
 - [ ] CSS that Webflow's style panel can't express (`clip-path` with `calc`, `background-clip: text`, `@keyframes`, `color-mix`, `:has`) goes into **one embed per section, inside that section**, labelled `CSS · <section>`. Unlike head code, an embed's `<style>` **does render in the Designer**, and it moves, duplicates and gets deleted together with its section.
+- [ ] Bind each section's gaps to the new spacing variables (`rules.md` §3) and move gradient elements onto the `u-gradient-*` classes. Remove the gradient from the section class in the same step. The Home head code still has `#012462` in the partners CSS; it goes away with that block.
 - [ ] JS stays in custom code, but every JS-driven section must still look right with JS off. For example, the hero shows its static ASCII image and the first frame of the parallax, and a slider shows slide 1. That way the Designer state is a true "frame 0".
 
 ### Step 3: make the Navigator self-explanatory
@@ -62,7 +63,7 @@ Rule: **anything that is "how it looks" belongs in Webflow classes**. That cover
 ### Step 5: keep it that way
 - [ ] `docs/code-registry.md` lists every piece of custom code: where it's injected, which section it affects, and what the Designer shows without it. Update it in the same commit as the code.
 - [ ] Before each publish, run the checklist at the end of `rules.md`.
-- [ ] External bundle (`app.js`/`app.css`): decide whether we take it over (get repo access and pull the Zios-specific parts into this repo) or freeze it and stop changing anything it owns. Today nobody on this project can change it, yet it styles several sections.
+- [x] External bundle frozen (2026-10-05). Rebuilt sections move their behaviour into our own code.
 
 ## Effort
 - Step 1: one session (merge plus conflict check against live code).
