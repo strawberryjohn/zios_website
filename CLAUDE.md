@@ -28,7 +28,8 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 
 - Wrap sections in the `Section` + `Layout` / `Grid` components; use `Spacer` rather than ad-hoc margins.
 - Text goes through `Typography Heading` / `Typography Paragraph` / `Typography Eyebrow`, sized by the **Text Style** variable modes (Display, H1–H6, Text Large/Small), not by one-off font sizes.
-- Color comes from the **Theme** collection (`--_theme---*`) with modes Base / Dark / Brand. Set a section's theme mode; never hard-code a hex value.
+- Spacing comes from the role variables in the **Spacing** collection (`space/head-to-body`, `space/card-padding`, …; see `docs/rules.md` §3), with Base / tablet / mobile modes.
+- Color comes from the **Theme** collection (`--_theme---*`) with modes Base / Dark / Brand. Set a section's theme mode; never hard-code a hex value. Gradients are `u-gradient-*` utility classes.
 - Buttons: `Button Main`, `Button Primary`, `Button Secondary`, `Primary Button / Icon`, `Button / Text Link`.
 - Make a card clickable with the `Clickable` utility component.
 - Build new page sections as components in the `• Section` group (duplicate `• Section Custom (duplicate this)`).
@@ -39,13 +40,25 @@ The site is built on the **Lumos** framework (Timothy Ricks). Follow its convent
 
 See `docs/webflow-inventory.md` for the full list of components, variables, and CMS collections.
 
+## Rulebook (read before building anything)
+
+- `docs/rules.md`: spacing, type, colour, shape, icons/arrows, motion, responsive, and **Designer vs custom code**. It wins over Figma. Rules marked *Proposed* need the user's sign-off before they are applied site-wide.
+- `docs/code-registry.md`: every piece of custom code, where it is injected and what the Designer shows without it. Update it in the same commit as the code.
+- `docs/designer-cleanup.md`: the audit and the step-by-step plan to make the Designer match the published site.
+
+Core rule: **the Designer must show what the published site shows.** Layout, size, spacing, colour and all breakpoint overrides go on Webflow classes with variables. CSS the style panel can't express goes in an embed inside its section (labelled `CSS · <section>`). JS goes in footer code and hooks onto `data-js` attributes. Never inject CSS with JS, never add `@media` CSS in custom code, never leave hidden sections on a live page (move them to the Archive page).
+
+## Branches
+
+Start every session from the latest `main` and merge back into it at the end of the session. Live Webflow code that exists only on a side branch is how the repo stopped being the source of truth.
+
 ## Figma → Webflow workflow
 
 1. Get the Figma frame URL (`figma.com/design/<fileKey>/...?node-id=X-Y`) and mark the page "In progress" in `docs/build-tracker.md`.
 2. Read the frame with Figma MCP (`get_design_context`, `get_screenshot`, `get_variable_defs`).
 3. Map Figma tokens to existing Webflow variables. If a value has no match, flag it; don't create a variable without asking.
 4. Reuse existing components and classes first. Only create new classes for section-specific layout, named `<section>_<element>` in Lumos style.
-5. Build in the Designer (`data_whtml_builder` / `data_element_builder` / `data_component_builder`), then check the result with `element_snapshot_tool` against the Figma screenshot at desktop, tablet (991), and mobile (767/479).
+5. Build in the Designer (`data_whtml_builder` / `data_element_builder` / `data_component_builder`). Styling goes on classes; whatever CSS can't be a class goes in the section's own `CSS · <section>` embed, never in page head code. JS-driven sections get a "before JS" state that matches the first frame. Then check the result with `element_snapshot_tool` against the Figma screenshot at desktop, tablet (991), and mobile (767/479), **and check the Designer against the published page**. A section is not done while they differ.
 6. Update the tracker.
 
 ## Type and token rules
@@ -61,7 +74,7 @@ Figma is the visual target, not the source of truth for sizes. Sanity-check ever
 
 ## External code bundle
 
-Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it.
+**Frozen (decision 2026-10-05).** Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it. Don't add anything that depends on the bundle; rebuilt sections move their behaviour into `webflow/custom-code/`.
 
 ## Rules
 

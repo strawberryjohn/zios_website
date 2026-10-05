@@ -70,7 +70,7 @@ The Typography collection also defines a 700 Bold weight variable, but no 700 fi
 | Button Style | Base, Secondary | |
 | Typography | Base | font family, weights, letter-spacing (0 to -8%), line-heights, font sizes (text-small/main/large, h1–h8, display) |
 | Text Style | Base, Text Small, Text Large, H6–H1, Display | per-style type settings |
-| Spacing | Base, tablet | `space/1–10` (1–10rem), section-space (large 8.75rem / 6.25rem tablet, page-top 5rem) |
+| Spacing | Base, tablet, mobile (added 2026-10-05; body applies tablet ≤991, mobile ≤767) | `space/1–10` (1–10rem), role variables `space/head-to-body`, `eyebrow-to-heading`, `heading-to-text`, `text-to-action`, `paragraph`, `grid-gap`, `card-padding`, `card-title-to-text` (values in `rules.md` §3), section-space (large 8.75 / 6.25 / 4rem, page-top 5rem) |
 | Column Count | Base, 2–12 | |
 | Gap | Base, 0–8 | |
 | Trigger, State | Base, Active | interaction state |
@@ -86,6 +86,7 @@ The Typography collection also defines a 700 Bold weight variable, but no 700 fi
 | `swatch/blue-30` | `#bdddff` |
 | `swatch/blue-10` | `#e9f3ff` |
 | `swatch/blue-130` | `#1962b2` |
+| `swatch/blue-170` (night, added 2026-10-05) | `#012462` |
 | `swatch/blue-160` | `#0e3866` |
 | `swatch/blue-180` | `#071c33` |
 | `blue-160-2.0` | `#0f2a48` |
@@ -103,6 +104,9 @@ The Typography collection also defines a 700 Bold weight variable, but no 700 fi
 ### Type scale (desktop max → mobile min, rem)
 
 Display 6 · H1 5.125→3 · H2 4.25→3 · H3 2.5→1.5 · H4 1.875→1 · H5 1.375→1 · H6 1.125→1 · H7 1→0.8125 · H8 0.875→0.75 · Text large 1.2 · Text main 1→0.85 · Text small 0.875
+
+Radius: `radius/main` = 0 (cards, containers, images), `radius/small` = 5px (controls), `radius/round` (circles).
+Gradient classes: `u-gradient-sky`, `u-gradient-night-to-light`, `u-gradient-night-split`, `u-gradient-text`.
 
 ## Components (by group)
 
