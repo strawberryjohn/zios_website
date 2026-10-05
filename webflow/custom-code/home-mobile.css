@@ -1,0 +1,100 @@
+/* Home: tablet/mobile tweaks (Eugene's list, 2026-10-03). Lives in the Home page head.
+   Note: Webflow publishes class names lowercased (aboutUs_x -> aboutus_x). */
+@media screen and (max-width: 991px) {
+  /* 3. Hero: whatever shows between the layers while they scroll is the dark blue, not the sky gradient. */
+  .hero_sec { background-color: #012462; }
+  /* 6. Leistungsbereiche: a services cell between card rows (2 columns: after cards 2, 4, 6). */
+  .services_board .services_card.is-01 { order: 10; } .services_board .services_card.is-02 { order: 20; }
+  .services_board .services_card.is-03 { order: 30; } .services_board .services_card.is-04 { order: 40; }
+  .services_board .services_card.is-05 { order: 50; } .services_board .services_card.is-06 { order: 60; }
+  .services_board .services_card.is-07 { order: 70; } .services_board .services_card.is-08 { order: 80; }
+  .services_board .services_cell { grid-column: 1 / -1; grid-row: auto; height: 1.5rem; }
+  .services_board .services_cell.is-1 { display: block; order: 25; }
+  .services_board .services_cell.is-2 { display: block; order: 45; }
+  .services_board .services_cell.is-3 { display: block; order: 65; }
+  /* 10, 11. Reviews / news: arrows + autoplay timer bar (built by home-mobile.js). */
+  .reviews_list.is-slider .reviews_grid { display: flex; grid-template-columns: none; gap: 0; }
+  .reviews_list.is-slider .reviews_item { height: auto; }
+  .m-nav { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+  .m-nav_btn { display: flex; flex: none; justify-content: center; align-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid currentColor; background: transparent; color: var(--swatch--blue-100); cursor: pointer; }
+  .m-nav_btn svg { width: 1.5rem; height: 0.75rem; }
+  .m-nav_btn.is-prev svg { transform: rotate(180deg); }
+  .m-nav_btn:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: 2px; }
+  .m-nav_bar { position: relative; flex: 1 1 0%; height: 2px; overflow: hidden; background-color: var(--swatch--blue-30); }
+  .m-nav_fill { position: absolute; top: 0; bottom: 0; left: 0; width: 0; background-color: var(--swatch--blue-100); }
+  /* R3. Reviews: every card as tall as the tallest one. */
+  .reviews_list.is-slider .reviews_grid { align-items: stretch; }
+  .reviews_list.is-slider .reviews_item { display: flex; }
+  .reviews_list.is-slider .reviews_card { height: 100%; }
+  /* R3. News: same arrows + timer bar as reviews (built by home-mobile.js); no dots,
+     own nav hidden; link button below the slider with room above it. */
+  .news_sec .news_swiper_nav { display: none !important; }
+  .news_sec .g-swiper_layout { display: flex; flex-direction: column; }
+  .news_sec .new_head { order: 0; }
+  .news_sec .news_slider_component { order: 1; }
+  .news_sec .news_btn_wr { order: 2; margin-top: 2.5rem; }
+}
+@media screen and (max-width: 767px) {
+  /* 1. Hero: heading below the nav, 40px above the button. */
+  .hero_main_wr { display: flex; flex-direction: column; }
+  .hero_contain { display: flex; flex-direction: column; justify-content: flex-start; padding-top: 8rem; }
+  .hero_sec .hero_head { margin-bottom: 2.5rem; }
+  .hero_sec .button-wr.is-hero { margin-top: 0; }
+  /* 2. Hero text + link: their own dark blue screen below the hero (home-mobile.js),
+     sitting 300px above the marquee; this block + the partners marquee (--zp-h, set by the JS) = one screen. */
+  .hero_bottom_mob { display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; min-height: calc(100svh - var(--zp-h, 8rem)); padding-top: 2rem; padding-bottom: 18.75rem; color: var(--swatch--white-100); }
+  .hero_bottom_mob .hero_bottom.u-align-items-end { position: static; transform: none; align-items: center; text-align: center; }
+  /* 3. Ground block overlaps the main mountain a bit more. */
+  .hero_layer.is-ground { top: 85%; }
+  /* 4. Partners marquee smaller. */
+  .partners_sec { padding-top: calc(2rem + 2px); padding-bottom: 3.5rem; }
+  /* Overlap the hero by 2px so no light hairline shows at the seam above the marquee. */
+  .gradient_wrap { margin-top: -2px; }
+  .partners_sec .partners_item { height: 2.25rem; }
+  /* 5. Expertise slider: no timer tabs; text block drops to the bottom edge. */
+  .expert_sec .expert_tabs { display: none; }
+  .expert_sec .expert_body { bottom: 1.5rem; }
+  /* 6. One column: a cell after every card but the last. */
+  .services_board .services_cell.is-1 { order: 15; } .services_board .services_cell.is-2 { order: 25; }
+  .services_board .services_cell.is-3 { order: 35; }
+  .services_board .services_cell.is-4 { display: block; order: 45; }
+  .services_board .services_cell.is-5 { display: block; order: 55; }
+  .services_board .services_cell.is-6 { display: block; order: 65; }
+  .services_board .services_cell.is-7 { display: block; order: 75; }
+  /* 7. Produkte & Plattformen: one column, no slider. */
+  .swiper.products.is-stacked { overflow: visible; }
+  .swiper.products.is-stacked .swiper-wrapper { display: flex; flex-direction: column; gap: 1.5rem; height: auto !important; transform: none !important; }
+  .swiper.products.is-stacked .swiper-slide { width: 100% !important; min-height: 0; height: auto; margin: 0 !important; }
+  .solutions_sec .products_swiper_nav, .solutions_sec .products_swiper_pagination { display: none !important; }
+  .solutions_sec .products_item_inner { grid-template-columns: minmax(0, 1fr); }
+  .solutions_sec .products_item_visual_wr { height: auto; aspect-ratio: 16 / 10; max-height: 15rem; }
+  /* 8. Über Zios: smaller stats, less space above the blue panel. */
+  .aboutus_sec .aboutus_item_wr .aboutus_item_num { font-size: var(--_typography---font-size--h3); }
+  .aboutus_sec .aboutus_item_wr .aboutus_item_title { font-size: var(--_typography---font-size--h6); }
+  .aboutus_sec .aboutus_header_wr .aboutus_head { margin-bottom: 1rem; }
+  /* R3. Stats in one column with light blue dividers; 24/7 tight on Monitoring; link centred 48px below it. */
+  /* Something outside Webflow's styles kept two staggered columns on the live site,
+     hence the !important. Stat blocks: content top left, same 24px from text to divider. */
+  .aboutus_main_wr .aboutus_layout.u-grid-custom { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none; row-gap: 0; }
+  .aboutus_main_wr .aboutus_layout > * { grid-column: 1 / -1 !important; grid-row: auto !important; width: auto !important; transform: none !important; }
+  .aboutus_main_wr .aboutus_item_wr.u-flex-vertical-nowrap { margin: 0 !important; padding: 1.5rem 0; row-gap: 0.5rem; justify-content: flex-start; align-items: flex-start; text-align: left; border-right: 0; border-bottom: 1px solid var(--swatch--blue-60); }
+  .aboutus_main_wr .aboutus_item_wr:first-child { padding-top: 0; }
+  .aboutus_main_wr .aboutus_number_wr { margin-top: 2rem; margin-bottom: 0; }
+  .aboutus_main_wr .aboutus_number { margin-bottom: -0.15em; }
+  .aboutus_main_wr .aboutus_number_title_wr { margin-top: 0; }
+  /* The live site positions the link outside the flow (not from Webflow's styles), so pin it back with !important. */
+  .aboutus_main_wr .aboutus_link_wr { position: static !important; display: flex !important; justify-content: center !important; width: 100% !important; margin: 3rem 0 0 !important; padding: 0 !important; transform: none !important; }
+  .aboutus_main_wr .aboutus_link_wr .text_link { position: relative !important; inset: auto !important; width: auto !important; margin: 0 auto !important; transform: none !important; }
+  /* 9. Austria map a little lower; the cards are pushed below its label by home-mobile.js. */
+  .greetings_sec .greetings_map_inner { top: 16rem; }
+  /* R3. Reviews: tighter vertical rhythm. */
+  .reviews_sec { padding-bottom: 3.5rem; }
+  .reviews_sec .reviews_contain { row-gap: 1rem; }
+  .reviews_sec .reviews_card { padding-top: 1.5rem; row-gap: 1.5rem; }
+  .reviews_sec .m-nav { margin-top: 1rem; }
+  /* R3. FAQ: tighter vertical rhythm. */
+  .faq_sec { padding-top: 3rem; padding-bottom: 3rem; }
+  .faq_sec .faq_layout.u-grid-custom { row-gap: 0.75rem; }
+  .faq_sec .faq_list { margin-bottom: 2rem; }
+  .faq_sec .accordion_component { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+}
