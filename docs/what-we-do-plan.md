@@ -145,3 +145,15 @@ Designer = published: everything visible is in Webflow styles/components; no cus
 QA: Chromium mock with the same values at 1440 matches the Figma frame (2038px tall vs Figma's 2001px; the difference is Figma's text-box trim). The 390px mobile stack checked. Designer snapshot pending (Designer disconnected).
 
 Tooling note: when the Designer isn't connected, SVGs can still be exported with `use_figma` → `exportAsync({format:'SVG_STRING'})` (results cap at 20 KB, so round coordinates for big icons), then uploaded with `create_asset` + S3 POST.
+
+### Follow-ups (2026-10-06)
+
+- **Row hover**: `wwdServices_row` hover → `rgba(252,252,252,0.1)` background, 400ms ease transition (Webflow style, so the Designer shows it too).
+- **Row descriptions** replaced Figma's placeholders (≤ ~100 chars, 2 lines at desktop):
+  - Cybersecurity: "Proactive protection for your systems, data and people, from threat detection to incident response."
+  - KI & Automatisierung: "AI and automation for everyday processes, so your team spends less time on routine work."
+  - Compliance & Governance: "Meet GDPR and NIS2 requirements with clear policies, audit-ready documentation and controls."
+  - Managed IT & Server: "Reliable day-to-day IT and server management, monitored around the clock by our team."
+  - Cloud & Backup: "Secure cloud infrastructure and automated backups that keep your business running."
+- **Home hero reveal**: same stagger as this page's hero, added as registered page scripts `homeherorevealguard` (head) and `homeheroreveal` (footer); sources `home-hero-reveal-guard.js` / `home-hero-reveal.js`. Built-in line splitter (works with gsap 3.12). Only animates the children of the elements the parallax moves.
+- 3D rotating icons: tried a three.js rebuild of the Cybersecurity shield; dropped at the user's call.
