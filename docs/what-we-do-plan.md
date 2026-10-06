@@ -12,7 +12,7 @@ Existing content on the page isn't worth keeping. Rebuild each section from Figm
 | 0 | Prep: audit the current page, hide old sections, add page code slots | | | | Done |
 | 1 | Hero: "Rethink what your business can become." + lead + CTA, background image | `10028:32219` | full | Navbar (global), hero positioning offset rule, `Button Primary` | Built, visual QA pending |
 | 2 | Partner logos strip | `10028:32091` | full | `partners_sec` marquee + `home-partners.css` (check the bg colour: here it sits on the hero gradient) | Done |
-| 3 | What We Do: intro, 5 rows (number + title / 3D icon / text + "Get Started"), closing CTA "See how organizations build resilience with ZiOS" + "View Cases" | `10028:32223` | regular | Leistungsbereiche CMS (5 items match: Cybersecurity, KI & Automatisierung, Compliance & Governance, Managed IT & Server, Cloud & Backup), `Button / Text Link`, `Clickable` | |
+| 3 | What We Do: intro, 5 rows (number + title / 3D icon / text + "Get Started"), closing CTA "See how organizations build resilience with ZiOS" + "View Cases" | `10028:32223` | regular | Leistungsbereiche CMS (5 items match: Cybersecurity, KI & Automatisierung, Compliance & Governance, Managed IT & Server, Cloud & Backup), `Button / Text Link`, `Clickable` | Built (static), Designer QA pending |
 | 4 | Core Industries We Serve: 2-col list of 6, tag chips, arrow icon | `10028:23438` | regular | Branchen CMS + tags, same tag-chip style as Home | |
 | 5 | ZiOS Shop: eyebrow, title, CTA, rule, text, laptop image bleeding right | `10028:23419` | regular (image may bleed) | build once as a shared product block | |
 | 6 | ZiOS Hosting: same layout, server image | `10028:23428` | regular | second instance of the block from #5 | |
@@ -105,3 +105,43 @@ Kept the existing CMS marquee (`partners_sec is-whatWeDo`, Partners logos collec
 - Changed: the `is-whatWeDo` combo padding was 2rem top / 18.75rem bottom (mobile 6 / 11rem), left over from the old overlapping layout. Now 0 / 0 at every breakpoint, so the strip sits flush under the hero like Figma, and section 3 brings its own top spacing.
 - The CMS list runs NVIDIA → Microsoft (Figma shows Microsoft first). It's a continuous marquee, so the order only changes which logo leads; left as is.
 
+
+### 3. What We Do services (`10028:32223`)
+
+Built as `wwdServices_sec` after `partners_sec`; old `whatWeDo_sec` (tabs) **hidden**.
+
+**Static, not CMS**: the Leistungsbereiche collection has 6 items whose names don't match Figma's 5 rows (CMS: Managed IT & Support, Cybersecurity & Backup, Cloud,Hosting & M365, Netzwerk & Infrastruktur, KI & Automatisierung, Websites & digitale Lösungen) and has no icon or short-description fields. Binding would mean changing CMS data or showing copy that differs from Figma.
+
+| Figma | Value | Webflow |
+|---|---|---|
+| Section bg | gradient `#002361` → `#0465cf` (top → bottom) | `wwdServices_sec`: bg colour `swatch/blue-170` + `linear-gradient(180deg, #012462, #0465cf)`. `#0465cf` has no swatch; it's written literally like Home's gradient stops (`u-gradient-*`, `expert_stage`). **Flagged** |
+| Theme | | Dark mode on `wwdServices_sec`; text `--_theme---text` |
+| Padding | 160 top, 100 bottom | 10rem / 6.25rem (tablet 7.5 / 5, mobile 5 / 4) |
+| Heading | "What We Do", Medium 40 / 1.1, capitalize | `u-text-style-h3` (40, 500, capitalize) + `wwdServices_title`; h2 |
+| Intro | 16 / 1.3, 424 wide | `u-text-style-h8` + `wwdServices_intro` max 26.5rem |
+| Gaps | head 24, sections 64 | 1.5rem / 4rem (mobile 3rem) |
+| Rows | 3 columns 1fr / 350 / 1fr, 260 high, 1px `#4fa3ff` grid | `wwdServices_row` grid `minmax(0,1fr) 21.875rem minmax(0,1fr)`, min-height 16.25rem, borders `swatch/blue-80`; list has the top border. Tablet middle column 15rem; mobile one column (title cell, icon panel 15rem high with top/bottom borders, text cell) |
+| Cells | padding 36, space-between | `wwdServices_cell` 2.25rem (tablet/mobile 1.5rem) |
+| Number `[ 01 ]` / description | 16 regular, 75% opacity | `u-text-style-h8` + `wwdServices_meta` (opacity 0.75) |
+| Service name | Medium 40 | `u-text-style-h3` + `wwdServices_name`; h3 |
+| Icon panel | blue-100 at 25% + dot pattern (white 4px ellipse at 0.45 scale, spacing 3, 20% opacity) | `wwdServices_visual`: `rgba(35,140,255,.25)` (= blue-100 at 25%) + `radial-gradient(circle, rgba(252,252,252,.2) .9px, transparent 1.1px)` at 0.45rem tiles; side borders blue-80 |
+| Icons | 5 isometric vectors, 200×200 | exported from Figma as **SVG** (crisp at any density), assets: cybersecurity `6ac4428f206891e7b24507f6`, ki `6ac4428f061109e0326e673b`, compliance `6ac4428fd24133a07f3aa490`, managed-it `6ac4428f8d2975a4d04fa986`, cloud-backup `6ac4428fd24133a07f3aa47e`; copies in `webflow/assets/what-we-do/`. `wwdServices_icon` 12.5rem (tablet 10rem) |
+| "Get Started" | 16 regular, arrow, gap 16 | `Button / Text Link`, variant **Light / Small**. That variant had a 14px (0.88rem) label and 0.88rem gap, both off-grid, so it's now **16px / 1rem gap**. This also applies to Home's "Leistungen Entdecken" link (same role, same style) |
+| Closing logo | Zios logo 65×24, `#4C97EB` | SVG asset `6ac4428f206891e7b2450811`, colour snapped to `swatch/blue-80` (#4FA3FF); `wwdServices_logo` 4.0625 × 1.5rem |
+| Closing title | Medium 40, 552 wide, centred | `u-text-style-h3` + `wwdServices_cta_title` max 34.5rem; h2 |
+| "View Cases" | 220px light pill | `Button Primary`, variant **Light / Wide**, → `/cases` |
+
+Links (Figma has no targets; closest existing detail pages):
+- Cybersecurity → `/capabilities/cybersecurity-2`
+- KI & Automatisierung → `/capabilities/ki-automatisierung`
+- Compliance & Governance → `/contacts` (no matching page)
+- Managed IT & Server → `/capabilities/managed-it-support`
+- Cloud & Backup → `/capabilities/cloud-hosting-m365`
+
+Copy: all five descriptions are Figma's placeholder ("Managed IT Services – IT-Betreuung & Outsourcing für Unternehmen"), kept verbatim per the copy rule. Real copy is needed.
+
+Designer = published: everything visible is in Webflow styles/components; no custom code in this section.
+
+QA: Chromium mock with the same values at 1440 matches the Figma frame (2038px tall vs Figma's 2001px; the difference is Figma's text-box trim). The 390px mobile stack checked. Designer snapshot pending (Designer disconnected).
+
+Tooling note: when the Designer isn't connected, SVGs can still be exported with `use_figma` → `exportAsync({format:'SVG_STRING'})` (results cap at 20 KB, so round coordinates for big icons), then uploaded with `create_asset` + S3 POST.
