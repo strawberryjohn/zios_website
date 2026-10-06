@@ -11,7 +11,7 @@ Existing content on the page isn't worth keeping. Rebuild each section from Figm
 |---|---|---|---|---|---|
 | 0 | Prep: audit the current page, hide old sections, add page code slots | | | | Done |
 | 1 | Hero: "Rethink what your business can become." + lead + CTA, background image | `10028:32219` | full | Navbar (global), hero positioning offset rule, `Button Primary` | Built, visual QA pending |
-| 2 | Partner logos strip | `10028:32091` | full | `partners_sec` marquee + `home-partners.css` (check the bg colour: here it sits on the hero gradient) | |
+| 2 | Partner logos strip | `10028:32091` | full | `partners_sec` marquee + `home-partners.css` (check the bg colour: here it sits on the hero gradient) | Done |
 | 3 | What We Do: intro, 5 rows (number + title / 3D icon / text + "Get Started"), closing CTA "See how organizations build resilience with ZiOS" + "View Cases" | `10028:32223` | regular | Leistungsbereiche CMS (5 items match: Cybersecurity, KI & Automatisierung, Compliance & Governance, Managed IT & Server, Cloud & Backup), `Button / Text Link`, `Clickable` | |
 | 4 | Core Industries We Serve: 2-col list of 6, tag chips, arrow icon | `10028:23438` | regular | Branchen CMS + tags, same tag-chip style as Home | |
 | 5 | ZiOS Shop: eyebrow, title, CTA, rule, text, laptop image bleeding right | `10028:23419` | regular (image may bleed) | build once as a shared product block | |
@@ -93,5 +93,15 @@ Built as `wwdHero_sec` (first child of `dark-bg-wrapper`).
 
 Figma's `ss01`/`ss04` font features aren't used anywhere on the site (Home included), so they're left out to keep the same role styled the same everywhere.
 
-Open: visual QA at 1440 / 991 / 767 / 479 needs the Designer (`element_snapshot_tool`).
+Follow-ups after review (2026-10-05):
+- **CTA width**: Home's CTA isn't styled wider; it only looks longer because its label ("Kostenlose Erstberatung") is longer. Figma's CTA is a fixed 220px pill with the label left and the arrow right, so page head CSS sets `.wwdhero_content .button_primary_wrap { width: 13.75rem }` and makes the inner element `width: 100%; justify-content: space-between`. Page code doesn't run in the Designer, so the canvas still shows the narrow button.
+- **Reveal animation** (`wwd-hero-reveal.js`, page footer; guard + CSS in `wwd-hero.css`, page head): GSAP 3.13 + SplitText (loaded from jsdelivr if the page doesn't already have them). Heading lines slide up out of masks (yPercent 110 → 0, 1s, stagger 0.12, power3.out), then the lead text and CTA rise 24px and fade in (0.8s, stagger 0.12, overlapping the end of the heading). The background fades in and scales 1.06 → 1 over 1.8s. The split is reverted at the end so the heading re-wraps on resize. `html.wwd-reveal-pending` hides the three elements until the timeline sets its start state; a 3s timeout un-hides them if GSAP never loads. Reduced motion: no animation. Tested in headless Chromium against a mock of the hero: 2 lines split, CTA 220px, no errors, split reverted at the end.
+- Full page head/footer blocks: `page-what-we-do-head.html` / `page-what-we-do-footer.html` (they keep the pre-existing reviews-swiper code).
+- Snapshot check (desktop): layout matches Figma. The snapshot tool doesn't load custom fonts, and it drew the hero background blank even though CMS images render fine. The asset and element binding check out and a real browser shows it, but it still needs a look on the canvas.
+
+### 2. Partner logos (`10028:32091`)
+
+Kept the existing CMS marquee (`partners_sec is-whatWeDo`, Partners logos collection). It already matches Figma: 8 logos (the same as Figma), PNGs in `blue-130`, `partners_item` 3.5rem high (Figma 55px), about 70px gaps, section bg `swatch/blue-170`.
+- Changed: the `is-whatWeDo` combo padding was 2rem top / 18.75rem bottom (mobile 6 / 11rem), left over from the old overlapping layout. Now 0 / 0 at every breakpoint, so the strip sits flush under the hero like Figma, and section 3 brings its own top spacing.
+- The CMS list runs NVIDIA → Microsoft (Figma shows Microsoft first). It's a continuous marquee, so the order only changes which logo leads; left as is.
 
