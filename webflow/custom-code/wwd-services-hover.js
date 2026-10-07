@@ -1,5 +1,5 @@
 // What we do services: direction-aware row hover.
-// Each .wwdservices_row holds a .wwdservices_overlay (light blue, styled in
+// Each .wwdservices_row holds a .wwdservices_overlay (dark blue, styled in
 // Webflow, parked above the row at translateY(-101%) with a 500ms transform
 // transition). On mouse enter the overlay jumps, without animating, to the edge
 // the cursor came in through, then slides in. On leave it slides out through
