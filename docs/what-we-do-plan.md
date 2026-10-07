@@ -148,7 +148,8 @@ Tooling note: when the Designer isn't connected, SVGs can still be exported with
 
 ### Follow-ups (2026-10-06)
 
-- **Row hover**: `wwdServices_row` hover → `rgba(252,252,252,0.1)` background, 400ms ease transition (Webflow style, so the Designer shows it too).
+- **Row hover**: `wwdServices_row` hover → `rgba(123,186,255,0.1)` (swatch/blue-60 at 10%, light blue; was white 10% at first), 400ms ease transition (Webflow style, so the Designer shows it too).
+- **Row height (2026-10-07)**: `min-height` replaced by `grid-auto-rows: minmax(16.25rem, auto)` + `align-items: stretch` on the row (mobile: `auto`), and `align-self: stretch` on `wwdServices_cell` / `wwdServices_visual`, so the dotted visual panel and the text cells always fill the full row height.
 - **Row descriptions** replaced Figma's placeholders (≤ ~100 chars, 2 lines at desktop):
   - Cybersecurity: "Proactive protection for your systems, data and people, from threat detection to incident response."
   - KI & Automatisierung: "AI and automation for everyday processes, so your team spends less time on routine work."
