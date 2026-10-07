@@ -158,3 +158,8 @@ Tooling note: when the Designer isn't connected, SVGs can still be exported with
   - Cloud & Backup: "Secure cloud infrastructure and automated backups that keep your business running."
 - **Home hero reveal**: same stagger as this page's hero, added as registered page scripts `homeherorevealguard` (head) and `homeheroreveal` (footer); sources `home-hero-reveal-guard.js` / `home-hero-reveal.js`. Built-in line splitter (works with gsap 3.12). Only animates the children of the elements the parallax moves.
 - 3D rotating icons: tried a three.js rebuild of the Cybersecurity shield; dropped at the user's call.
+
+### Follow-ups (2026-10-07)
+
+- **Directional row hover** (ref: aspensearch.com Clients list). Each `wwdServices_row` holds a `wwdServices_overlay` div (`aria-hidden`), styled in Webflow: absolute inset 0, `rgba(123,186,255,0.1)` (swatch/blue-60 @ 10%), `pointer-events: none`, parked at `translate3d(0,-101%,0)`, `transform` transition 500ms `cubic-bezier(0.65,0,0.35,1)`. The row is `position: relative; overflow: hidden`; cells and the visual are `position: relative; z-index: 1` above it. The old `:hover` background and row transition are removed.
+- `wwd-services-hover.js` (page footer): on mouse enter, snaps the overlay to the edge the cursor crossed (top/bottom half), then slides it to 0; on leave it slides out through the exit edge. Mouse only; touch and reduced motion skip it. The canvas shows the resting state (overlay hidden), same as the published page before hover.
