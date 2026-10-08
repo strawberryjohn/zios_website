@@ -1,0 +1,8 @@
+/* Core Industries card hover/focus = the active card in Figma (blue line, blue chips, blue arrow).
+   Lives in the What we do page head custom code (parent:hover selectors can't be Webflow classes). */
+.coreind_card:hover, .coreind_card:focus-visible { border-top-color: var(--swatch--blue-100); }
+.coreind_card:hover .coreind_card_icon, .coreind_card:focus-visible .coreind_card_icon { color: var(--swatch--blue-100); }
+.coreind_card:hover .coreind_tag, .coreind_card:focus-visible .coreind_tag { background-color: var(--background-2-0); border-color: var(--swatch--blue-30); color: var(--swatch--blue-100); }
+@media (prefers-reduced-motion: reduce) {
+  .coreind_card, .coreind_card_icon, .coreind_tag { transition: none; }
+}
