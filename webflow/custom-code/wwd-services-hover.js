@@ -3,7 +3,8 @@
 // Webflow, parked above the row at translateY(-101%) with a 350ms expo-out
 // transition). On mouse enter the overlay jumps, without animating, to the edge
 // the cursor came in through, then slides in. On leave it slides out through
-// the edge the cursor left by. The row's icon tilts 25deg counter-clockwise and
+// the edge the cursor left by. The row's icon turns 25deg counter-clockwise round its
+// vertical axis (seen from above; perspective is on .wwdservices_visual) and
 // lifts 0.5rem while hovered (the 700ms transition is on .wwdservices_icon in
 // Webflow). Mouse only; touch and reduced motion get nothing.
 // Lives in the What we do page footer custom code.
@@ -30,7 +31,7 @@
       place(ov, edge(row, e), false);
       ov.getBoundingClientRect(); // commit the start position before animating
       place(ov, 0, true);
-      if (icon) icon.style.transform = 'translateY(-0.5rem) rotate(-25deg)';
+      if (icon) icon.style.transform = 'translateY(-0.5rem) rotateY(25deg)';
     });
     row.addEventListener('pointerleave', function (e) {
       if (e.pointerType !== 'mouse') return;
