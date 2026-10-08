@@ -12,6 +12,11 @@
    The component's arrow (.button_primary_icon.is-2) is absolutely placed 1rem from the right and
    the caption only reserved 1rem, so the two touched. Arrow now sits on the 20px side padding
    (as in Figma) and the caption keeps arrow width + a 20px gap clear. */
-.wwdproducts_btn_wr .button_primary_element { min-width: 13.75rem; }
-.wwdproducts_btn_wr .button_primary_icon.is-2 { right: 1.25rem; }
-.wwdproducts_btn_wr .button_primary_text { padding-right: 2.75rem; }
+.wwdproducts_btn_wr .button_primary_element,
+.wwdreinvent_btn_wr .button_primary_element { min-width: 13.75rem; }
+.wwdproducts_btn_wr .button_primary_icon.is-2,
+.wwdreinvent_btn_wr .button_primary_icon.is-2 { right: 1.25rem; }
+.wwdproducts_btn_wr .button_primary_text,
+.wwdreinvent_btn_wr .button_primary_text { padding-right: 2.75rem; }
+/* Reinvention CTA (Figma 10029:33106): white pill, blue-130 caption and arrow. */
+.wwdreinvent_btn_wr .button_primary_element { background-color: var(--swatch--white-100); color: var(--swatch--blue-130); }
