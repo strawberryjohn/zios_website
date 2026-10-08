@@ -1,7 +1,17 @@
-/* What we do: Reinvention section (page head). Figma 10029:33051.
-   The style API can't hold a var() gradient or plus-lighter blending, so they live here.
-   Gradient end is swatch/blue-170 (#012462); Figma has rgb(0,36,100), the nearest swatch. */
+/* What we do: Produkte & Plattformen + Reinvention (page head). Figma 10210:14252.
+   Versioned in strawberryjohn/zios_website: webflow/custom-code/wwd-products-reinvent.css */
+
+/* Reinvention panel = the Home Über Zios panel: same gradient (244deg, blue-100 15% -> blue-170 91%);
+   the animated ASCII mountain is drawn by wwd-reinvent-ascii.js into .wwdreinvent_ascii.
+   The style API can't hold a var() gradient, so it lives here. */
 .wwdreinvent_sec {
-  background-image: linear-gradient(245.35deg, var(--swatch--blue-100) 14.56%, var(--swatch--blue-170) 90.66%);
+  background-image: linear-gradient(244deg, var(--swatch--blue-100) 15%, var(--swatch--blue-170) 91%);
 }
-.wwdreinvent_bg { mix-blend-mode: plus-lighter; }
+
+/* Button Primary in these sections: Figma CTA is 220px wide with the arrow at the right edge.
+   The component's arrow (.button_primary_icon.is-2) is absolutely placed 1rem from the right and
+   the caption only reserved 1rem, so the two touched. Arrow now sits on the 20px side padding
+   (as in Figma) and the caption keeps arrow width + a 20px gap clear. */
+.wwdproducts_btn_wr .button_primary_element { min-width: 13.75rem; }
+.wwdproducts_btn_wr .button_primary_icon.is-2 { right: 1.25rem; }
+.wwdproducts_btn_wr .button_primary_text { padding-right: 2.75rem; }
