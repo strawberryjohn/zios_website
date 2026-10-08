@@ -56,6 +56,8 @@ Most static pages still have placeholder SEO ("Website Name" / "Place website me
 | Team | `team` | `69cfc49f17dd72c9727c2910` | `69cfc49f17dd72c9727c2916` |
 | 🔵 Reference collections | `reference-collections` | `69ef0f9f1eb473c5dfc2c06b` | `69ef0f9f1eb473c5dfc2c073` |
 
+Leistungsbereiche fields added 2026-10-08 for the Why section stats: `3rd-section-number-2`, `3rd-section-text-2`, `3rd-section-number-3`, `3rd-section-text-3` (PlainText, optional). The existing `3rd-section-number` / `3rd-section-text` are stat 1.
+
 ## Fonts
 
 **Allianceno** (Alliance No.2), custom-uploaded: 300 Light (otf), 400 Regular (otf), 500 Medium (woff2), 600 SemiBold (woff2).
