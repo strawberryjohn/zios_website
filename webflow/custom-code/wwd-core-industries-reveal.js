@@ -5,7 +5,8 @@
 // with a background gradient over a transparent border, which is handed back to
 // the real border (and its hover colour) when the card finishes.
 // Uses the site's gsap when present, else loads it; loads ScrollTrigger if missing.
-// Reduced motion: no animation. Lives in the What we do page footer custom code.
+// Reduced motion: no animation. Runs on the What we do page as the registered inline
+// script 'wwdcoreindustriesreveal' (footer), minified with terser to fit the 2000-char limit.
 // Versioned in strawberryjohn/zios_website: webflow/custom-code/wwd-core-industries-reveal.js
 (function () {
   var cards = document.querySelectorAll('.coreind_card');
