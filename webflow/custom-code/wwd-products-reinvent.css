@@ -2,21 +2,12 @@
    Versioned in strawberryjohn/zios_website: webflow/custom-code/wwd-products-reinvent.css */
 
 /* Reinvention panel = the Home Über Zios panel: same gradient (244deg, blue-100 15% -> blue-170 91%);
-   the animated ASCII mountain is drawn by wwd-reinvent-ascii.js into .wwdreinvent_ascii.
+   the animated ASCII mountain is the Home script (wwd-reinvent-ascii.js) drawing into the .aboutUs_ascii host.
    The style API can't hold a var() gradient, so it lives here. */
 .wwdreinvent_sec {
   background-image: linear-gradient(244deg, var(--swatch--blue-100) 15%, var(--swatch--blue-170) 91%);
 }
 
-/* Button Primary in these sections: Figma CTA is 220px wide with the arrow at the right edge.
-   The component's arrow (.button_primary_icon.is-2) is absolutely placed 1rem from the right and
-   the caption only reserved 1rem, so the two touched. Arrow now sits on the 20px side padding
-   (as in Figma) and the caption keeps arrow width + a 20px gap clear. */
-.wwdproducts_btn_wr .button_primary_element,
-.wwdreinvent_btn_wr .button_primary_element { min-width: 13.75rem; }
-.wwdproducts_btn_wr .button_primary_icon.is-2,
-.wwdreinvent_btn_wr .button_primary_icon.is-2 { right: 1.25rem; }
-.wwdproducts_btn_wr .button_primary_text,
-.wwdreinvent_btn_wr .button_primary_text { padding-right: 2.75rem; }
-/* Reinvention CTA (Figma 10029:33106): white pill, blue-130 caption and arrow. */
+/* Reinvention CTA (Figma 10029:33106): white pill, blue-130 caption and arrow.
+   Caption/arrow spacing comes from the wrapper width (22.5rem, as the Home hero .button-wr). */
 .wwdreinvent_btn_wr .button_primary_element { background-color: var(--swatch--white-100); color: var(--swatch--blue-130); }
