@@ -3,9 +3,8 @@
 // Webflow, parked above the row at translateY(-101%) with a 350ms expo-out
 // transition). On mouse enter the overlay jumps, without animating, to the edge
 // the cursor came in through, then slides in. On leave it slides out through
-// the edge the cursor left by. The row's icon lifts 0.5rem while hovered (the
-// 700ms transition is on .wwdservices_icon in Webflow); the turn itself is
-// wwd-icon-turn.js. Mouse only; touch and reduced motion get nothing.
+// the edge the cursor left by. The icon's lift and 3D turn are wwd-icon-3d.js.
+// Mouse only; touch and reduced motion get nothing.
 // Lives in the What we do page footer custom code.
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -29,14 +28,10 @@
       place(ov, edge(row, e), false);
       ov.getBoundingClientRect(); // commit the start position before animating
       place(ov, 0, true);
-      var icon = row.querySelector('.wwdservices_icon');
-      if (icon) icon.style.transform = 'translateY(-0.5rem)';
     });
     row.addEventListener('pointerleave', function (e) {
       if (e.pointerType !== 'mouse') return;
       place(ov, edge(row, e), true);
-      var icon = row.querySelector('.wwdservices_icon');
-      if (icon) icon.style.transform = '';
     });
   });
 })();
