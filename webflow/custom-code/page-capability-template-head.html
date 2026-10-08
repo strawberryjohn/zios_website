@@ -199,3 +199,37 @@ html.cap-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidd
   .features_sec .features_title_wr, .features_sec .features_title { transition: none; }
 }
 </style>
+<style>
+/* "What can I do", static version (cando_sec, Figma 10051:13075). Replaces the CMS-driven features_sec
+   (hidden, not deleted) on Capabilities (Template) 69bc155fa7556de240825b39. Page head.
+   Layout, type and colours live on the cando_* classes in Webflow; this file only adds what classes can't:
+   active title colour, hover, the last-row border and the mobile accordion order. JS: capability-cando.js. */
+
+.cando_tab { transition: background-color 0.35s ease; }
+.cando_tab_title { transition: color 0.35s ease; }
+.cando_tab.is-active .cando_tab_title { color: var(--swatch--blue-130); }
+.cando_tab:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: -2px; }
+@media (hover: hover) and (min-width: 768px) {
+  .cando_tab:not(.is-active):hover { background-color: color-mix(in srgb, var(--swatch--blue-10) 50%, transparent); }
+}
+/* The layout already draws the bottom line. */
+.cando_layout > .cando_tab:last-child { border-bottom: 0; }
+
+/* Mobile: one column, each panel opens directly under its own title (DOM order is panels, then tabs). */
+@media screen and (max-width: 767px) {
+  .cando_layout > .cando_tab:nth-of-type(1) { order: 1; }  .cando_layout > .cando_panel:nth-of-type(1) { order: 2; }
+  .cando_layout > .cando_tab:nth-of-type(2) { order: 3; }  .cando_layout > .cando_panel:nth-of-type(2) { order: 4; }
+  .cando_layout > .cando_tab:nth-of-type(3) { order: 5; }  .cando_layout > .cando_panel:nth-of-type(3) { order: 6; }
+  .cando_layout > .cando_tab:nth-of-type(4) { order: 7; }  .cando_layout > .cando_panel:nth-of-type(4) { order: 8; }
+  .cando_layout > .cando_tab:nth-of-type(5) { order: 9; }  .cando_layout > .cando_panel:nth-of-type(5) { order: 10; }
+  .cando_layout > .cando_tab:nth-of-type(6) { order: 11; } .cando_layout > .cando_panel:nth-of-type(6) { order: 12; }
+  .cando_layout > .cando_tab:nth-of-type(7) { order: 13; } .cando_layout > .cando_panel:nth-of-type(7) { order: 14; }
+  .cando_layout > .cando_tab:last-child { border-bottom: 1px solid var(--swatch--black-20); }
+  .cando_panel { overflow: hidden; }
+  .cando_panel.is-closing { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cando_tab, .cando_tab_title { transition: none; }
+}
+</style>
