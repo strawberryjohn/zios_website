@@ -58,6 +58,27 @@ html.cap-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidd
    so the per-group CSS animation from the "Partneres-logos / Animation" embed is switched off. */
 .partners_component.is-js-marquee > .partners_list_wrap { animation: none !important; }
 .partners_component.is-js-marquee { will-change: transform; }
+
+/* "What you'll achieve" cards (Achieve section / Item component, Figma 10051:13115).
+   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
+   The class itself (achieve_item) carries layout, the notched clip-path and a solid swatch/blue-100 fallback;
+   the style API mangles var() inside gradients, so the gradient lives here. */
+
+/* Card fill. Figma: #0465cf -> #0c76ea (no swatches); swatch/blue-130 -> swatch/blue-100 until signed off. */
+.achieve_item {
+  background-image: linear-gradient(180deg, var(--swatch--blue-130) 0%, var(--swatch--blue-100) 100%);
+}
+
+/* Visual box: Figma = #2289fb at 25% + 20% dot pattern. */
+.achieve_visual_wr {
+  background-color: color-mix(in srgb, var(--swatch--blue-100) 25%, transparent);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--swatch--white-100) 20%, transparent) 0.0625rem, transparent 0.075rem);
+  background-size: 0.45rem 0.45rem;
+}
+
+/* Number label reads "[ 01 ]". */
+.achieve_item_number::before { content: "[ "; }
+.achieve_item_number::after { content: " ]"; }
 </style>
 <script>
 /* Reveal guard: hide the hero text until capability-hero-reveal.js runs; show it anyway after 3s. */
