@@ -17,20 +17,31 @@
 .features_sec .features_title_wr.is-active { background-color: var(--swatch--blue-10); }
 .features_sec .features_title_wr.is-active .features_title { color: var(--swatch--blue-130); }
 
-/* Panel copy: left-aligned like Figma (was centred). Image 521x247, radius, 40px to the text,
+/* Panel copy: left-aligned like Figma (was centred). Image 521x247, 40px to the text,
    lead H5 Medium (Figma 22px, snapped to 24), 30px to the body, body 16px black-70. */
 .features_sec .features__RT {
   width: 100%;
   max-width: 32.5rem;
   text-align: left;
 }
-.features_sec .features__RT figure { margin: 0 0 2.5rem; max-width: 100% !important; }
+/* Image spans the full text width, square corners. Webflow's rich text makes the figure's inner
+   div inline-block (shrinks to the image) and caps the figure at the uploaded width, so both are reset. */
+.features_sec .features__RT figure {
+  display: block;
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 0 2.5rem;
+  padding: 0;
+}
+.features_sec .features__RT figure > div { display: block; width: 100%; padding: 0; }
 .features_sec .features__RT figure img {
   display: block;
   width: 100%;
+  max-width: none;
+  height: auto;
   aspect-ratio: 521 / 247;
   object-fit: cover;
-  border-radius: 0.375rem;
+  border-radius: 0;
 }
 .features_sec .features__RT h1, .features_sec .features__RT h2, .features_sec .features__RT h3,
 .features_sec .features__RT h4, .features_sec .features__RT h5, .features_sec .features__RT h6 {
