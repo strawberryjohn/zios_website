@@ -1,0 +1,127 @@
+<script>
+const swiperReviews = new Swiper('[swiper="reviews"] .swiper', {
+  speed: 700,
+  slidesPerView: 'auto',
+  //slidesPerGroup: 2,
+  // centeredSlides: true,
+  loop: true,
+  grabCursor: true,
+  loopedSlides: 6,
+
+  pagination: {
+    el: '.reviews-pagination',
+    clickable: true,
+    bulletClass: 'reviews-bullet', 
+    bulletActiveClass: 'active'
+  },
+
+  navigation: {
+    nextEl: '[swiper="reviews"] .swiper-button.next',
+    prevEl: '[swiper="reviews"] .swiper-button.prev'
+  },
+})
+</script>
+
+<!-- WHAT WE DO REDESIGN (versioned in strawberryjohn/zios_website: webflow/custom-code/) -->
+<script>
+// What we do hero: GSAP stagger reveal on load.
+// Heading lines slide up out of a mask one after another, then the lead text and
+// the CTA rise in; the background fades in underneath. The elements stay hidden
+// (html.wwd-reveal-pending, set in the page head) until the timeline has set its
+// start state, and the head script un-hides them after 3s if GSAP never loads.
+// Reduced motion: no animation. Lives in the What we do page footer custom code.
+(function () {
+  var d = document.documentElement;
+  var hero = document.querySelector('.wwdhero_sec');
+  function show() { d.classList.remove('wwd-reveal-pending'); }
+  if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { show(); return; }
+
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  var chain = Promise.resolve();
+  if (typeof window.gsap === 'undefined') {
+    chain = chain.then(function () { return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js'); });
+  }
+  chain = chain.then(function () {
+    // SplitText needs a 3.13+ core; with an older gsap already on the page, reveal the heading whole.
+    var v = (window.gsap.version || '0').split('.').map(Number);
+    var newEnough = v[0] > 3 || (v[0] === 3 && v[1] >= 13);
+    if (typeof window.SplitText === 'undefined' && newEnough) {
+      return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js').catch(function () {});
+    }
+  });
+  chain.then(function () { return document.fonts ? document.fonts.ready : null; }).then(run).catch(show);
+
+  function run() {
+    var gsap = window.gsap;
+    var heading = hero.querySelector('.wwdhero_heading');
+    var text = hero.querySelector('.wwdhero_text');
+    var btn = hero.querySelector('.wwdhero_content .button_primary_wrap');
+    var bg = hero.querySelector('.wwdhero_bg');
+    var split = null;
+
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    if (bg) tl.from(bg, { autoAlpha: 0, scale: 1.06, duration: 1.8, ease: 'power2.out' }, 0);
+    if (heading && window.SplitText) {
+      gsap.registerPlugin(window.SplitText);
+      split = window.SplitText.create(heading, { type: 'lines', mask: 'lines', linesClass: 'wwdhero_line' });
+      tl.from(split.lines, { yPercent: 110, duration: 1, stagger: 0.12 }, 0.1);
+    } else if (heading) {
+      tl.from(heading, { y: 40, autoAlpha: 0, duration: 1 }, 0.1);
+    }
+    tl.from([text, btn].filter(Boolean), { y: 24, autoAlpha: 0, duration: 0.8, stagger: 0.12 }, '-=0.6');
+    // Back to plain text afterwards so the heading re-wraps normally on resize.
+    if (split) tl.eventCallback('onComplete', function () { split.revert(); });
+    show();
+  }
+})();
+</script>
+<script>
+// What we do services: direction-aware row hover.
+// Each .wwdservices_row holds a .wwdservices_overlay (#002768 at 40%, styled in
+// Webflow, parked above the row at translateY(-101%) with a 350ms expo-out
+// transition). On mouse enter the overlay jumps, without animating, to the edge
+// the cursor came in through, then slides in. On leave it slides out through
+// the edge the cursor left by. The icon's lift and 3D turn are wwd-icon-3d.js.
+// Mouse only; touch and reduced motion get nothing.
+// Lives in the What we do page footer custom code.
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var rows = document.querySelectorAll('.wwdservices_row');
+
+  function edge(row, e) {
+    var r = row.getBoundingClientRect();
+    return e.clientY < r.top + r.height / 2 ? -101 : 101;
+  }
+
+  function place(ov, y, animate) {
+    ov.style.transition = animate ? '' : 'none';
+    ov.style.transform = 'translate3d(0,' + y + '%,0)';
+  }
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var ov = row.querySelector('.wwdservices_overlay');
+    if (!ov) return;
+    row.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      place(ov, edge(row, e), false);
+      ov.getBoundingClientRect(); // commit the start position before animating
+      place(ov, 0, true);
+    });
+    row.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      place(ov, edge(row, e), true);
+    });
+  });
+})();
+</script>
+<script>
+/* What we do: CAD-style 3D icon turn. Minified from webflow/custom-code/wwd-icon-3d.js */
+!function(t){var e=/-?\d*\.?\d+(?:e-?\d+)?/g,n="#4E87D0",r="http://www.w3.org/2000/svg";function o(t){var n=function(t){for(var n,r=[],o=/([MLCZ])([^MLCZ]*)/g;n=o.exec(t);)r.push([n[1],(n[2].match(e)||[]).map(Number)]);return r}(t),r=[],o=null,a=null;return n.forEach(function(t){var e=t[1];if("M"===t[0])o={p:[[e[0],e[1]]],cmd:[t]},r.push(o),a=[e[0],e[1]];else if("L"===t[0])o.p.push([e[0],e[1]]),o.cmd.push(t),a=[e[0],e[1]];else if("C"===t[0]){for(var n=1;n<=10;n++){var i=n/10,c=1-i;o.p.push([c*c*c*a[0]+3*c*c*i*e[0]+3*c*i*i*e[2]+i*i*i*e[4],c*c*c*a[1]+3*c*c*i*e[1]+3*c*i*i*e[3]+i*i*i*e[5]])}o.cmd.push(t),a=[e[4],e[5]]}else"Z"===t[0]&&o.cmd.push(t)}),r.forEach(function(t){for(var e=t.p,n=[e[0]],r=1;r<e.length;r++){var o=n[n.length-1];Math.hypot(e[r][0]-o[0],e[r][1]-o[1])>1&&n.push(e[r])}n.length>2&&Math.hypot(n[0][0]-n[n.length-1][0],n[0][1]-n[n.length-1][1])<1&&n.pop(),t.p=e=n;for(var a=e.length,i=0,c=0;c<a;c++){var s=e[c],u=e[(c+1)%a];i+=s[0]*u[1]-u[0]*s[1]}t.ccw=i>0,t.sharp=e.map(function(t,n){var r=e[(n-1+a)%a],o=e[(n+1)%a],i=[t[0]-r[0],t[1]-r[1]],c=[o[0]-t[0],o[1]-t[1]];return(i[0]*c[0]+i[1]*c[1])/(Math.hypot(i[0],i[1])*Math.hypot(c[0],c[1])+1e-9)<.8})}),r}function a(t){var e=t.solids.map(function(t){var e=[];t.loops.forEach(function(t){e=e.concat(o(t))}),e.forEach(function(t,n){var r=0;e.forEach(function(e,o){o!==n&&function(t,e){for(var n=!1,r=0,o=e.length-1;r<e.length;o=r++){var a=e[r],i=e[o];a[1]>t[1]!=i[1]>t[1]&&t[0]<(i[0]-a[0])*(t[1]-a[1])/(i[1]-a[1])+a[0]&&(n=!n)}return n}(t.p[0],e.p)&&r++}),t.hole=r%2==1});var r=null;if(t.pocket){var a=[];t.pocket.loops.forEach(function(t){a=a.concat(o(t))}),r={depth:t.pocket.depth,floor:t.pocket.floor||n,keys:a.map(function(t){return t.p[0][0].toFixed(1)+","+t.p[0][1].toFixed(1)})}}return{s:t,loops:e,pocket:r}}),r=[],a=[];return e.forEach(function(t){t.loops.forEach(function(t){t.p.forEach(function(t){r.push(t[0])})}),a.push(t.s.z0,t.s.z1)}),{model:t,solids:e,pivot:[(Math.min.apply(0,r)+Math.max.apply(0,r))/2,(Math.min.apply(0,a)+Math.max.apply(0,a))/2]}}function i(t){return t.toFixed(2)}function c(t,e,n){var r="";return e.cmd.forEach(function(e){var o=e[1];if("Z"!==e[0]){r+=e[0];for(var a=0;a<o.length;a+=2){var c=t.P(o[a],n,-o[a+1]);r+=i(c[0])+" "+i(c[1])+" "}}else r+="Z"}),r}function s(t,e){var r=function(t,e,n){var r=t.alpha,o=t.kv;function a(t){var e=Math.sin(r),n=Math.cos(r);return{U:[Math.cos(t),Math.sin(t)*e],Wv:[Math.sin(t),-Math.cos(t)*e],V:[0,-n*o],t:[n*Math.sin(t),-n*Math.cos(t),e]}}var i=a(t.psi),c=a(t.psi+e);function s(t,e,n,r){return[e*t.U[0]+n*t.Wv[0],e*t.U[1]+n*t.Wv[1]+r*t.V[1]]}var u=s(i,n[0],n[1],0),l=s(c,n[0],n[1],0),p=u[0]-l[0],h=u[1]-l[1];return{t:c.t,P:function(t,e,n){var r=s(c,t,e,n);return[r[0]+p,r[1]+h]},far:function(t,e,n){return-(t*c.t[0]+e*c.t[1]+n*c.t[2])}}}(t.model,e,t.pivot),o=[],a=r.t;return t.solids.forEach(function(t,e){var s=t.s,u=s.layer||0,l=t.pocket?t.pocket.keys:[];if(t.loops.forEach(function(n){for(var c=n.p[0][0].toFixed(1)+","+n.p[0][1].toFixed(1),p=l.indexOf(c)>=0,h=s.z0,f=p?s.z0+t.pocket.depth:s.z1,d=n.p.length,v=[],m=(n.ccw?1:-1)*(n.hole?-1:1),y=0;y<d;y++){var M=n.p[y],k=n.p[(y+1)%d],E=k[0]-M[0],b=k[1]-M[1],g=Math.hypot(E,b)||1,w=m*b/g,x=m*E/g,A=w*a[0]+x*a[2]>1e-4;v.push({a:M,b:k,na:w,nh:x,vis:A})}for(var L=[],C=[],F=0;F<d;F++)n.sharp[F]&&C.length&&(L.push(C),C=[]),C.push(F);C.length&&(L.length&&!n.sharp[0]?L[0]=C.concat(L[0]):L.push(C)),L.forEach(function(t){var r=0,o=0,a=0;t.forEach(function(e,n){if(v[e].vis&&(r+=v[e].na,o+=v[e].nh),n>0){var i=v[t[n-1]],c=v[e];a+=i.na*c.nh-i.nh*c.na}});var i=t.length>2?a*(n.ccw?1:-1)*(n.hole?-1:1)>.05:n.hole,c=180*Math.atan2(o,r)/Math.PI>20,u=(i?s.holeWall:s.wall)||(c!==i?"#3E7AC9":"#2D6CBD");t.forEach(function(r){v[r].col=u,v[r].run=e+":"+n.p[0][0].toFixed(1)+":"+t[0]})}),v.forEach(function(t,a){if(t.vis){var c=v[(a-1+d)%d],l=v[(a+1)%d],p=r.P(t.a[0],h,-t.a[1]),m=r.P(t.b[0],h,-t.b[1]),y=r.P(t.a[0],f,-t.a[1]),M=r.P(t.b[0],f,-t.b[1]),k="M"+i(p[0])+" "+i(p[1])+"L"+i(m[0])+" "+i(m[1])+"L"+i(M[0])+" "+i(M[1])+"L"+i(y[0])+" "+i(y[1])+"Z",E="M"+i(p[0])+" "+i(p[1])+"L"+i(m[0])+" "+i(m[1])+"M"+i(y[0])+" "+i(y[1])+"L"+i(M[0])+" "+i(M[1]);!n.sharp[a]&&c.vis||(E+="M"+i(p[0])+" "+i(p[1])+"L"+i(y[0])+" "+i(y[1])),!n.sharp[(a+1)%d]&&l.vis||(E+="M"+i(m[0])+" "+i(m[1])+"L"+i(M[0])+" "+i(M[1]));var b=(t.a[0]+t.b[0])/2,g=(t.a[1]+t.b[1])/2;o.push({layer:u,rank:1,far:r.far(b,(h+f)/2,-g),d:k,edge:E,fill:t.col,cls:s.cls,si:e,run:t.run})}})}),t.pocket){var p=t.loops.filter(function(t){return l.indexOf(t.p[0][0].toFixed(1)+","+t.p[0][1].toFixed(1))>=0}),h=p.map(function(e){return c(r,e,s.z0+t.pocket.depth)}).join(""),f=p[0].p[0];o.push({layer:u,rank:0,far:r.far(f[0],s.z0+t.pocket.depth,-f[1])+1e3,d:h,edge:h,fill:t.pocket.floor,cls:s.cls,si:e,evenodd:!0})}var d=t.loops.map(function(t){return c(r,t,s.z0)}).join("");o.push({layer:u,rank:2,far:-1e9,d:d,edge:d,fill:s.cap||n,cls:s.cls,si:e,evenodd:!0})}),o.sort(function(t,e){return t.layer-e.layer||(2===t.rank)-(2===e.rank)||e.far-t.far}),o}function u(t,e,n){var o=a(e);t.innerHTML="";var i=document.createElementNS(r,"defs"),c=document.createElementNS(r,"mask");c.setAttribute("id",n+"-m"),c.setAttribute("maskUnits","userSpaceOnUse"),c.setAttribute("x","-100"),c.setAttribute("y","-100"),c.setAttribute("width","400"),c.setAttribute("height","400"),i.appendChild(c),t.appendChild(i);var u=document.createElementNS(r,"g");u.setAttribute("opacity","0.75"),t.appendChild(u);var l=document.createElementNS(r,"rect");return l.setAttribute("x","-100"),l.setAttribute("y","-100"),l.setAttribute("width","400"),l.setAttribute("height","400"),l.setAttribute("fill","#8CBEFF"),l.setAttribute("mask","url(#"+n+"-m)"),t.appendChild(l),{draw:function(t){var e=s(o,t),n="",r="",a="",i=null;function l(){a&&(r+='<path d="'+a+'" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"/>'),a=""}e.forEach(function(t){var e=t.evenodd?' fill-rule="evenodd"':"";n+='<path d="'+t.d+'" fill="'+t.fill+'"'+e+' stroke="'+t.fill+'" stroke-width="0.6" stroke-linejoin="round"/>',t.run&&t.run===i||l(),i=t.run||null,r+='<path d="'+t.d+'" fill="#000"'+e+' stroke="#000" stroke-width="0.7" stroke-linejoin="round"/>',a+=t.edge,t.run||l()}),l(),u.innerHTML=n,c.innerHTML=r}}}t.HL3D={Renderer:u,faces:s,prepare:a};var l=-25*Math.PI/180,p="150ms";function h(t,e,n){fetch(e.currentSrc||e.src).then(function(t){return t.ok?t.text():Promise.reject()}).then(function(o){var a=document.createElement("div");a.innerHTML=o;var i=a.querySelector("metadata[data-hl3d]");if(i){var c=JSON.parse(i.textContent),s=document.createElement("div");s.style.cssText="position:relative;display:block;flex:none;transition:transform 700ms cubic-bezier(.32,.72,0,1)",e.parentNode.insertBefore(s,e),s.appendChild(e);var h=document.createElementNS(r,"svg");h.setAttribute("viewBox","0 0 200 200"),h.setAttribute("aria-hidden","true"),h.style.cssText="position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0;pointer-events:none;transition:opacity "+p,e.style.transition="opacity "+p,s.appendChild(h);var f=u(h,c,"hl3d"+n),d=0,v=0,m=0,y=0,M=0;f.draw(0),t.addEventListener("pointerenter",function(t){"mouse"===t.pointerType&&E(1)}),t.addEventListener("pointerleave",function(t){"mouse"===t.pointerType&&E(0)})}function k(t){var n=Math.min(1,(t-y)/700);d=v+(m-v)*function(t){for(var e=t,n=0;n<8;n++){var r=.96*e*(1-e)*(1-e)+e*e*e-t,o=.96*(1-e)*(1-3*e)+3*e*e;if(Math.abs(r)<1e-5||!o)break;e=Math.min(1,Math.max(0,e-r/o))}return 2.16*e*(1-e)*(1-e)+3*e*e*(1-e)+e*e*e}(n),f.draw(d*l),n<1?M=requestAnimationFrame(k):(M=0,0===m&&(e.style.opacity="",h.style.opacity="0"))}function E(t){v=d,m=t,y=performance.now(),t&&(h.style.opacity="1",e.style.opacity="0"),s.style.transform=t?"translateY(-0.5rem)":"",M||(M=requestAnimationFrame(k))}}).catch(function(){})}if(t.document&&!t.HL3D_NO_AUTO&&!t.matchMedia("(prefers-reduced-motion: reduce)").matches){var f=function(){document.querySelectorAll(".wwdservices_row").forEach(function(t,e){var n=t.querySelector("img.wwdservices_icon");n&&h(t,n,e)})};"loading"===document.readyState?document.addEventListener("DOMContentLoaded",f):f()}}(window);
+</script>

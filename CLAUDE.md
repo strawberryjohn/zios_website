@@ -59,6 +59,15 @@ Figma is the visual target, not the source of truth for sizes. Sanity-check ever
 - Only colours from the swatch/theme variables. A new variable or text style needs sign-off; prefer extending an existing collection over one-off classes.
 - One-off decorative sizes (e.g. the 240px "24/7") belong on a section-specific class, not in the global scale.
 
+## Designer = published
+
+What the Webflow Designer canvas shows must match the published site, and vice versa.
+
+- Layout, sizes, colours and spacing live in Webflow styles (classes, combos, component variants), never only in page/site custom code, because custom code doesn't run on the canvas.
+- Custom code is only for runtime behaviour (animations, sliders, canvases) and its guard states. The canvas shows the finished state of an animation, which is what the published page settles on.
+- If a component can't express a design (e.g. a fixed-width button), add a variant or a combo class in Webflow instead of overriding it from custom CSS.
+- Before finishing a section, check that nothing visible depends on custom CSS alone; if it does, move it into Webflow styles.
+
 ## External code bundle
 
 Most of the site's JS and a lot of its CSS do not live in Webflow: every page loads `https://zios-webflow.netlify.app/app.js` and `app.css`, built from a separate GitHub repo (`ndrewfrolov/zios`), which this project can't reach. Slider logic (tabs, autoplay), animations and some section styles live there. Before changing behaviour or a style that doesn't take effect, check whether the bundle owns it.

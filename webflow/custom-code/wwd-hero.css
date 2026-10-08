@@ -1,0 +1,8 @@
+/* What we do hero (page head). Versioned in strawberryjohn/zios_website: webflow/custom-code/. */
+
+/* Reveal (wwd-hero-reveal.js): hidden until the GSAP timeline has set its start state. */
+html.wwd-reveal-pending .wwdhero_heading,
+html.wwd-reveal-pending .wwdhero_text,
+html.wwd-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidden; }
+/* Line masks: a little room so descenders aren't clipped at line-height 1.1. */
+.wwdhero_line-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
