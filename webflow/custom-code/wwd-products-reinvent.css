@@ -1,0 +1,7 @@
+/* What we do: Reinvention section (page head). Figma 10029:33051.
+   The style API can't hold a var() gradient or plus-lighter blending, so they live here.
+   Gradient end is swatch/blue-170 (#012462); Figma has rgb(0,36,100), the nearest swatch. */
+.wwdreinvent_sec {
+  background-image: linear-gradient(245.35deg, var(--swatch--blue-100) 14.56%, var(--swatch--blue-170) 90.66%);
+}
+.wwdreinvent_bg { mix-blend-mode: plus-lighter; }
