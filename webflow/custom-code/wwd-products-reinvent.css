@@ -1,0 +1,13 @@
+/* What we do: Produkte & Plattformen + Reinvention (page head). Figma 10210:14252.
+   Versioned in strawberryjohn/zios_website: webflow/custom-code/wwd-products-reinvent.css */
+
+/* Reinvention panel = the Home Über Zios panel: same gradient (244deg, blue-100 15% -> blue-170 91%);
+   the animated ASCII mountain is the Home script (wwd-reinvent-ascii.js) drawing into the .aboutUs_ascii host.
+   The style API can't hold a var() gradient, so it lives here. */
+.wwdreinvent_sec {
+  background-image: linear-gradient(244deg, var(--swatch--blue-100) 15%, var(--swatch--blue-170) 91%);
+}
+
+/* Reinvention CTA (Figma 10029:33106): white pill, blue-130 caption and arrow.
+   Caption/arrow spacing comes from the wrapper width (22.5rem, as the Home hero .button-wr). */
+.wwdreinvent_btn_wr .button_primary_element { background-color: var(--swatch--white-100); color: var(--swatch--blue-130); }

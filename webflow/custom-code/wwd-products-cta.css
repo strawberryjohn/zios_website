@@ -1,0 +1,5 @@
+/* Products & Platforms CTA = Figma 10029:33020: 220px blue-100 pill, 20px side padding,
+   white caption left, white arrow on the right padding. Width comes from .wwdproducts_btn_wr (13.75rem).
+   Lives in an HTML Embed at the top of wwdproducts_sec (What we do page), not in page head/footer code. */
+.wwdproducts_btn_wr .button_primary_element { background-color: var(--swatch--blue-100); color: var(--swatch--white-100); padding-left: 1.25rem; padding-right: 1.25rem; }
+.wwdproducts_btn_wr .button_primary_icon.is-2 { right: 1.25rem; }
