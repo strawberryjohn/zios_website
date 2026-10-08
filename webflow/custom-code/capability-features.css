@@ -1,40 +1,3 @@
-<style>
-/* Leistungsbereiche template: "Why ..." section (Figma 10052:14429).
-   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626. */
-
-/* Vertical gradient. Figma: #002361 -> #0465cf. Start = swatch/blue-170.
-   The end colour has no swatch yet; swatch/blue-130 (#1962b2) is the closest until one is signed off. */
-.why_sec {
-  background-image: linear-gradient(180deg, var(--swatch--blue-170) 0%, var(--swatch--blue-130) 100%);
-}
-
-/* Stats 2 and 3 are optional CMS fields: drop a column when its number is empty. */
-.why_stat:has(> .why_stat_number.w-dyn-bind-empty) {
-  display: none;
-}
-
-/* "What you'll achieve" cards (Achieve section / Item component, Figma 10051:13115).
-   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
-   The class itself (achieve_item) carries layout, the notched clip-path and a solid swatch/blue-100 fallback;
-   the style API mangles var() inside gradients, so the gradient lives here. */
-
-/* Card fill. Figma: #0465cf -> #0c76ea (no swatches); swatch/blue-130 -> swatch/blue-100 until signed off. */
-.achieve_item {
-  background-image: linear-gradient(180deg, var(--swatch--blue-130) 0%, var(--swatch--blue-100) 100%);
-}
-
-/* Visual box: Figma = #2289fb at 25% + 20% dot pattern. */
-.achieve_visual_wr {
-  background-color: color-mix(in srgb, var(--swatch--blue-100) 25%, transparent);
-  background-image: radial-gradient(circle, color-mix(in srgb, var(--swatch--white-100) 20%, transparent) 0.0625rem, transparent 0.075rem);
-  background-size: 0.45rem 0.45rem;
-}
-
-/* Number label reads "[ 01 ]". */
-.achieve_item_number::before { content: "[ "; }
-.achieve_item_number::after { content: " ]"; }
-</style>
-<style>
 /* "What can I do" section (features_sec, Figma 10051:13075).
    Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
    JS: capability-features.js (page footer). */
@@ -132,4 +95,3 @@
 @media (prefers-reduced-motion: reduce) {
   .features_sec .features_title_wr, .features_sec .features_title { transition: none; }
 }
-</style>
