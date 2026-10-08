@@ -1,0 +1,235 @@
+<!-- Versioned in strawberryjohn/zios_website: webflow/custom-code/ (capability-*.css) -->
+<style>
+/* Leistungsbereiche template: "Why ..." section (Figma 10052:14429).
+   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626. */
+
+/* Vertical gradient. Figma: #002361 -> #0465cf. Start = swatch/blue-170.
+   The end colour has no swatch yet; swatch/blue-130 (#1962b2) is the closest until one is signed off. */
+.why_sec {
+  background-image: linear-gradient(180deg, var(--swatch--blue-170) 0%, var(--swatch--blue-130) 100%);
+}
+
+/* Stats 2 and 3 are optional CMS fields: drop a column when its number is empty. */
+.why_stat:has(> .why_stat_number.w-dyn-bind-empty) {
+  display: none;
+}
+
+/* Capabilities page hero (wwdHero_* classes, Figma 10051:14295). Page head of Capabilities (Template)
+   69bc155fa7556de240825b39 only, so the What we do hero (same classes) is not affected. */
+
+/* Background pinned to the centre: it grows from the middle as the screen widens instead of
+   anchoring to the bottom and drifting up. Capped at the 1920px content width. No transform here,
+   the reveal tween owns transform. */
+.wwdhero_bg {
+  top: 0; right: 0; left: 0;
+  margin-left: auto; margin-right: auto;
+  max-width: 120rem;
+  object-position: 50% 50%;
+}
+
+/* Blend where the image is cut by the section: bottom always, sides once the screen is wider
+   than the 1920px image. Sits above the images, below the content (wwdHero_contain is z-index 1). */
+.wwdhero_sec::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 72%, var(--swatch--blue-170) 100%);
+}
+@media (min-width: 120rem) {
+  .wwdhero_sec::after {
+    background:
+      linear-gradient(180deg, transparent 72%, var(--swatch--blue-170) 100%),
+      linear-gradient(90deg,
+        var(--swatch--blue-170) calc(50% - 60rem),
+        transparent calc(50% - 48rem),
+        transparent calc(50% + 48rem),
+        var(--swatch--blue-170) calc(50% + 60rem));
+  }
+}
+
+/* Reveal (capability-hero-reveal.js): hidden until the timeline has set its start state. */
+html.cap-reveal-pending .wwdhero_head > *,
+html.cap-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidden; }
+.wwdhero_line-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
+
+/* Partners marquee on the Capabilities page: capability-partners-marquee.js moves the whole track,
+   so the per-group CSS animation from the "Partneres-logos / Animation" embed is switched off. */
+.partners_component.is-js-marquee > .partners_list_wrap { animation: none !important; }
+.partners_component.is-js-marquee { will-change: transform; }
+
+/* "What you'll achieve" cards (Achieve section / Item component, Figma 10051:13115).
+   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
+   The class itself (achieve_item) carries layout, the notched clip-path and a solid swatch/blue-100 fallback;
+   the style API mangles var() inside gradients, so the gradient lives here. */
+
+/* Card fill. Figma: #0465cf -> #0c76ea (no swatches); swatch/blue-130 -> swatch/blue-100 until signed off. */
+.achieve_item {
+  background-image: linear-gradient(180deg, var(--swatch--blue-130) 0%, var(--swatch--blue-100) 100%);
+}
+
+/* Visual box: Figma = #2289fb at 25% + 20% dot pattern. */
+.achieve_visual_wr {
+  background-color: color-mix(in srgb, var(--swatch--blue-100) 25%, transparent);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--swatch--white-100) 20%, transparent) 0.0625rem, transparent 0.075rem);
+  background-size: 0.45rem 0.45rem;
+}
+
+/* Number label reads "[ 01 ]". */
+.achieve_item_number::before { content: "[ "; }
+.achieve_item_number::after { content: " ]"; }
+</style>
+<script>
+/* Reveal guard: hide the hero text until capability-hero-reveal.js runs; show it anyway after 3s. */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var d = document.documentElement;
+  d.classList.add('cap-reveal-pending');
+  setTimeout(function () { d.classList.remove('cap-reveal-pending'); }, 3000);
+})();
+</script>
+<style>
+/* "What can I do" section (features_sec, Figma 10051:13075).
+   Page head of Capabilities (Template) 69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
+   JS: capability-features.js (page footer). */
+
+/* No "+" icons (removed per review; the class is also display:none in the Designer). */
+.features_sec .features_item_icon { display: none; }
+
+/* Rows: buttons centre their text by default, so long titles wrapped centred. Left-align them. */
+.features_sec .features_title_wr {
+  justify-content: flex-start;
+  text-align: left;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.35s ease;
+}
+.features_sec .features_title { transition: color 0.35s ease; }
+.features_sec .features_title_wr.is-active { background-color: var(--swatch--blue-10); }
+.features_sec .features_title_wr.is-active .features_title { color: var(--swatch--blue-130); }
+
+/* Panel copy: left-aligned like Figma (was centred). Image 521x247, 40px to the text,
+   lead H5 Medium (Figma 22px, snapped to 24), 30px to the body, body 16px black-70. */
+.features_sec .features__RT {
+  width: 100%;
+  max-width: 32.5rem;
+  text-align: left;
+}
+/* Image spans the full text width, square corners. Webflow's rich text makes the figure's inner
+   div inline-block (shrinks to the image) and caps the figure at the uploaded width, so both are reset. */
+.features_sec .features__RT figure {
+  display: block;
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 0 2.5rem;
+  padding: 0;
+}
+.features_sec .features__RT figure > div { display: block; width: 100%; padding: 0; }
+.features_sec .features__RT figure img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 521 / 247;
+  object-fit: cover;
+  border-radius: 0;
+}
+.features_sec .features__RT h1, .features_sec .features__RT h2, .features_sec .features__RT h3,
+.features_sec .features__RT h4, .features_sec .features__RT h5, .features_sec .features__RT h6 {
+  margin: 0 0 1.875rem;
+  font-size: var(--_typography---font-size--h5, 1.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--swatch--black-100);
+}
+.features_sec .features__RT p {
+  margin: 0 0 1.25rem;
+  font-size: var(--_typography---font-size--h8, 1rem);
+  line-height: 1.3;
+  color: var(--swatch--black-70);
+}
+.features_sec .features__RT > :last-child { margin-bottom: 0; }
+
+/* Panels: only the active one is visible. Before the script runs, the first one shows. */
+.features_sec .features_content_wr { visibility: hidden; opacity: 0; }
+.features_sec .features_item.is-active .features_content_wr,
+.features_sec .features_list:not(.is-init) .features_item:first-child .features_content_wr { visibility: visible; opacity: 1; }
+
+/* Tablet and up: two-column grid instead of absolutely positioned panels. All panels share the
+   left cell, which spans every row, so the section grows to fit the tallest panel and the copy can
+   no longer overflow into the next section or sit on top of another panel.
+   --features-count is set by the script (row count = number of items). */
+@media screen and (min-width: 768px) {
+  .features_sec .features_list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .features_sec .features_item { display: contents; }
+  .features_sec .features_title_wr {
+    grid-column: 2;
+    border-left: 1px solid var(--swatch--black-20);
+    border-bottom: 1px solid var(--swatch--black-20);
+  }
+  .features_sec .features_item:last-child .features_title_wr { border-bottom: 0; }
+  .features_sec .features_content_wr {
+    grid-column: 1;
+    grid-row: 1 / span var(--features-count, 7);
+    position: relative;
+    inset: auto;
+    width: auto;
+    height: auto;
+    padding: 4rem 2rem;
+    justify-content: center;
+    align-items: center;
+    border-right: 0;
+  }
+}
+
+/* Mobile: accordion, the active item's panel opens under its title. */
+@media screen and (max-width: 767px) {
+  .features_sec .features_content_wr { display: none; overflow: hidden; }
+  .features_sec .features_item.is-active .features_content_wr,
+  .features_sec .features_item.is-closing .features_content_wr,
+  .features_sec .features_list:not(.is-init) .features_item:first-child .features_content_wr { display: flex; }
+  .features_sec .features__RT { padding-top: 0.5rem; padding-bottom: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .features_sec .features_title_wr, .features_sec .features_title { transition: none; }
+}
+</style>
+<style>
+/* "What can I do", static version (cando_sec, Figma 10051:13075). Replaces the CMS-driven features_sec
+   (hidden, not deleted) on Capabilities (Template) 69bc155fa7556de240825b39. Page head.
+   Layout, type and colours live on the cando_* classes in Webflow; this file only adds what classes can't:
+   active title colour, hover, the last-row border and the mobile accordion order. JS: capability-cando.js. */
+
+.cando_tab { transition: background-color 0.35s ease; }
+.cando_tab_title { transition: color 0.35s ease; }
+.cando_tab.is-active .cando_tab_title { color: var(--swatch--blue-130); }
+.cando_tab:focus-visible { outline: 2px solid var(--swatch--blue-100); outline-offset: -2px; }
+@media (hover: hover) and (min-width: 768px) {
+  .cando_tab:not(.is-active):hover { background-color: color-mix(in srgb, var(--swatch--blue-10) 50%, transparent); }
+}
+/* The layout already draws the bottom line. */
+.cando_layout > .cando_tab:last-child { border-bottom: 0; }
+
+/* Mobile: one column, each panel opens directly under its own title (DOM order is panels, then tabs). */
+@media screen and (max-width: 767px) {
+  .cando_layout > .cando_tab:nth-of-type(1) { order: 1; }  .cando_layout > .cando_panel:nth-of-type(1) { order: 2; }
+  .cando_layout > .cando_tab:nth-of-type(2) { order: 3; }  .cando_layout > .cando_panel:nth-of-type(2) { order: 4; }
+  .cando_layout > .cando_tab:nth-of-type(3) { order: 5; }  .cando_layout > .cando_panel:nth-of-type(3) { order: 6; }
+  .cando_layout > .cando_tab:nth-of-type(4) { order: 7; }  .cando_layout > .cando_panel:nth-of-type(4) { order: 8; }
+  .cando_layout > .cando_tab:nth-of-type(5) { order: 9; }  .cando_layout > .cando_panel:nth-of-type(5) { order: 10; }
+  .cando_layout > .cando_tab:nth-of-type(6) { order: 11; } .cando_layout > .cando_panel:nth-of-type(6) { order: 12; }
+  .cando_layout > .cando_tab:nth-of-type(7) { order: 13; } .cando_layout > .cando_panel:nth-of-type(7) { order: 14; }
+  .cando_layout > .cando_tab:last-child { border-bottom: 1px solid var(--swatch--black-20); }
+  .cando_panel { overflow: hidden; }
+  .cando_panel.is-closing { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cando_tab, .cando_tab_title { transition: none; }
+}
+</style>

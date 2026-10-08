@@ -1,0 +1,19 @@
+/* "What you'll achieve" card hover (capability-achieve-rain.js). Page head of Capabilities (Template)
+   69bc155fa7556de240825b39 and the Leistungsbereiche CMS template 69e9ddef2088dcee56f16626.
+   Lighter bottom: a blue-60 layer (42% at the bottom, clear above 35%) fades in over the card gradient.
+   The rain canvas sits behind the icon inside the dotted box. */
+.achieve_item { position: relative; isolation: isolate; }
+.achieve_item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--swatch--blue-60) 0%, transparent) 35%, color-mix(in srgb, var(--swatch--blue-60) 42%, transparent) 100%);
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.achieve_item.is-hover::before { opacity: 1; }
+.achieve_visual_wr { position: relative; }
+.achieve_rain { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.achieve_visual_img { position: relative; z-index: 1; }

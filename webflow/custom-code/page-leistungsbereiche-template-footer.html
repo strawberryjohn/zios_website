@@ -1,0 +1,207 @@
+<!-- Features section (capability-features.js) -->
+<script>
+// "What can I do" section (features_sec): tabs on desktop, accordion on mobile, GSAP motion.
+// Replaces the old data-feature/data-feature-panel script: each title now drives the panel in its
+// own CMS item, so pairing can't break when a binding is empty.
+// - Switching: the outgoing panel fades out completely before the incoming one staggers in
+//   (image, lead, paragraphs), so two panels never overlap.
+// - Hover (mouse, 768px+): resting on a title for a moment opens it; click/tap/keyboard also work.
+// - Scroll reveal: heading, then the titles one after another, then the open panel's content.
+// - Without GSAP (or with reduced motion) it still switches, just without animation.
+// Lives in the page footer of Capabilities (Template) and the Leistungsbereiche CMS template;
+// CSS in capability-features.css (page head).
+(function () {
+  var HOVER_DELAY = 90;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var desktopMq = window.matchMedia('(min-width: 768px)');
+  var hoverMq = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function loadGsap() {
+    if (window.gsap) return Promise.resolve(window.gsap);
+    var tag = document.querySelector('script[src*="gsap.min.js"]');
+    if (!tag) {
+      tag = document.createElement('script');
+      tag.src = 'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js';
+      document.head.appendChild(tag);
+    }
+    // Another script (e.g. the hero reveal) may already be loading it: wait for window.gsap.
+    return new Promise(function (resolve, reject) {
+      var tries = 0;
+      (function check() {
+        if (window.gsap) return resolve(window.gsap);
+        if (++tries > 100) return reject();
+        setTimeout(check, 50);
+      })();
+    });
+  }
+
+  function init(sec) {
+    var list = sec.querySelector('.features_list');
+    if (!list) return;
+    var items = [].slice.call(list.querySelectorAll(':scope > .features_item'));
+    if (!items.length) return;
+    var heading = sec.querySelector('.features_contain > .features_content_heading');
+    var gsap = null;
+    var active = -1;
+    var hoverTimer = null;
+
+    function parts(i) {
+      var it = items[i];
+      return {
+        item: it,
+        btn: it.querySelector('.features_title_wr'),
+        wr: it.querySelector('.features_content_wr'),
+        panel: it.querySelector('.features_content_panel')
+      };
+    }
+    function kids(p) {
+      var rt = p.wr && p.wr.querySelector('.features_content_panel .features__RT');
+      return rt ? [].slice.call(rt.children) : [];
+    }
+
+    list.style.setProperty('--features-count', items.length);
+    items.forEach(function (it, i) {
+      var p = parts(i);
+      if (!p.btn || !p.wr) return;
+      var id = 'features-panel-' + i;
+      p.wr.id = id;
+      p.btn.setAttribute('type', 'button');
+      p.btn.setAttribute('aria-controls', id);
+      p.btn.setAttribute('aria-expanded', 'false');
+      p.btn.addEventListener('click', function () { activate(i, true); });
+      p.btn.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !hoverMq.matches || !desktopMq.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () { activate(i, true); }, HOVER_DELAY);
+      });
+      p.btn.addEventListener('pointerleave', function () { clearTimeout(hoverTimer); });
+    });
+
+    function setClasses(i, on) {
+      var p = parts(i);
+      [p.item, p.btn, p.panel].forEach(function (el) { if (el) el.classList.toggle('is-active', on); });
+      if (p.btn) p.btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    }
+
+    // Inline state for every panel, used once GSAP owns visibility.
+    function syncInline() {
+      if (!gsap) return;
+      items.forEach(function (it, i) {
+        var p = parts(i);
+        if (!p.wr) return;
+        gsap.killTweensOf(p.wr);
+        gsap.killTweensOf(kids(p));
+        gsap.set(kids(p), { clearProps: 'transform,opacity,visibility' });
+        gsap.set(p.wr, { clearProps: 'height' });
+        it.classList.remove('is-closing');
+        gsap.set(p.wr, { autoAlpha: i === active ? 1 : 0 });
+      });
+    }
+
+    function activate(i, animate) {
+      if (i === active) return;
+      var prev = active;
+      active = i;
+      var next = parts(i);
+      var anim = animate && gsap && !reduce;
+
+      if (gsap) {
+        // Stop anything mid-flight and hide every panel that is not involved in this switch.
+        items.forEach(function (it, k) {
+          var p = parts(k);
+          if (!p.wr) return;
+          gsap.killTweensOf(p.wr);
+          gsap.killTweensOf(kids(p));
+          if (k !== prev || !anim) {
+            gsap.set(p.wr, { autoAlpha: k === i ? 1 : 0, clearProps: 'height' });
+            gsap.set(kids(p), { clearProps: 'transform,opacity,visibility' });
+            if (k !== prev) it.classList.remove('is-closing');
+          }
+        });
+      }
+
+      if (prev > -1) setClasses(prev, false);
+      setClasses(i, true);
+      if (!anim || !next.wr) {
+        if (prev > -1) items[prev].classList.remove('is-closing');
+        return;
+      }
+
+      var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      var prevP = prev > -1 ? parts(prev) : null;
+      var content = kids(next);
+
+      if (desktopMq.matches) {
+        gsap.set(next.wr, { autoAlpha: 0 });
+        if (prevP && prevP.wr) tl.to(prevP.wr, { autoAlpha: 0, duration: 0.18, ease: 'power1.out' });
+        tl.set(next.wr, { autoAlpha: 1 });
+        tl.fromTo(content, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.08 });
+      } else {
+        // Accordion: close the old item, open the new one with its content staggering in.
+        if (prevP && prevP.wr) {
+          prevP.item.classList.add('is-closing');
+          gsap.set(prevP.wr, { autoAlpha: 1 });
+          tl.to(prevP.wr, {
+            height: 0, duration: 0.35, ease: 'power2.inOut',
+            onComplete: function () {
+              prevP.item.classList.remove('is-closing');
+              gsap.set(prevP.wr, { clearProps: 'height', autoAlpha: 0 });
+            }
+          }, 0);
+        }
+        gsap.set(next.wr, { autoAlpha: 1 });
+        tl.fromTo(next.wr, { height: 0 }, { height: 'auto', duration: 0.4, ease: 'power2.inOut', clearProps: 'height' }, 0);
+        tl.fromTo(content, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07 }, 0.15);
+      }
+      tl.eventCallback('onComplete', function () {
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      });
+    }
+
+    activate(0, false);
+    list.classList.add('is-init');
+
+    if (reduce) return;
+    loadGsap().then(function (g) {
+      gsap = g;
+      syncInline();
+      if (desktopMq.addEventListener) desktopMq.addEventListener('change', syncInline);
+      reveal();
+    }).catch(function () {});
+
+    function reveal() {
+      // Already on screen (e.g. reload mid-page): leave it as is.
+      var r = (heading || list).getBoundingClientRect();
+      if (!('IntersectionObserver' in window) || r.top < window.innerHeight * 0.85) return;
+      var titles = items.map(function (it) { return it.querySelector('.features_title'); }).filter(Boolean);
+      var open = kids(parts(active));
+      var targets = [heading].concat(titles, open).filter(Boolean);
+      gsap.set(targets, { autoAlpha: 0, y: 32 });
+      var io = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        var tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.8 } });
+        if (heading) tl.to(heading, { autoAlpha: 1, y: 0 }, 0);
+        tl.to(titles, { autoAlpha: 1, y: 0, stagger: 0.07 }, 0.15);
+        tl.to(open, { autoAlpha: 1, y: 0, stagger: 0.1 }, 0.3);
+        tl.eventCallback('onComplete', function () {
+          gsap.set(targets, { clearProps: 'transform,opacity,visibility' });
+        });
+      }, { rootMargin: '0px 0px -15% 0px' });
+      io.observe(list);
+    }
+  }
+
+  function start() { document.querySelectorAll('.features_sec').forEach(init); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+
+<!-- Handle counting items number -->
+<script>
+document.querySelectorAll('.item-number').forEach((el, index) => {
+  const number = index + 1;
+  el.textContent = number < 10 ? '0' + number : '' + number;
+});
+</script>
