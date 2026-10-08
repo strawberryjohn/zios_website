@@ -2,9 +2,9 @@
 <style>
 .hl-float{animation:hl-float 6s ease-in-out infinite;transform-box:view-box;transform-origin:50% 50%}
 @keyframes hl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.hl-trace{fill:none;stroke:#E4F1FF;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;opacity:0}
+.hl-trace{fill:none;stroke:#CFE5FF;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;opacity:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
-.tr1{animation:tr1 4.5s cubic-bezier(.32,.72,0,1) 0s infinite}@keyframes tr1{0%{stroke-dashoffset:100;opacity:0}6%{opacity:1}55%{stroke-dashoffset:0;opacity:1}62%,100%{stroke-dashoffset:0;opacity:0}}.tr2{animation:tr2 4.5s cubic-bezier(.32,.72,0,1) 0.35s infinite}@keyframes tr2{0%{stroke-dashoffset:100;opacity:0}6%{opacity:1}55%{stroke-dashoffset:0;opacity:1}62%,100%{stroke-dashoffset:0;opacity:0}}</style>
+.tr1{animation:tr1 4.5s cubic-bezier(.32,.72,0,1) 0s infinite}@keyframes tr1{0%{stroke-dashoffset:100;opacity:0}6%{opacity:.55}55%{stroke-dashoffset:0;opacity:.55}62%,100%{stroke-dashoffset:0;opacity:0}}.tr2{animation:tr2 4.5s cubic-bezier(.32,.72,0,1) 0.35s infinite}@keyframes tr2{0%{stroke-dashoffset:100;opacity:0}6%{opacity:.55}55%{stroke-dashoffset:0;opacity:.55}62%,100%{stroke-dashoffset:0;opacity:0}}</style>
 <g class="hl-float">
 <path d="M143.223 14.4102L135.129 84.0362L97.7461 102.728L105.84 33.1017L143.223 14.4102Z" fill="#2D6CBD" fill-opacity="0.75" stroke="#8CBEFF" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M183.69 112.076L146.307 130.768L97.7461 102.731L135.129 84.0391L183.69 112.076Z" fill="#3E7AC9" fill-opacity="0.75" stroke="#8CBEFF" stroke-linecap="round" stroke-linejoin="round"/>

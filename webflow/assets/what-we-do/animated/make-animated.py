@@ -6,7 +6,7 @@ EASE='cubic-bezier(.32,.72,0,1)'
 BASE=f'''
 .hl-float{{animation:hl-float 6s ease-in-out infinite;transform-box:view-box;transform-origin:50% 50%}}
 @keyframes hl-float{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-3px)}}}}
-.hl-trace{{fill:none;stroke:#E4F1FF;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;opacity:0}}
+.hl-trace{{fill:none;stroke:#CFE5FF;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;opacity:0}}
 @media (prefers-reduced-motion:reduce){{*{{animation:none!important}}}}
 '''
 def first_subpath(d):
@@ -24,7 +24,7 @@ def build(name, parts, trace_from, css, trace_anim):
     out=f'{head}\n<style>{BASE}{trace_anim}{css}</style>\n<g class="hl-float">{body}{traces}</g>\n</svg>\n'
     open(OUT+f'wwd-icon-{name}.svg','w').write(out); print(name,len(out))
 
-def trace_kf(n,dur,delay=0,steps='0%{stroke-dashoffset:100;opacity:0}6%{opacity:1}55%{stroke-dashoffset:0;opacity:1}62%,100%{stroke-dashoffset:0;opacity:0}'):
+def trace_kf(n,dur,delay=0,steps='0%{stroke-dashoffset:100;opacity:0}6%{opacity:.55}55%{stroke-dashoffset:0;opacity:.55}62%,100%{stroke-dashoffset:0;opacity:0}'):
     return f'.{n}{{animation:{n} {dur}s {EASE} {delay}s infinite}}@keyframes {n}{{{steps}}}'
 
 # 1 Cybersecurity: shackle lifts and clicks down; trace round the shield face
