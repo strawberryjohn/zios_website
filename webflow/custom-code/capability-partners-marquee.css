@@ -1,0 +1,4 @@
+/* Partners marquee on the Capabilities page: capability-partners-marquee.js moves the whole track,
+   so the per-group CSS animation from the "Partneres-logos / Animation" embed is switched off. */
+.partners_component.is-js-marquee > .partners_list_wrap { animation: none !important; }
+.partners_component.is-js-marquee { will-change: transform; }

@@ -1,0 +1,56 @@
+<!-- Features section -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const items = document.querySelectorAll('.features_title_wr');
+  const panels = document.querySelectorAll('.features_content_panel');
+
+  const panelMap = {};
+  panels.forEach(panel => {
+    const id = panel.getAttribute('data-feature-panel');
+    panelMap[id] = panel;
+  });
+
+  let activeItem = items[0];
+  let activePanel = null;
+
+  if (activeItem) {
+    const id = activeItem.getAttribute('data-feature');
+    activeItem.classList.add('is-active');
+    activePanel = panelMap[id];
+    if (activePanel) {
+      activePanel.classList.add('is-active');
+    }
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      if (item === activeItem) return;
+
+      const id = item.getAttribute('data-feature');
+      const nextPanel = panelMap[id];
+
+      if (activeItem) activeItem.classList.remove('is-active');
+      if (activePanel) activePanel.classList.remove('is-active');
+
+      setTimeout(() => {
+        item.classList.add('is-active');
+        if (nextPanel) {
+          nextPanel.classList.add('is-active');
+        }
+
+
+        activeItem = item;
+        activePanel = nextPanel;
+      }, 20); 
+    });
+  });
+});
+</script>
+
+<!-- Handle counting items number -->
+<script>
+document.querySelectorAll('.item-number').forEach((el, index) => {
+  const number = index + 1;
+  el.textContent = number < 10 ? '0' + number : '' + number;
+});
+</script>

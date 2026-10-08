@@ -1,0 +1,39 @@
+/* Capabilities page hero (wwdHero_* classes, Figma 10051:14295). Page head of Capabilities (Template)
+   69bc155fa7556de240825b39 only, so the What we do hero (same classes) is not affected. */
+
+/* Background pinned to the centre: it grows from the middle as the screen widens instead of
+   anchoring to the bottom and drifting up. Capped at the 1920px content width. No transform here,
+   the reveal tween owns transform. */
+.wwdhero_bg {
+  top: 0; right: 0; left: 0;
+  margin-left: auto; margin-right: auto;
+  max-width: 120rem;
+  object-position: 50% 50%;
+}
+
+/* Blend where the image is cut by the section: bottom always, sides once the screen is wider
+   than the 1920px image. Sits above the images, below the content (wwdHero_contain is z-index 1). */
+.wwdhero_sec::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 72%, var(--swatch--blue-170) 100%);
+}
+@media (min-width: 120rem) {
+  .wwdhero_sec::after {
+    background:
+      linear-gradient(180deg, transparent 72%, var(--swatch--blue-170) 100%),
+      linear-gradient(90deg,
+        var(--swatch--blue-170) calc(50% - 60rem),
+        transparent calc(50% - 48rem),
+        transparent calc(50% + 48rem),
+        var(--swatch--blue-170) calc(50% + 60rem));
+  }
+}
+
+/* Reveal (capability-hero-reveal.js): hidden until the timeline has set its start state. */
+html.cap-reveal-pending .wwdhero_head > *,
+html.cap-reveal-pending .wwdhero_content .button_primary_wrap { visibility: hidden; }
+.wwdhero_line-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
