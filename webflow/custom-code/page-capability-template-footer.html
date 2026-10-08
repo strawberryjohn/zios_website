@@ -1,0 +1,179 @@
+<!-- Features section -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const items = document.querySelectorAll('.features_title_wr');
+  const panels = document.querySelectorAll('.features_content_panel');
+
+  const panelMap = {};
+  panels.forEach(panel => {
+    const id = panel.getAttribute('data-feature-panel');
+    panelMap[id] = panel;
+  });
+
+  let activeItem = items[0];
+  let activePanel = null;
+
+  if (activeItem) {
+    const id = activeItem.getAttribute('data-feature');
+    activeItem.classList.add('is-active');
+    activePanel = panelMap[id];
+    if (activePanel) {
+      activePanel.classList.add('is-active');
+    }
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      if (item === activeItem) return;
+
+      const id = item.getAttribute('data-feature');
+      const nextPanel = panelMap[id];
+
+      if (activeItem) activeItem.classList.remove('is-active');
+      if (activePanel) activePanel.classList.remove('is-active');
+
+      setTimeout(() => {
+        item.classList.add('is-active');
+        if (nextPanel) {
+          nextPanel.classList.add('is-active');
+        }
+
+
+        activeItem = item;
+        activePanel = nextPanel;
+      }, 20); 
+    });
+  });
+});
+</script>
+
+<!-- Versioned in strawberryjohn/zios_website: webflow/custom-code/ -->
+<script>
+// Capabilities hero: GSAP stagger reveal on load, same as the What we do hero (wwd-hero-reveal).
+// Eyebrow rises in, heading lines slide up out of a mask one after another, then the lead text and
+// the CTA rise in; the background layers fade in underneath. Elements stay hidden
+// (html.cap-reveal-pending, set in the page head) until the timeline has set its start state; the
+// head script un-hides them after 3s if GSAP never loads. Reduced motion: no animation.
+// Lives in the Capabilities (Template) page footer custom code.
+(function () {
+  var d = document.documentElement;
+  var hero = document.querySelector('.wwdhero_sec');
+  function show() { d.classList.remove('cap-reveal-pending'); }
+  if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { show(); return; }
+
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  var chain = Promise.resolve();
+  if (typeof window.gsap === 'undefined') {
+    chain = chain.then(function () { return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js'); });
+  }
+  chain = chain.then(function () {
+    // SplitText needs a 3.13+ core; with an older gsap already on the page, reveal the heading whole.
+    var v = (window.gsap.version || '0').split('.').map(Number);
+    var newEnough = v[0] > 3 || (v[0] === 3 && v[1] >= 13);
+    if (typeof window.SplitText === 'undefined' && newEnough) {
+      return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js').catch(function () {});
+    }
+  });
+  chain.then(function () { return document.fonts ? document.fonts.ready : null; }).then(run).catch(show);
+
+  function run() {
+    var gsap = window.gsap;
+    var eyebrow = hero.querySelector('.wwdhero_head .why_eyebrow');
+    var heading = hero.querySelector('.wwdhero_heading');
+    var text = hero.querySelector('.wwdhero_text');
+    var btn = hero.querySelector('.wwdhero_content .button_primary_wrap');
+    var bgs = hero.querySelectorAll('.wwdhero_bg');
+    var split = null;
+
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    if (bgs.length) tl.from(bgs, { autoAlpha: 0, scale: 1.06, duration: 1.8, ease: 'power2.out' }, 0);
+    if (eyebrow) tl.from(eyebrow, { y: 16, autoAlpha: 0, duration: 0.8 }, 0);
+    if (heading && window.SplitText) {
+      gsap.registerPlugin(window.SplitText);
+      split = window.SplitText.create(heading, { type: 'lines', mask: 'lines', linesClass: 'wwdhero_line' });
+      tl.from(split.lines, { yPercent: 110, duration: 1, stagger: 0.12 }, 0.1);
+    } else if (heading) {
+      tl.from(heading, { y: 40, autoAlpha: 0, duration: 1 }, 0.1);
+    }
+    tl.from([text, btn].filter(Boolean), { y: 24, autoAlpha: 0, duration: 0.8, stagger: 0.12 }, '-=0.6');
+    // Back to plain text afterwards so the heading re-wraps normally on resize.
+    if (split) tl.eventCallback('onComplete', function () { split.revert(); });
+    show();
+  }
+})();
+</script>
+<script>
+// Partners marquee (Capabilities page): one transform on the whole track instead of a separate
+// CSS animation per logo group, so the groups can never drift apart.
+// - Loop length = measured distance from group 1 to group 2 (includes the real gap), so the wrap
+//   point lands exactly on an identical frame: no visible reset.
+// - Enough groups are cloned to cover the screen width plus one loop.
+// - Hover eases the whole track down to 25% speed and back, instead of pausing one group.
+// Speed matches the old CSS: one group width per 40s. Reduced motion: static.
+// Lives in the Capabilities (Template) page footer custom code; CSS in capability-partners-marquee.css.
+(function () {
+  var SECONDS_PER_LOOP = 40, HOVER_RATE = 0.25, EASE = 4;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function init(track) {
+    var groups = track.querySelectorAll(':scope > .partners_list_wrap');
+    if (groups.length < 2) return;
+    track.classList.add('is-js-marquee');
+    if (reduce) return;
+
+    var period = 0, x = 0, rate = 1, target = 1, last = 0, visible = true;
+    var host = track.parentElement;
+
+    function measure() {
+      var g = track.querySelectorAll(':scope > .partners_list_wrap');
+      period = g[1].getBoundingClientRect().left - g[0].getBoundingClientRect().left;
+      if (period <= 0) return;
+      // Cover the visible width plus one loop so the right edge never runs out of logos.
+      while (g.length * period < host.clientWidth + 2 * period) {
+        var clone = g[g.length - 1].cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+        g = track.querySelectorAll(':scope > .partners_list_wrap');
+      }
+      x = x % period;
+    }
+
+    function frame(now) {
+      var dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+      last = now;
+      if (visible && period > 0) {
+        rate += (target - rate) * Math.min(1, dt * EASE);
+        x -= (period / SECONDS_PER_LOOP) * rate * dt;
+        if (x <= -period) x += period;
+        track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+      }
+      requestAnimationFrame(frame);
+    }
+
+    measure();
+    // Logo widths change once images load or fonts/breakpoints change.
+    if (window.ResizeObserver) new ResizeObserver(measure).observe(groups[0]);
+    window.addEventListener('load', measure);
+    window.addEventListener('resize', measure);
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(host);
+    }
+    host.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') target = HOVER_RATE; });
+    host.addEventListener('pointerleave', function () { target = 1; });
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    document.querySelectorAll('.partners_component').forEach(init);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
