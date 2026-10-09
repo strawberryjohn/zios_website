@@ -15,9 +15,20 @@
     {
       sel: '.ctaimg_sec',
       items: ['.ctaimg_title', '.ctaimg_text', '.ctaimg_btn_wr'],
-      prep: function (root, q) { gsap.set(q('.ctaimg_hand_wr'), { autoAlpha: 0, x: 80 }); },
+      // Animate the blended images themselves, never their wrapper: opacity/transform on an ancestor
+      // isolates them, and plus-lighter / color-dodge then blend against nothing (black arms show).
+      prep: function (root, q) {
+        root.__glowOpacity = q('.ctaimg_glow').map(function (g) { return getComputedStyle(g).opacity; });
+        gsap.set(q('.ctaimg_hand, .ctaimg_glow'), { opacity: 0, x: 80 });
+      },
       extra: function (tl, root, q) {
-        tl.to(q('.ctaimg_hand_wr'), { autoAlpha: 1, x: 0, duration: 1.6, ease: 'power2.out' }, 0);
+        tl.to(q('.ctaimg_hand'), { opacity: 1, x: 0, duration: 1.6, ease: 'power2.out' }, 0);
+        q('.ctaimg_glow').forEach(function (g, i) {
+          tl.to(g, { opacity: root.__glowOpacity[i], x: 0, duration: 1.6, ease: 'power2.out' }, 0);
+        });
+        tl.eventCallback('onComplete', function () {
+          gsap.set(q('.ctaimg_hand, .ctaimg_glow'), { clearProps: 'transform,opacity' });
+        });
       }
     },
     {
@@ -25,7 +36,7 @@
       items: ['.wwdreinvent_title', '.wwdreinvent_text', '.wwdreinvent_btn_wr'],
       prep: function (root, q) { gsap.set(q('.aboutUs_ascii, .aboutus_ascii'), { autoAlpha: 0 }); },
       extra: function (tl, root, q) {
-        tl.to(q('.aboutUs_ascii, .aboutus_ascii'), { autoAlpha: 1, duration: 1.6, ease: 'power1.out' }, 0);
+        tl.to(q('.aboutUs_ascii, .aboutus_ascii'), { autoAlpha: 1, duration: 1.6, ease: 'power1.out', clearProps: 'opacity,visibility' }, 0);
       }
     },
     {
